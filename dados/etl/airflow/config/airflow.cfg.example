@@ -1,1 +1,13 @@
+# airflow.cfg.example
+# Copie este arquivo para $AIRFLOW_HOME/airflow.cfg e ajuste os valores.
 
+[core]
+# dags_folder = /caminho/para/airflow_home/dags
+# base_log_folder = /caminho/para/airflow_home/logs
+
+[database]
+# sql_alchemy_conn = sqlite:////caminho/para/airflow_home/airflow.db
+# sql_alchemy_conn = postgresql+psycopg2://usuario:senha@host:5432/airflow
+
+[api]
+# port = 8081
