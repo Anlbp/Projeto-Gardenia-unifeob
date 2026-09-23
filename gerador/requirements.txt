@@ -1,1 +1,216 @@
+# Gerador de Dados - Gardênia
+
+Simulador de dados para o projeto da loja de roupas Gardênia.
+
+O programa gera dados fictícios de clientes, produtos e compras em formato CSV. Os dados possuem informações temporais e inconsistências controladas para simular um cenário de dados brutos que posteriormente pode ser utilizado em processos de ETL, Data Lake e Data Warehouse.
+
+## Requisitos
+
+É necessário ter o Python 3.10 ou superior instalado.
+
+O projeto não utiliza bibliotecas externas. Os módulos utilizados fazem parte da biblioteca padrão do Python:
+
+* `random`
+* `csv`
+* `datetime`
+
+Não é necessário instalar:
+
+* MySQL
+* MongoDB
+* Pandas
+* NumPy
+* outras bibliotecas externas
+* conexão com a internet
+
+## Instalação
+
+Clone o repositório:
+
+```bash
+git clone URL_DO_REPOSITORIO
+```
+
+Entre na pasta do projeto:
+
+```bash
+cd NOME_DA_PASTA
+```
+
+Não é necessário executar `pip install`, pois o gerador não possui dependências externas.
+
+## Verificando o Python
+
+Execute:
+
+```bash
+python --version
+```
+
+No Windows, caso o comando acima não funcione, tente:
+
+```bash
+py --version
+```
+
+O resultado deverá apresentar uma versão do Python igual ou superior à 3.10.
+
+## Execução
+
+Execute o gerador pelo terminal:
+
+```bash
+python gerador.py
+```
+
+No Windows, também pode ser utilizado:
+
+```bash
+py gerador.py
+```
+
+O programa não possui interface gráfica e deve ser executado diretamente pelo terminal.
+
+## Arquivos gerados
+
+Após a execução, serão criados automaticamente três arquivos:
+
+```text
+clientes.csv
+produtos.csv
+compras.csv
+```
+
+### clientes.csv
+
+Contém informações dos clientes, como:
+
+* identificador
+* nome
+* e-mail
+* CPF
+* telefone
+* cidade
+* estado
+* data de cadastro
+* data e hora da geração
+
+### produtos.csv
+
+Contém informações dos produtos, como:
+
+* identificador
+* produto
+* preço
+* satisfação média
+* material
+* categoria
+* marca
+* estoque
+* status
+* data de fabricação
+* data e hora da geração
+
+### compras.csv
+
+Contém informações das compras, como:
+
+* identificador da compra
+* CPF do cliente
+* identificador do produto
+* data da compra
+* quantidade
+* preço unitário
+* satisfação
+* valor total
+* desconto
+* valor com desconto
+* forma de pagamento
+* data e hora da geração
+
+## Dados inconsistentes
+
+O simulador também gera inconsistências propositalmente para representar dados brutos de um sistema real.
+
+Entre os problemas simulados estão:
+
+* campos vazios
+* valores nulos
+* duplicidades
+* formatos diferentes de CPF
+* formatos diferentes de telefone
+* e-mails inválidos
+* diferenças de maiúsculas e minúsculas
+* espaços extras
+* datas em formatos diferentes
+* preços utilizando ponto ou vírgula
+* produtos inexistentes
+* categorias inconsistentes
+* estoque negativo
+* valores de satisfação inválidos
+* formas de pagamento inconsistentes
+
+Essas inconsistências podem posteriormente ser identificadas e corrigidas durante o processo de ETL.
+
+## Quantidade de dados
+
+A configuração padrão do simulador produz aproximadamente:
+
+```text
+800 clientes
+100 produtos
+15.000 compras
+```
+
+O número final pode ser maior devido às duplicidades controladas inseridas pelo simulador.
+
+## Data e hora da geração
+
+Cada registro possui o campo:
+
+```text
+Data_Hora_Geracao
+```
+
+Esse campo registra a data e hora em que o simulador foi executado.
+
+Exemplo:
+
+```text
+2026-09-23 16:45:32
+```
+
+Além disso, os registros possuem outras informações temporais específicas, como `Data_Compra`, `Data_Cadastro` e `Data_Fabricacao`.
+
+## Estrutura do projeto
+
+```text
+gerador-dados/
+│
+├── gerador.py
+├── requirements.txt
+├── README.md
+│
+├── clientes.csv
+├── produtos.csv
+└── compras.csv
+```
+
+Os arquivos CSV são criados automaticamente após a execução do `gerador.py`.
+
+## Resumo da execução
+
+```text
+Python 3
+    ↓
+gerador.py
+    ↓
+Simulação dos dados
+    ↓
+Inserção de inconsistências
+    ↓
+clientes.csv
+produtos.csv
+compras.csv
+```
 
