@@ -1,0 +1,101 @@
+﻿ID_Produto,Produto,Preco_Unitario,Satisfacao_Media,Material,Categoria,Marca,Estoque,Status,Data_Fabricacao,Data_Hora_Geracao
+P0001,Jaqueta,274.89,3.2,Poliéster,Casacos,Fila,151,Ativo,2024-01-22,2026-09-23 16:55:35
+P0002,Pijama,82.43,2.6,Algodão,Roupas,Fila,11,Ativo,2023-05-12,2026-09-23 16:55:35
+P0003,Meia Calça,26.17,4.4,Nylon,Roupas,Olympikus,160,Ativo,2023-12-16,2026-09-23 16:55:35
+P0004,Tênis Casual,169.9,5.0,Lona,Calçados,Nike,105,Esgotado,2023-12-26,2026-09-23 16:55:35
+P0005,Polo,79.9,3.1,Piquet,Camisas,Adidas,79,Esgotado,2024-08-29,2026-09-23 16:55:35
+P0006,Boné,39.9,2.8,Algodão,Acessórios ,C&A,43,Ativo,2023-01-21,2026-09-23 16:55:35
+P0007,Tênis Esportivo,239.88,4.1,Sintético,Calçados,Riachuelo,108,Ativo,2024-08-04,2026-09-23 16:55:35
+P0008,Top Fitness,37.42,4.2,Poliamida,Roupas,Levi's,150,Ativo,2023-01-23,2026-09-23 16:55:35
+P0009,Brinco,43.89,3.3,Banho de Ouro,Acessórios,Aramis,25,Ativo,2025-04-07,2026-09-23 16:55:35
+P0010,Necessaire,69.9,3.3,Nylon,Acessórios,Levi's,128,Ativo,2025-04-10,2026-09-23 16:55:35
+P0011,Máscara de Cílios,49.9,5.5,Sintético,Cosméticos,Aramis,111,Esgotado,2023-07-26,2026-09-23 16:55:35
+P0012,Boné,53.87 ,3.0,Algodão,Acessórios,Colcci,67,Inativo,2023-02-18,2026-09-23 16:55:35
+P0013,Sapato Social,219.9,4.1,Couro,Calçados,Puma,245,Inativo,2023-04-05,2026-09-23 16:55:35
+P0014,Robe,139.9,2.7,Microfibra,Roupas,Aramis,205,Ativo,2024-06-27,2026-09-23 16:55:35
+P0015,Shorts Jeans,89.9,4.5,Denim,Bermudas,Colcci,166,Inativo,2025-04-23 ,2026-09-23 16:55:35
+P0016,Cueca Boxer,32.89,4.2,Algodão,Roupas,Mizuno,80,Ativo,2023-07-24,2026-09-23 16:55:35
+P0017,Legging,94.37,3.6,Elastano,Roupas,Hering,195,Ativo,2024-07-14,2026-09-23 16:55:35
+P0018,Carteira de Mão,121.37,4.7, Couro Sintético,Bolsas,Renner,147,Esgotado,2024-05-26,2026-09-23 16:55:35
+P0019,Meia Calça,41.88,3.2,Nylon,Roupas,Mizuno,163,Inativo,2024-06-29 ,2026-09-23 16:55:35
+P0020,Guarda-Chuva,37.42,3.8,Nylon,Acessórios,Lacoste,93,Ativo,2024-04-18,2026-09-23 16:55:35
+P0021,Bermuda,79.9,4.6,Algodão,Bermudas,Adidas,105,Esgotado,2023-11-23,2026-09-23 16:55:35
+P0022,Shorts Jeans,98.89,3.2,Denim,Bermudas,Hering,73,Ativo,2024-10-23,2026-09-23 16:55:35
+P0023,Clutch,129.9,3.5,Sintético,Bolsas,Renner,-10,Ativo,2023-06-03,2026-09-23 16:55:35
+P0024,Polo,79.9,3.7,Piquet,Camisas,Mizuno,143,Esgotado,2024-03-22,2026-09-23 16:55:35
+P0025,Tênis Esportivo,199.9,2.9,Sintético,Calçados,Reserva,34,Ativo,2023-01-30,2026-09-23 16:55:35
+P0026,Bolsa Tote,269.87,2.9,Lona,Bolsas,Aramis,218,Ativo,2023-02-13,2026-09-23 16:55:35
+P0027,Jaqueta,212.41,3.3,Poliéster,Casacos,Adidas,76,Ativo,2025-06-06,2026-09-23 16:55:35
+P0028,Sandália,110.42,3.5,Couro Sintético,Calçados,Lacoste,214,Ativo,2025-01-11,2026-09-23 16:55:35
+P0029,Camisa Social,134.87,4.8,Algodão,Camisas,Riachuelo,133,ativo,2024-11-11,2026-09-23 16:55:35
+P0030,Luva,42.41,3.1,Poliéster,Acessórios,Levi's,31,Ativo,2025-03-02,2026-09-23 16:55:35
+P0031,Pulseira,65.89,4.5,Aço,Acessórios,Mizuno,190,Ativo,2023-08-30,2026-09-23 16:55:35
+P0032,BERMUDA,,2.9,Algodão,Bermudas,Calvin Klein,248,Ativo,2023-10-09,2026-09-23 16:55:35
+P0033,Legging,52.43,3.7,Elastano,Roupas,Puma,95,Ativo,2024-12-17,2026-09-23 16:55:35
+P0034,Relógio,329.89,3.7,Aço Inoxidável,Acessórios,Lacoste,63,Ativo,,2026-09-23 16:55:35
+P0035,Cachecol,69.9,4.6,Tricô,Acessórios,Nike,5,Esgotado,2024-10-22,2026-09-23 16:55:35
+P0036,Bolsa Tote,149.93,4.2,Lona,Bolsas,Zara,-1,Ativo,2024-11-18,2026-09-23 16:55:35
+P0037,Colar,87.89,3.3,Prata ,Acessórios,Fila,245,Esgotado,2024-12-18,2026-09-23 16:55:35
+P0038,Camisa Social,134.87,4.7,Algodão,Camisas,Olympikus,219,Ativo,2024-03-29,2026-09-23 16:55:35
+P0039,Sapato Social,219.9,3.3,Couro,Calçados,Zara,,Ativo,2025-04-22,2026-09-23 16:55:35
+P0040,Shorts Jeans,80.91,4.8,Denim,Bermudas,Mizuno ,161,Ativo,2023-11-21,2026-09-23 16:55:35
+P0041,Top Fitness,42.41,4.6,Poliamida,Roupas,Aramis,240,Esgotado,2024-05-18,2026-09-23 16:55:35
+P0042,Mocassim,189.9,4.3,Couro,Calçados,Puma,224,Ativo,2025-04-19,2026-09-23 16:55:35
+P0043,Necessaire,69.9,3.8,Nylon,Acessórios,C&A,90,Esgotado,2024-03-06,2026-09-23 16:55:35
+P0044,Pijama,131.88,4.2,Algodão,,Hering,195,Esgotado,2023-02-23,2026-09-23 16:55:35
+P0045,Cinto,53.91,6.0,Couro,Acessórios,,51,Ativo,2024-10-05,2026-09-23 16:55:35
+P0046,Brinco,33.91,2.8,Banho de Ouro,Acessórios,Lacoste,63,Inativo,2024-06-12,2026-09-23 16:55:35
+P0047,Clutch,142.89,4.5,Sintético,Bolsas,Aramis,81,Esgotado,2024-04-07,2026-09-23 16:55:35
+P0048,Vestido Casual,159.9,2.9,Viscose,Vestidos,Levi's,151,Ativo,2025-04-26,2026-09-23 16:55:35
+P0049,Casaco de Inverno,254.91,3.5,Poliéster,Casacos,Olympikus,46,Inativo,2024-02-07,2026-09-23 16:55:35
+P0050,Regata,26.17,4.9,Algodão,Camisetas,Zara,236,Ativo,2024-07-25,2026-09-23 16:55:35
+P0051,Carteira,49.9,3.2,Couro Sintético,Acessórios,Nike,218,Ativo,2023-06-22,2026-09-23 16:55:35
+P0052,Máscara de Cílios,54.89,4.0,Sintético,Cosméticos,Fila,38,Ativo,2023-04-02,2026-09-23 16:55:35
+P0053,Brinco,"33,91",2.5,Banho de Ouro,Acessórios,Calvin Klein,134,Esgotado,2024-03-21,2026-09-23 16:55:35
+P0054,Luva,42.41,3.1,Poliéster,Acessórios,Reserva,52,Ativo,2023-07-15,2026-09-23 16:55:35
+P0055,MEIA CALÇA,41.88,3.5,Nylon,Roupas,Renner,110,Inativo,2025-05-26,2026-09-23 16:55:35
+P0056,Shorts Jeans,89.9,4.3,Denim,Bermudas,Hering,48,Ativo,2024-03-04,2026-09-23 16:55:35
+P0057,Bermuda,59.93,3.2,Algodão,Bermudas,Calvin Klein,67,Ativo,2023-08-30,2026-09-23 16:55:35
+P0058,Sandália,155.88,0,Couro Sintético,Calçados,Levi's,120,Esgotado,2023-05-17,2026-09-23 16:55:35
+P0059,Sapato Social,219.9,4.3, Couro,Calçados,Reserva,181,Ativo,2024-03-09,2026-09-23 16:55:35
+P0060,Meia Esportiva,33.62,2.6,algodão,Roupas,Aramis,85,Ativo,2023-08-29,2026-09-23 16:55:35
+P0061,Anel,67.43,2.5,Prata,Acessórios,Olympikus,129,Ativo,2024-09-26,2026-09-23 16:55:35
+P0062,Sapato Social,219.9,2.8,Couro,Calçados,,228,Inativo,2024-07-26 ,2026-09-23 16:55:35
+P0063,Blusa  de  Frio,149.9,2.9,Lã,Casacos,Calvin Klein,126,ATIVO,2023-12-14,2026-09-23 16:55:35
+P0064,Mochila,119.9,4.3,Poliéster,Acessórios,Reserva,110,Ativo,2023-05-26,2026-09-23 16:55:35
+P0065,Pijama,,4.9,Algodão,Roupas,Reserva,127,Esgotado,2025-06-11,2026-09-23 16:55:35
+P0066,Sandália,142.89,3.2,Couro Sintético,CALÇADOS,Reserva,224,Inativo,2023-09-27 ,2026-09-23 16:55:35
+P0067,Pijama,120.89,,Algodão,Roupas,Aramis,80,Ativo,2025-01-24,2026-09-23 16:55:35
+P0068,Colar,95.88,2.6,Prata,Acessórios,Zara,38,Ativo,2023-02-25,2026-09-23 16:55:35
+P0069,Tênis Esportivo,239.88,3.2,Sintético ,Calçados,Mizuno,180,Ativo,2024-04-23,2026-09-23 16:55:35
+P0070,Luva,37.42,3.6,Poliéster,Acessórios,Aramis,181,Ativo,2024-07-28,2026-09-23 16:55:35
+P0071,Luva,42.41,4.6,Poliéster,Acessórios,Puma,221,Ativo,2023-06-01,2026-09-23 16:55:35
+P0072,Mochila,119.9,4.7,Poliéster,ACESSÓRIOS,Hering,46,Esgotado,2025-05-04,2026-09-23 16:55:35
+P0073,Gorro,44.9,3.9,Acrílico,Acessórios,Renner,169,Inativo,2024-08-22,2026-09-23 16:55:35
+P0074,Camiseta Básica,80.87,4.4,Algodão,Camisetas,Adidas,46,Ativo,2024-03-02,2026-09-23 16:55:35
+P0075,Touca de Banho,29.88,4.2,Silicone,Acessórios,Gardênia,227,Ativo,2023-12-03,2026-09-23 16:55:35
+P0076,Clutch,110.42,3.5,Sintético,Bolsas,Levi's,151,Ativo,2023-04-19,2026-09-23 16:55:35
+P0077,Calça Jeans,110.42,3.7,Denim,Calças,Aramis,181,Ativo,2024-11-06,2026-09-23 16:55:35
+P0078,Carteira de Mão,89.9,4.0,Couro Sintético,Bolsas,,1,Esgotado,2023-12-04,2026-09-23 16:55:35
+P0079,Máscara de Cílios,59.88,3.3,Sintético,Cosméticos,Lacoste,187,Ativo,2025-01-21,2026-09-23 16:55:35
+P0080,Jaqueta,249.9,3.3,Poliéster,CASACOS,Adidas,14,Inativo,2025-01-31,2026-09-23 16:55:35
+P0081,Anel,98.89,2.7,Prata,Acessórios,Zara,65,Ativo,2023-07-02,2026-09-23 16:55:35
+P0082,Mochila,89.93,4.6,Poliéster,Acessórios,Olympikus,41,Ativo,2024-02-02,2026-09-23 16:55:35
+P0083,Bolsa Transversal,143.91,2.8,Couro Sintético,Bolsas ,Mizuno,125,Esgotado,20250331,2026-09-23 16:55:35
+P0084,Cueca Boxer,26.91,3.4,Algodão,Roupas,Fila,24,Inativo,2025-05-02,2026-09-23 16:55:35
+P0085,casaco de inverno,359.88,3.6,Poliéster,Casacos,Reserva,99,Inativo,2024-05-02,2026-09-23 16:55:35
+P0086,Anel,98.89,2.7,Prata,Acessórios,fila,108,Inativo,2025-04-10,2026-09-23 16:55:35
+P0087,blusa de frio,164.89,4.1, Lã,Casacos,Riachuelo,23,Ativo,2023-02-11,2026-09-23 16:55:35
+P0088,Carteira,49.9,4.1,Couro Sintético,Acessórios,Aramis,182,Inativo,2023-06-08,2026-09-23 16:55:35
+P0089,Carteira de Mão,121.37,2.7,Couro Sintético,Bolsas,Adidas,119,Ativo,2024-03-23,2026-09-23 16:55:35
+P0090,Cueca Boxer,26.91 ,5.0,Algodão,Roupas,Zara,175,Inativo,2023-11-04,2026-09-23 16:55:35
+P0091,Tênis Casual,169.9,3.9,LONA,Calçados,Nike,141,Inativo,2023-03-20,2026-09-23 16:55:35
+P0092,Meia Esportiva,33.62,3.6,Algodão,Roupas,Reserva,24,,2024-04-20,2026-09-23 16:55:35
+P0093,LEGGING,59.42,6.0,Elastano,Roupas,Calvin Klein,4,Ativo,2023-04-27,2026-09-23 16:55:35
+P0094,Blusa de Frio ,164.89,2.6,Lã,Casacos,Colcci,106,Ativo,2025-06-16,2026-09-23 16:55:35
+P0095,Pulseira,71.88,4.4,Aço,Acessórios,Reserva,115,Ativo,2024-09-30,2026-09-23 16:55:35
+P0096,Blusa de Frio,149.9,3.0,Lã,Casacos,Reserva,191,Esgotado,2024-09-10,2026-09-23 16:55:35
+P0097,Meia Esportiva,27.39,3.8,Algodão,Roupas,Puma,1,Ativo,2024-02-09,2026-09-23 16:55:35
+P0098,Saia Midi,143.88,3.7,Poliéster,Saias,ARAMIS,103,Ativo,2025-06-08,2026-09-23 16:55:35
+P0099,Máscara de Cílios,49.9,4.2,Sintético,Cosméticos,Olympikus,246,Ativo,2024-12-07,2026-09-23 16:55:35
+P0100,Mochila,107.91,2.8,Poliéster,Acessórios,Gardênia,48,,2023-04-25,2026-09-23 16:55:35
