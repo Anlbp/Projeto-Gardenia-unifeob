@@ -1,1 +1,32 @@
+---
+- name: Preparar ambiente para o Simulador de Dados
+  hosts: vm_simulador
+  become: true
+  tasks:
+    - name: Atualizar o repositório APT
+      apt:
+        update_cache: yes
 
+    - name: Instalar Python 3 e suporte a ambiente virtual
+      apt:
+        name:
+          - python3
+          - python3-pip
+          - python3-venv
+        state: present
+
+    - name: Criar diretório para a aplicação
+      file:
+        path: /home/debian/app_simulador
+        state: directory
+        owner: debian
+        group: debian
+        mode: '0755'
+
+    - name: Criar diretório para armazenamento dos dados
+      file:
+        path: /home/debian/app_simulador/dados
+        state: directory
+        owner: debian
+        group: debian
+        mode: '0755'

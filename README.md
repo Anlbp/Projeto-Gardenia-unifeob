@@ -29,4 +29,45 @@ Após o tratamento, os dados serão organizados de acordo com o modelo dimension
 
 Com a implementação da solução, a loja poderá reduzir a dependência de registros em papel, melhorar a organização das informações, facilitar o processo de compra e utilizar os dados armazenados para obter uma visão mais clara das vendas, clientes e estoque.
 
+## Como reproduzir o ambiente:
 
+1. **Provisionamento da VM (OpenTofu):**
+   ```bash
+   cd infraestrutura/
+   tofu init
+   tofu apply -auto-approve
+   ```
+2. **Configuração do Ambiente (Ansible):**
+    Atualize o IP retornado no arquivo "infraestrutura/ansible/invetory.ini" e execute:
+    ```bash
+    cd infraestrutura/ansible/
+    ansible-playbook -i inventory.ini playbook.yml
+    ```
+3. **Implantação da Aplicação:**
+    ```bash
+    scp -r simulador/* debian@192.168.122.XX:/home/debian/app_simulador/
+    ```
+4. **Execução do Simulador na VM:**
+    ```bash
+    ssh debian@192.168.122.XX
+    python3 /home/debian/app_simulador/simulador.py
+
+⚠️ **Verifique se a sua pasta possui exatamente estes arquivos antes de dar push no git:**
+
+```text
+projeto-data-science/
+├── .gitignore
+├── README.md
+├── dados/
+│   └── exemplo_dados.csv
+├── infraestrutura/
+│   ├── cloud_init.cfg
+│   ├── main.tf
+│   ├── variables.tf
+│   └── ansible/
+│       ├── inventory.ini
+│       └── playbook.yml
+└── simulador/
+    ├── requirements.txt
+    └── simulador.py
+```

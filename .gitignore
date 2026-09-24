@@ -1,1 +1,6 @@
-
+*.tfstate
+*.tfstate.*
+.terraform/
+*.pem
+id_rsa
+*.qcow2
