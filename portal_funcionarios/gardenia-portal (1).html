@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal do Funcionário — Gardênia Modas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/JsBarcode/3.11.5/JsBarcode.all.min.js"></script>
+<style>
+  :root{
+    --white:#ffffff;
+    --sage-50:#f4f8f3;
+    --sage-100:#e5efe1;
+    --sage-200:#cfe3c8;
+    --sage-400:#9dc691;
+    --sage-600:#6d9c62;
+    --sage-800:#3f6338;
+    --ink:#213321;
+    --ink-soft:#5b6a58;
+    --hairline:#dbe6d6;
+    --danger:#c8583f;
+    --warn:#b5793f;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --white:#12180f; --sage-50:#161f13; --sage-100:#1c2818; --sage-200:#2a3a24;
+      --sage-400:#4d6c43; --sage-600:#8fbf7f; --sage-800:#bfe0af;
+      --ink:#eef3ea; --ink-soft:#a9baa2; --hairline:#2a3a24;
+    }
+  }
+  :root[data-theme="dark"]{
+    --white:#12180f; --sage-50:#161f13; --sage-100:#1c2818; --sage-200:#2a3a24;
+    --sage-400:#4d6c43; --sage-600:#8fbf7f; --sage-800:#bfe0af;
+    --ink:#eef3ea; --ink-soft:#a9baa2; --hairline:#2a3a24;
+  }
+
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--white);color:var(--ink);font-family:'Inter',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;}
+  a{color:inherit;}
+  button{font-family:inherit;}
+  h1,h2,h3{font-family:'Space Grotesk',sans-serif;font-weight:500;margin:0;}
+
+  .app{display:flex;min-height:100vh;}
+
+  /* Sidebar */
+  .sidebar{
+    width:220px;flex:none;
+    border-right:1px solid var(--hairline);
+    padding:24px 14px;
+    display:flex;flex-direction:column;gap:2px;
+  }
+  .sidebar .brand{display:flex;align-items:center;gap:10px;padding:6px 10px 22px;}
+  .sidebar .brand-mark{width:30px;height:30px;flex:none;}
+  .sidebar .brand-name{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;line-height:1.15;}
+  .sidebar .brand-sub{font-size:10.5px;color:var(--ink-soft);}
+  .nav-item{
+    display:flex;align-items:center;gap:10px;
+    padding:9px 10px;border-radius:8px;
+    font-size:13.5px;color:var(--ink-soft);
+    cursor:pointer;border:none;background:none;text-align:left;width:100%;
+  }
+  .nav-item svg{width:17px;height:17px;stroke:var(--ink-soft);flex:none;}
+  .nav-item:hover{background:var(--sage-50);color:var(--ink);}
+  .nav-item:hover svg{stroke:var(--ink);}
+  .nav-item.active{background:var(--sage-600);color:var(--white);}
+  .nav-item.active svg{stroke:var(--white);}
+
+  .main-col{flex:1;min-width:0;}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 32px;}
+
+  header{border-bottom:1px solid var(--hairline);padding:22px 0;}
+  .header-row{display:flex;align-items:center;justify-content:space-between;gap:24px;}
+  .view-title{font-size:19px;}
+  .view-sub{font-size:12.5px;color:var(--ink-soft);margin-top:2px;}
+  .header-right{display:flex;align-items:center;gap:18px;}
+  .search{display:flex;align-items:center;gap:8px;background:var(--sage-50);border:1px solid var(--hairline);border-radius:8px;padding:9px 14px;width:220px;}
+  .search input{border:none;background:none;outline:none;font-family:inherit;font-size:13.5px;color:var(--ink);width:100%;}
+  .search input::placeholder{color:var(--ink-soft);}
+  .avatar{width:36px;height:36px;border-radius:50%;background:var(--sage-600);color:var(--white);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex:none;}
+
+  main.content{padding:36px 0 60px;}
+  .view{display:none;}
+  .view.active{display:block;}
+
+  /* Hero (início) */
+  .hero{padding:8px 0 8px;}
+  .hero .eyebrow{font-size:13px;color:var(--sage-800);margin-bottom:10px;}
+  .hero h1{font-size:clamp(26px,4vw,36px);line-height:1.15;margin:0 0 12px;max-width:640px;}
+  .hero p{color:var(--ink-soft);font-size:15px;max-width:520px;line-height:1.6;margin:0;}
+
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--hairline);border:1px solid var(--hairline);border-radius:12px;overflow:hidden;margin:32px 0 8px;}
+  .stat{background:var(--white);padding:20px 22px;}
+  .stat .label{font-size:12px;color:var(--ink-soft);margin-bottom:8px;}
+  .stat .value{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:500;}
+  .stat .value.accent{color:var(--sage-600);}
+  .stat .delta{font-size:12px;margin-top:6px;color:var(--sage-600);}
+  .stat .delta.warn{color:var(--warn);}
+
+  .modules{padding:48px 0 20px;}
+  .section-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:20px;}
+  .section-head h2{font-size:19px;}
+  .section-head span{font-size:13px;color:var(--ink-soft);}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .card{position:relative;border-radius:14px;padding:24px 22px;min-height:140px;display:flex;flex-direction:column;justify-content:space-between;text-decoration:none;border:1px solid var(--hairline);background:var(--white);transition:transform .15s ease, border-color .15s ease;cursor:pointer;}
+  .card:hover{transform:translateY(-2px);border-color:var(--sage-400);}
+  .card.filled{background:var(--sage-600);border-color:var(--sage-600);color:var(--white);}
+  .card.tint{background:var(--sage-50);}
+  .card .icon{width:24px;height:24px;stroke:var(--sage-600);}
+  .card.filled .icon{stroke:var(--white);}
+  .card .title{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:500;margin-top:14px;}
+  .card .desc{font-size:12.5px;color:var(--ink-soft);margin-top:6px;line-height:1.5;}
+  .card.filled .desc{color:rgba(255,255,255,.82);}
+  .card .tag{position:absolute;top:18px;right:18px;font-size:10.5px;background:var(--danger);color:#fff;padding:3px 8px;border-radius:20px;}
+
+  /* Generic view header */
+  .view-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;gap:16px;flex-wrap:wrap;}
+  .view-head h2{font-size:22px;}
+  .view-head p{color:var(--ink-soft);font-size:13.5px;margin-top:4px;}
+
+  /* Buttons */
+  .btn{display:inline-flex;align-items:center;gap:7px;border-radius:8px;padding:9px 16px;font-size:13px;font-weight:500;border:1px solid var(--hairline);background:var(--white);color:var(--ink);cursor:pointer;}
+  .btn:hover{border-color:var(--sage-400);}
+  .btn-primary{background:var(--sage-600);border-color:var(--sage-600);color:#fff;}
+  .btn-primary:hover{background:var(--sage-800);border-color:var(--sage-800);}
+  .btn-ghost{border-color:transparent;background:none;color:var(--ink-soft);}
+  .btn-danger{color:var(--danger);}
+  .btn svg{width:14px;height:14px;stroke:currentColor;}
+  .btn-sm{padding:6px 10px;font-size:12px;}
+
+  /* Live search (clientes) */
+  .search-live{display:flex;align-items:center;gap:10px;background:var(--sage-50);border:1px solid var(--hairline);border-radius:10px;padding:12px 16px;margin-bottom:18px;}
+  .search-live svg{width:16px;height:16px;stroke:var(--ink-soft);flex:none;}
+  .search-live input{flex:1;border:none;background:none;outline:none;font-family:inherit;font-size:14px;color:var(--ink);}
+  .search-hint{font-size:11.5px;color:var(--ink-soft);}
+
+  .list-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:15px 4px;border-bottom:1px solid var(--hairline);cursor:pointer;}
+  .list-row:hover{background:var(--sage-50);}
+  .list-row:last-child{border-bottom:none;}
+  .client-name{font-weight:600;font-size:14px;}
+  .client-meta{font-size:12px;color:var(--ink-soft);margin-top:3px;display:flex;gap:12px;flex-wrap:wrap;}
+  .client-spend{text-align:right;flex:none;}
+  .client-spend .amt{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:500;}
+  .client-spend .lbl{font-size:11px;color:var(--ink-soft);}
+  .empty-state{padding:36px 10px;text-align:center;color:var(--ink-soft);font-size:13.5px;}
+
+  /* Tables */
+  table.table{width:100%;border-collapse:collapse;font-size:13.5px;}
+  table.table th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.03em;color:var(--ink-soft);font-weight:500;padding:0 10px 10px;border-bottom:1px solid var(--hairline);}
+  table.table td{padding:12px 10px;border-bottom:1px solid var(--hairline);vertical-align:middle;}
+  table.table tr:last-child td{border-bottom:none;}
+  table.table td[contenteditable="true"]{outline:none;border-radius:5px;}
+  table.table td[contenteditable="true"]:focus{background:var(--sage-50);}
+  .qty-control{display:inline-flex;align-items:center;gap:6px;}
+  .qty-control button{width:24px;height:24px;border-radius:6px;border:1px solid var(--hairline);background:var(--white);cursor:pointer;font-size:14px;line-height:1;}
+  .qty-control span{min-width:22px;text-align:center;display:inline-block;font-family:'Space Grotesk',sans-serif;}
+  .badge{display:inline-block;font-size:11px;padding:3px 9px;border-radius:20px;background:var(--sage-100);color:var(--sage-800);}
+  .badge.low{background:#fbe7dd;color:var(--danger);}
+
+  .panel{border:1px solid var(--hairline);border-radius:14px;padding:22px;}
+  .panel + .panel{margin-top:16px;}
+  .grid-2{display:grid;grid-template-columns:1.4fr 1fr;gap:18px;align-items:start;}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+
+  /* Vendas / caixa */
+  .scan-box{display:flex;align-items:center;gap:10px;background:var(--sage-50);border:2px dashed var(--sage-400);border-radius:12px;padding:16px 18px;margin-bottom:18px;}
+  .scan-box svg{width:20px;height:20px;stroke:var(--sage-600);flex:none;}
+  .scan-box input{flex:1;border:none;background:none;outline:none;font-family:'Space Grotesk',sans-serif;font-size:16px;color:var(--ink);letter-spacing:.5px;}
+  .scan-msg{font-size:12px;margin-top:8px;min-height:16px;}
+  .scan-msg.ok{color:var(--sage-600);}
+  .scan-msg.err{color:var(--danger);}
+  .cart-total{display:flex;justify-content:space-between;align-items:baseline;padding:16px 4px 4px;border-top:2px solid var(--ink);margin-top:6px;}
+  .cart-total .lbl{font-size:13px;color:var(--ink-soft);}
+  .cart-total .amt{font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:600;}
+  .catalog-chip{border:1px solid var(--hairline);border-radius:9px;padding:10px 12px;font-size:12px;cursor:pointer;background:var(--white);}
+  .catalog-chip:hover{border-color:var(--sage-400);background:var(--sage-50);}
+  .catalog-chip .sku{color:var(--ink-soft);font-size:10.5px;display:block;margin-top:3px;}
+
+  /* Chart cards */
+  .chart-card{border:1px solid var(--hairline);border-radius:14px;padding:20px 20px 8px;}
+  .chart-card h3{font-size:14px;margin-bottom:14px;}
+  .chart-card canvas{max-height:220px;}
+
+  /* Chips / permissions */
+  .chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:4px 10px;border-radius:20px;background:var(--sage-100);color:var(--sage-800);margin:2px 4px 2px 0;}
+  .perm-toggle{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--hairline);border-radius:20px;padding:6px 12px;font-size:12px;cursor:pointer;user-select:none;}
+  .perm-toggle input{accent-color:var(--sage-600);}
+
+  /* Forms / modal */
+  .field{margin-bottom:14px;}
+  .field label{display:block;font-size:12px;color:var(--ink-soft);margin-bottom:6px;}
+  .field input,.field select{width:100%;padding:10px 12px;border:1px solid var(--hairline);border-radius:8px;font-family:inherit;font-size:13.5px;background:var(--white);color:var(--ink);outline:none;}
+  .field input:focus,.field select:focus{border-color:var(--sage-600);}
+  .field-row{display:flex;gap:12px;}
+  .field-row .field{flex:1;}
+
+  .modal-overlay{position:fixed;inset:0;background:rgba(33,51,33,.45);display:none;align-items:center;justify-content:center;z-index:50;padding:20px;}
+  .modal-overlay.open{display:flex;}
+  .modal{background:var(--white);border-radius:16px;padding:26px 26px 22px;width:100%;max-width:440px;max-height:88vh;overflow-y:auto;}
+  .modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;}
+  .modal-head h3{font-size:17px;}
+  .modal-close{background:none;border:none;cursor:pointer;color:var(--ink-soft);font-size:18px;line-height:1;padding:4px;}
+  .modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px;}
+
+  .etiqueta{border:1px dashed var(--hairline);border-radius:12px;padding:20px;text-align:center;background:var(--sage-50);}
+  .etiqueta .loja{font-size:11px;letter-spacing:.05em;color:var(--ink-soft);}
+  .etiqueta .nome{font-family:'Space Grotesk',sans-serif;font-size:15px;margin:6px 0 2px;}
+  .etiqueta .preco{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:600;color:var(--sage-800);margin-bottom:10px;}
+  .etiqueta svg{max-width:100%;}
+
+  footer.appfoot{border-top:1px solid var(--hairline);margin-top:40px;padding:22px 0 34px;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--ink-soft);}
+
+  @media print{
+    body *{visibility:hidden;}
+    .etiqueta-print,.etiqueta-print *{visibility:visible;}
+    .etiqueta-print{position:absolute;top:20px;left:20px;}
+  }
+
+  @media (max-width:960px){
+    .sidebar{display:none;}
+    .grid{grid-template-columns:repeat(2,1fr);}
+    .stats{grid-template-columns:repeat(2,1fr);}
+    .grid-2{grid-template-columns:1fr;}
+  }
+  @media (max-width:520px){
+    .wrap{padding:0 18px;}
+    .grid{grid-template-columns:1fr;}
+    .stats{grid-template-columns:1fr;}
+    .search{display:none;}
+    .field-row{flex-direction:column;gap:0;}
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="20" cy="12" r="6" fill="var(--sage-400)"/>
+        <circle cx="11" cy="22" r="6" fill="var(--sage-600)"/>
+        <circle cx="29" cy="22" r="6" fill="var(--sage-600)"/>
+        <circle cx="20" cy="26" r="6" fill="var(--sage-800)"/>
+        <circle cx="20" cy="22" r="3.2" fill="#f2c14e"/>
+      </svg>
+      <div>
+        <div class="brand-name">Gardênia</div>
+        <div class="brand-sub">Portal do Funcionário</div>
+      </div>
+    </div>
+
+    <button class="nav-item active" data-view="inicio" onclick="navigate('inicio')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+      Início
+    </button>
+    <button class="nav-item" data-view="clientes" onclick="navigate('clientes')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M17 11a4 4 0 0 0 0-8"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
+      Clientes
+    </button>
+    <button class="nav-item" data-view="estoque" onclick="navigate('estoque')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3.3 7.5l8.7 5 8.7-5"/><path d="M12 22.5V12.5"/></svg>
+      Estoque
+    </button>
+    <button class="nav-item" data-view="vendas" onclick="navigate('vendas')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+      Vendas
+    </button>
+    <button class="nav-item" data-view="metricas" onclick="navigate('metricas')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg>
+      Métricas
+    </button>
+    <button class="nav-item" data-view="financeiro" onclick="navigate('financeiro')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v10"/><path d="M15 9.5c0-1.4-1.3-2.5-3-2.5s-3 1.1-3 2.5 1.3 2 3 2.5 3 1.1 3 2.5-1.3 2.5-3 2.5-3-1.1-3-2.5"/></svg>
+      Financeiro
+    </button>
+    <button class="nav-item" data-view="funcionarios" onclick="navigate('funcionarios')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.32 9c.14.36.38.67.7.88.32.21.7.32 1.09.32H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Funcionários
+    </button>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main-col">
+    <header>
+      <div class="wrap header-row">
+        <div>
+          <div class="view-title" id="header-title">Início</div>
+          <div class="view-sub" id="header-sub">Terça-feira, 16 de setembro</div>
+        </div>
+        <div class="header-right">
+          <div class="search">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" placeholder="Buscar no portal...">
+          </div>
+          <div class="avatar">MC</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content wrap">
+
+      <!-- ============ INÍCIO ============ -->
+      <section class="view active" id="view-inicio">
+        <div class="hero">
+          <div class="eyebrow">Terça-feira, 16 de setembro</div>
+          <h1>Bom dia. Aqui está o resumo da loja hoje.</h1>
+          <p>Acesse os módulos abaixo para gerenciar clientes, estoque, vendas e o desempenho da Gardênia.</p>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <div class="label">Vendas hoje</div>
+            <div class="value accent" id="stat-vendas-hoje">R$ 2.480</div>
+            <div class="delta">↑ 12% vs. ontem</div>
+          </div>
+          <div class="stat">
+            <div class="label">Peças em estoque</div>
+            <div class="value" id="stat-estoque">1.247</div>
+            <div class="delta warn" id="stat-estoque-baixo">18 itens em falta</div>
+          </div>
+          <div class="stat">
+            <div class="label">Clientes cadastrados</div>
+            <div class="value" id="stat-clientes">892</div>
+            <div class="delta">+7 esta semana</div>
+          </div>
+          <div class="stat">
+            <div class="label">Ticket médio</div>
+            <div class="value" id="stat-ticket">R$ 146</div>
+            <div class="delta">↑ 4% no mês</div>
+          </div>
+        </div>
+
+        <section class="modules">
+          <div class="section-head">
+            <h2>Módulos</h2>
+            <span>6 áreas disponíveis</span>
+          </div>
+          <div class="grid">
+            <div class="card filled" onclick="navigate('clientes')">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M17 11a4 4 0 0 0 0-8"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
+              <div><div class="title">Clientes</div><div class="desc">Busca em tempo real por nome, celular ou CPF</div></div>
+            </div>
+            <div class="card" onclick="navigate('estoque')">
+              <span class="tag" id="tag-estoque">18 em falta</span>
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3.3 7.5l8.7 5 8.7-5"/><path d="M12 22.5V12.5"/></svg>
+              <div><div class="title">Estoque</div><div class="desc">Produtos, quantidades e etiquetas</div></div>
+            </div>
+            <div class="card" onclick="navigate('vendas')">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+              <div><div class="title">Vendas</div><div class="desc">Caixa com leitura de código de barras</div></div>
+            </div>
+            <div class="card tint" onclick="navigate('metricas')">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg>
+              <div><div class="title">Métricas de Vendas</div><div class="desc">Listas em tempo real e gráficos</div></div>
+            </div>
+            <div class="card" onclick="navigate('financeiro')">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v10"/><path d="M15 9.5c0-1.4-1.3-2.5-3-2.5s-3 1.1-3 2.5 1.3 2 3 2.5 3 1.1 3 2.5-1.3 2.5-3 2.5-3-1.1-3-2.5"/></svg>
+              <div><div class="title">Financeiro</div><div class="desc">Planilha de entradas e saídas</div></div>
+            </div>
+            <div class="card" onclick="navigate('funcionarios')">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.32 9c.14.36.38.67.7.88.32.21.7.32 1.09.32H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              <div><div class="title">Funcionários</div><div class="desc">Equipe, cargos e permissões</div></div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- ============ CLIENTES ============ -->
+      <section class="view" id="view-clientes">
+        <div class="view-head">
+          <div>
+            <h2>Clientes</h2>
+            <p>O cadastro é feito pelo site — aqui você só consulta o que cada cliente já comprou.</p>
+          </div>
+        </div>
+
+        <div class="search-live">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="client-search" placeholder="Digite nome, celular ou CPF..." oninput="renderClients()">
+        </div>
+        <div class="search-hint" id="client-count" style="margin:-10px 0 16px;"></div>
+
+        <div class="panel" style="padding:6px 20px;">
+          <div id="client-list"></div>
+        </div>
+      </section>
+
+      <!-- ============ ESTOQUE ============ -->
+      <section class="view" id="view-estoque">
+        <div class="view-head">
+          <div>
+            <h2>Estoque</h2>
+            <p>Cadastre produtos, ajuste quantidades e gere etiquetas com código de barras.</p>
+          </div>
+          <button class="btn btn-primary" onclick="openProductModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Novo produto
+          </button>
+        </div>
+
+        <div class="panel" style="padding:8px 20px;">
+          <table class="table">
+            <thead>
+              <tr><th>Produto</th><th>SKU</th><th>Categoria</th><th>Tam. / Cor</th><th>Preço</th><th>Quantidade</th><th></th></tr>
+            </thead>
+            <tbody id="product-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ VENDAS ============ -->
+      <section class="view" id="view-vendas">
+        <div class="view-head">
+          <div>
+            <h2>Vendas · Caixa</h2>
+            <p>Use a maquininha de leitura ou digite o código do produto e pressione Enter.</p>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div>
+            <div class="scan-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="2" y="6" width="2" height="12"/><rect x="6" y="6" width="1" height="12"/><rect x="9" y="6" width="3" height="12"/><rect x="14" y="6" width="1" height="12"/><rect x="17" y="6" width="2" height="12"/><rect x="21" y="6" width="1" height="12"/></svg>
+              <input type="text" id="scan-input" placeholder="Escanear ou digitar o SKU..." onkeydown="if(event.key==='Enter')scanAdd()" autofocus>
+              <button class="btn btn-sm" onclick="scanAdd()">Adicionar</button>
+            </div>
+            <div class="scan-msg" id="scan-msg"></div>
+
+            <div class="panel" style="padding:8px 20px;margin-top:16px;">
+              <table class="table">
+                <thead><tr><th>Item</th><th>Qtd.</th><th>Preço</th><th>Subtotal</th><th></th></tr></thead>
+                <tbody id="cart-tbody">
+                  <tr><td colspan="5" class="empty-state">Carrinho vazio — escaneie um produto para começar</td></tr>
+                </tbody>
+              </table>
+              <div class="cart-total">
+                <span class="lbl">Total</span>
+                <span class="amt" id="cart-total">R$ 0,00</span>
+              </div>
+              <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:16px;">
+                <button class="btn" onclick="clearCart()">Limpar</button>
+                <button class="btn btn-primary" onclick="finalizeSale()">Finalizar venda</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h3 style="font-size:13px;color:var(--ink-soft);margin-bottom:12px;">Catálogo rápido</h3>
+            <div class="grid-3" id="catalog-grid" style="grid-template-columns:1fr 1fr;"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ MÉTRICAS ============ -->
+      <section class="view" id="view-metricas">
+        <div class="view-head">
+          <div>
+            <h2>Métricas de Vendas</h2>
+            <p>Listas atualizam a cada venda fechada no caixa. Gráficos com dados de exemplo — prontos para receber os dados reais do backend em Python.</p>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-bottom:16px;">
+          <div class="chart-card">
+            <h3>Vendas dos últimos 7 dias</h3>
+            <canvas id="chart-week"></canvas>
+          </div>
+          <div class="chart-card">
+            <h3>Vendas por categoria</h3>
+            <canvas id="chart-cat"></canvas>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="panel">
+            <h3 style="font-size:13px;color:var(--ink-soft);margin-bottom:8px;">Últimas vendas</h3>
+            <div id="recent-sales"></div>
+          </div>
+          <div class="panel">
+            <h3 style="font-size:13px;color:var(--ink-soft);margin-bottom:8px;">Mais vendidos hoje</h3>
+            <div id="top-products"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ FINANCEIRO ============ -->
+      <section class="view" id="view-financeiro">
+        <div class="view-head">
+          <div>
+            <h2>Financeiro</h2>
+            <p>Planilha simples de entradas e saídas — a versão completa virá dos relatórios gerados em Python.</p>
+          </div>
+          <button class="btn btn-primary" onclick="addFinanceRow()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Nova linha
+          </button>
+        </div>
+
+        <div class="panel" style="padding:8px 20px;">
+          <table class="table" id="finance-table">
+            <thead><tr><th style="width:15%">Data</th><th>Descrição</th><th style="width:18%">Categoria</th><th style="width:14%">Entrada</th><th style="width:14%">Saída</th><th style="width:10%"></th></tr></thead>
+            <tbody id="finance-tbody"></tbody>
+            <tfoot>
+              <tr><td colspan="3" style="text-align:right;color:var(--ink-soft);">Saldo</td><td colspan="2" id="finance-balance" style="font-family:'Space Grotesk',sans-serif;font-weight:600;"></td><td></td></tr>
+            </tfoot>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ FUNCIONÁRIOS ============ -->
+      <section class="view" id="view-funcionarios">
+        <div class="view-head">
+          <div>
+            <h2>Funcionários</h2>
+            <p>Cadastro da equipe, cargos e quais áreas do portal cada pessoa pode acessar.</p>
+          </div>
+          <button class="btn btn-primary" onclick="openEmployeeModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Novo funcionário
+          </button>
+        </div>
+
+        <div class="panel" style="padding:8px 20px;">
+          <table class="table">
+            <thead><tr><th>Nome</th><th>Cargo</th><th>Permissões</th><th></th></tr></thead>
+            <tbody id="employee-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="appfoot wrap">
+      <span>Gardênia Modas · Portal interno</span>
+      <span>v1.1 · dados de demonstração</span>
+    </footer>
+  </div>
+</div>
+
+<!-- ============ MODAL: Novo produto ============ -->
+<div class="modal-overlay" id="modal-product">
+  <div class="modal">
+    <div class="modal-head"><h3>Novo produto</h3><button class="modal-close" onclick="closeModal('modal-product')">✕</button></div>
+    <div class="field"><label>Nome do produto</label><input type="text" id="np-name" placeholder="Ex.: Vestido Linho Areia"></div>
+    <div class="field-row">
+      <div class="field"><label>SKU / código de barras</label><input type="text" id="np-sku" placeholder="Ex.: 789123456001"></div>
+      <div class="field"><label>Categoria</label>
+        <select id="np-cat"><option>Vestidos</option><option>Blusas</option><option>Calças</option><option>Saias</option><option>Acessórios</option></select>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Tamanho</label><input type="text" id="np-size" placeholder="Ex.: M"></div>
+      <div class="field"><label>Cor</label><input type="text" id="np-color" placeholder="Ex.: Areia"></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Preço (R$)</label><input type="number" id="np-price" placeholder="129.90"></div>
+      <div class="field"><label>Quantidade</label><input type="number" id="np-qty" placeholder="10"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('modal-product')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveProduct()">Salvar produto</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODAL: Etiqueta ============ -->
+<div class="modal-overlay" id="modal-label">
+  <div class="modal" style="max-width:340px;">
+    <div class="modal-head"><h3>Etiqueta</h3><button class="modal-close" onclick="closeModal('modal-label')">✕</button></div>
+    <div class="etiqueta etiqueta-print" id="etiqueta-content"></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('modal-label')">Fechar</button>
+      <button class="btn btn-primary" onclick="window.print()">Imprimir</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODAL: Novo funcionário ============ -->
+<div class="modal-overlay" id="modal-employee">
+  <div class="modal">
+    <div class="modal-head"><h3>Novo funcionário</h3><button class="modal-close" onclick="closeModal('modal-employee')">✕</button></div>
+    <div class="field"><label>Nome completo</label><input type="text" id="ne-name" placeholder="Ex.: Juliana Prado"></div>
+    <div class="field"><label>E-mail</label><input type="email" id="ne-email" placeholder="juliana@gardeniamodas.com"></div>
+    <div class="field"><label>Cargo</label>
+      <select id="ne-role"><option>Vendedor(a)</option><option>Caixa</option><option>Estoquista</option><option>Gerente</option></select>
+    </div>
+    <div class="field">
+      <label>Permissões de acesso</label>
+      <div id="ne-perms"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('modal-employee')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveEmployee()">Salvar funcionário</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===================== STATE (dados de demonstração) ===================== */
+const MODULES = ['Clientes','Estoque','Vendas','Métricas','Financeiro','Funcionários'];
+
+const state = {
+  clients: [
+    {name:'Marina Costa', phone:'(19) 99876-5432', cpf:'123.456.789-01', totalSpent:1240, purchases:[{date:'12/09/2026', items:'Vestido Linho Areia, Cinto Trança', total:289},{date:'02/08/2026', items:'Blusa Cropped Verde', total:119}]},
+    {name:'Ana Paula Ribeiro', phone:'(19) 98123-4567', cpf:'234.567.890-12', totalSpent:860, purchases:[{date:'10/09/2026', items:'Calça Alfaiataria', total:219}]},
+    {name:'Beatriz Lemos', phone:'(11) 97722-1190', cpf:'345.678.901-23', totalSpent:430, purchases:[{date:'01/09/2026', items:'Saia Midi Plissada', total:169}]},
+    {name:'Carla Nogueira', phone:'(19) 99654-3321', cpf:'456.789.012-34', totalSpent:2140, purchases:[{date:'14/09/2026', items:'Vestido Longo Floral, Brinco Dourado', total:349}]},
+    {name:'Débora Martins', phone:'(19) 98877-6655', cpf:'567.890.123-45', totalSpent:95, purchases:[{date:'20/08/2026', items:'Blusa Manga Longa', total:95}]},
+    {name:'Fernanda Prado', phone:'(16) 99123-8842', cpf:'678.901.234-56', totalSpent:670, purchases:[{date:'05/09/2026', items:'Calça Wide Leg', total:229}]},
+    {name:'Gabriela Souza', phone:'(19) 99001-2233', cpf:'789.012.345-67', totalSpent:1580, purchases:[{date:'13/09/2026', items:'Vestido Linho Areia', total:189}]},
+    {name:'Helena Duarte', phone:'(19) 97654-1122', cpf:'890.123.456-78', totalSpent:310, purchases:[{date:'28/08/2026', items:'Cinto Trança', total:79}]},
+    {name:'Isabela Freitas', phone:'(14) 99887-4455', cpf:'901.234.567-89', totalSpent:990, purchases:[{date:'09/09/2026', items:'Saia Midi Plissada, Brinco Dourado', total:249}]},
+    {name:'Juliana Prado', phone:'(19) 99321-6644', cpf:'012.345.678-90', totalSpent:1420, purchases:[{date:'11/09/2026', items:'Vestido Longo Floral', total:229}]},
+    {name:'Larissa Torres', phone:'(19) 98456-7789', cpf:'112.233.445-56', totalSpent:150, purchases:[{date:'19/08/2026', items:'Blusa Cropped Verde', total:119}]},
+    {name:'Patrícia Vale', phone:'(19) 99887-1234', cpf:'223.344.556-67', totalSpent:2890, purchases:[{date:'15/09/2026', items:'Vestido Linho Areia, Calça Alfaiataria', total:408}]},
+  ],
+
+  products: [
+    {sku:'789123456001', name:'Vestido Linho Areia', category:'Vestidos', size:'M', color:'Areia', price:189.00, qty:14},
+    {sku:'789123456002', name:'Vestido Longo Floral', category:'Vestidos', size:'P', color:'Floral', price:229.00, qty:3},
+    {sku:'789123456003', name:'Blusa Cropped Verde', category:'Blusas', size:'P', color:'Verde', price:119.00, qty:22},
+    {sku:'789123456004', name:'Blusa Manga Longa', category:'Blusas', size:'G', color:'Branco', price:95.00, qty:6},
+    {sku:'789123456005', name:'Calça Alfaiataria', category:'Calças', size:'38', color:'Preto', price:219.00, qty:9},
+    {sku:'789123456006', name:'Calça Wide Leg', category:'Calças', size:'40', color:'Bege', price:229.00, qty:2},
+    {sku:'789123456007', name:'Saia Midi Plissada', category:'Saias', size:'M', color:'Terracota', price:169.00, qty:11},
+    {sku:'789123456008', name:'Cinto Trança', category:'Acessórios', size:'Único', color:'Caramelo', price:79.00, qty:1},
+    {sku:'789123456009', name:'Brinco Dourado', category:'Acessórios', size:'Único', color:'Dourado', price:59.00, qty:31},
+    {sku:'789123456010', name:'Lenço de Seda', category:'Acessórios', size:'Único', color:'Verde-oliva', price:89.00, qty:0},
+  ],
+
+  employees: [
+    {name:'Camila Torres', email:'camila@gardeniamodas.com', role:'Gerente', perms:['Clientes','Estoque','Vendas','Métricas','Financeiro','Funcionários']},
+    {name:'Rodrigo Alves', email:'rodrigo@gardeniamodas.com', role:'Caixa', perms:['Vendas','Clientes']},
+    {name:'Sofia Bianchi', email:'sofia@gardeniamodas.com', role:'Estoquista', perms:['Estoque']},
+  ],
+
+  cart: [],
+  sales: [
+    {time:'09:12', items:2, total:289, label:'Vestido Linho Areia, Cinto Trança'},
+    {time:'10:40', items:1, total:119, label:'Blusa Cropped Verde'},
+    {time:'11:55', items:3, total:408, label:'Vestido Linho Areia, Calça Alfaiataria'},
+  ],
+  weekSales:[1980,2210,1750,2600,2040,3120,2480],
+};
+
+/* ===================== NAVIGATION ===================== */
+const titles = {
+  inicio:['Início','Terça-feira, 16 de setembro'],
+  clientes:['Clientes','Consulta de cadastro e histórico de compras'],
+  estoque:['Estoque','Produtos, quantidades e etiquetas'],
+  vendas:['Vendas','Caixa da loja'],
+  metricas:['Métricas de Vendas','Desempenho em tempo real'],
+  financeiro:['Financeiro','Entradas e saídas'],
+  funcionarios:['Funcionários','Equipe e permissões'],
+};
+
+function navigate(view){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+view).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.view===view));
+  document.getElementById('header-title').textContent = titles[view][0];
+  document.getElementById('header-sub').textContent = titles[view][1];
+  window.scrollTo(0,0);
+  if(view==='metricas') requestAnimationFrame(initCharts);
+}
+
+/* ===================== CLIENTES ===================== */
+function onlyDigits(s){ return (s||'').replace(/\D/g,''); }
+
+function renderClients(){
+  const q = document.getElementById('client-search').value.trim().toLowerCase();
+  const qd = onlyDigits(q);
+  const list = document.getElementById('client-list');
+  const countEl = document.getElementById('client-count');
+
+  const results = state.clients.filter(c=>{
+    if(!q) return true;
+    const nameMatch = c.name.toLowerCase().includes(q);
+    const digitMatch = qd.length>0 && (onlyDigits(c.phone).includes(qd) || onlyDigits(c.cpf).includes(qd));
+    return nameMatch || digitMatch;
+  });
+
+  countEl.textContent = q ? results.length+' resultado(s) para "'+q+'"' : results.length+' clientes cadastrados';
+
+  if(results.length===0){
+    list.innerHTML = '<div class="empty-state">Nenhum cliente encontrado</div>';
+    return;
+  }
+
+  list.innerHTML = results.map(c=>`
+    <div class="list-row">
+      <div>
+        <div class="client-name">${c.name}</div>
+        <div class="client-meta"><span>${c.phone}</span><span>${c.cpf}</span></div>
+      </div>
+      <div class="client-spend">
+        <div class="amt">R$ ${c.totalSpent.toLocaleString('pt-BR')}</div>
+        <div class="lbl">${c.purchases.length} compra(s)</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ===================== ESTOQUE ===================== */
+function stockBadge(qty){
+  if(qty===0) return '<span class="badge low">Sem estoque</span>';
+  if(qty<=3) return '<span class="badge low">'+qty+' un.</span>';
+  return '<span class="badge">'+qty+' un.</span>';
+}
+
+function renderProducts(){
+  const tbody = document.getElementById('product-tbody');
+  tbody.innerHTML = state.products.map((p,i)=>`
+    <tr>
+      <td><strong>${p.name}</strong></td>
+      <td style="color:var(--ink-soft);font-size:12px;">${p.sku}</td>
+      <td>${p.category}</td>
+      <td>${p.size} · ${p.color}</td>
+      <td>R$ ${p.price.toFixed(2).replace('.',',')}</td>
+      <td>
+        <div class="qty-control">
+          <button onclick="changeQty(${i},-1)">−</button>
+          <span>${p.qty}</span>
+          <button onclick="changeQty(${i},1)">+</button>
+        </div>
+      </td>
+      <td><button class="btn btn-sm" onclick="openLabel(${i})">Etiqueta</button></td>
+    </tr>
+  `).join('');
+  updateDashboardStats();
+}
+
+function changeQty(i,delta){
+  state.products[i].qty = Math.max(0, state.products[i].qty+delta);
+  renderProducts();
+}
+
+function openProductModal(){ document.getElementById('modal-product').classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+
+function saveProduct(){
+  const name = document.getElementById('np-name').value.trim();
+  const sku = document.getElementById('np-sku').value.trim() || String(Date.now());
+  if(!name){ alert('Digite o nome do produto.'); return; }
+  state.products.push({
+    sku, name,
+    category: document.getElementById('np-cat').value,
+    size: document.getElementById('np-size').value || '—',
+    color: document.getElementById('np-color').value || '—',
+    price: parseFloat(document.getElementById('np-price').value)||0,
+    qty: parseInt(document.getElementById('np-qty').value)||0,
+  });
+  ['np-name','np-sku','np-size','np-color','np-price','np-qty'].forEach(id=>document.getElementById(id).value='');
+  closeModal('modal-product');
+  renderProducts();
+  renderCatalog();
+}
+
+function openLabel(i){
+  const p = state.products[i];
+  document.getElementById('etiqueta-content').innerHTML = `
+    <div class="loja">GARDÊNIA MODAS</div>
+    <div class="nome">${p.name} — ${p.size}</div>
+    <div class="preco">R$ ${p.price.toFixed(2).replace('.',',')}</div>
+    <svg id="barcode-svg"></svg>
+  `;
+  document.getElementById('modal-label').classList.add('open');
+  try{ JsBarcode('#barcode-svg', p.sku, {format:'CODE128', height:42, width:1.6, fontSize:11, margin:0}); }catch(e){}
+}
+
+/* ===================== VENDAS / CAIXA ===================== */
+function renderCatalog(){
+  document.getElementById('catalog-grid').innerHTML = state.products.map(p=>`
+    <div class="catalog-chip" onclick="addToCart('${p.sku}')">
+      ${p.name}<span class="sku">R$ ${p.price.toFixed(2).replace('.',',')} · ${p.sku}</span>
+    </div>
+  `).join('');
+}
+
+function scanAdd(){
+  const input = document.getElementById('scan-input');
+  const code = input.value.trim();
+  const msg = document.getElementById('scan-msg');
+  if(!code) return;
+  const found = addToCart(code);
+  msg.textContent = found ? 'Adicionado: '+found : 'Produto não encontrado para o código "'+code+'"';
+  msg.className = 'scan-msg '+(found?'ok':'err');
+  input.value = '';
+  input.focus();
+}
+
+function addToCart(sku){
+  const p = state.products.find(pr=>pr.sku===sku);
+  if(!p) return null;
+  const existing = state.cart.find(c=>c.sku===sku);
+  if(existing) existing.qty++;
+  else state.cart.push({sku:p.sku, name:p.name, price:p.price, qty:1});
+  renderCart();
+  return p.name;
+}
+
+function removeFromCart(i){ state.cart.splice(i,1); renderCart(); }
+
+function renderCart(){
+  const tbody = document.getElementById('cart-tbody');
+  if(state.cart.length===0){
+    tbody.innerHTML = '<tr><td colspan="5" class="empty-state">Carrinho vazio — escaneie um produto para começar</td></tr>';
+  } else {
+    tbody.innerHTML = state.cart.map((c,i)=>`
+      <tr>
+        <td>${c.name}</td>
+        <td>${c.qty}</td>
+        <td>R$ ${c.price.toFixed(2).replace('.',',')}</td>
+        <td>R$ ${(c.qty*c.price).toFixed(2).replace('.',',')}</td>
+        <td><button class="btn btn-sm btn-ghost btn-danger" onclick="removeFromCart(${i})">Remover</button></td>
+      </tr>
+    `).join('');
+  }
+  const total = state.cart.reduce((s,c)=>s+c.qty*c.price,0);
+  document.getElementById('cart-total').textContent = 'R$ '+total.toFixed(2).replace('.',',');
+}
+
+function clearCart(){ state.cart=[]; renderCart(); }
+
+function finalizeSale(){
+  if(state.cart.length===0) return;
+  const total = state.cart.reduce((s,c)=>s+c.qty*c.price,0);
+  const itemsCount = state.cart.reduce((s,c)=>s+c.qty,0);
+  const label = state.cart.map(c=>c.name).join(', ');
+  const now = new Date();
+  const time = now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
+  state.sales.unshift({time, items:itemsCount, total, label});
+  state.weekSales[state.weekSales.length-1] += total;
+  clearCart();
+  updateDashboardStats();
+  if(document.getElementById('view-metricas').classList.contains('active')){
+    renderMetricLists();
+    if(window.weekChart){ window.weekChart.data.datasets[0].data = state.weekSales; window.weekChart.update(); }
+  }
+  document.getElementById('scan-msg').textContent = 'Venda finalizada: R$ '+total.toFixed(2).replace('.',',');
+  document.getElementById('scan-msg').className = 'scan-msg ok';
+}
+
+/* ===================== MÉTRICAS ===================== */
+function renderMetricLists(){
+  document.getElementById('recent-sales').innerHTML = state.sales.slice(0,6).map(s=>`
+    <div class="list-row" style="cursor:default;">
+      <div><div class="client-name" style="font-size:13px;">${s.label}</div><div class="client-meta"><span>${s.items} item(ns)</span><span>${s.time}</span></div></div>
+      <div class="client-spend"><div class="amt">R$ ${s.total.toFixed(2).replace('.',',')}</div></div>
+    </div>
+  `).join('');
+
+  const tally = {};
+  state.sales.forEach(s=> s.label.split(', ').forEach(n=> tally[n]=(tally[n]||0)+1 ));
+  const top = Object.entries(tally).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  document.getElementById('top-products').innerHTML = top.map(([name,count])=>`
+    <div class="list-row" style="cursor:default;">
+      <div class="client-name" style="font-size:13px;">${name}</div>
+      <div class="client-spend"><div class="amt">${count}×</div></div>
+    </div>
+  `).join('') || '<div class="empty-state">Sem vendas registradas ainda</div>';
+}
+
+function initCharts(){
+  renderMetricLists();
+  if(typeof Chart==='undefined') return;
+
+  const days = ['Qui','Sex','Sáb','Dom','Seg','Ter','Hoje'];
+  if(!window.weekChart){
+    window.weekChart = new Chart(document.getElementById('chart-week'), {
+      type:'bar',
+      data:{labels:days, datasets:[{data:state.weekSales, backgroundColor:'#6d9c62', borderRadius:6}]},
+      options:{plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true, grid:{color:'#e5efe1'}}, x:{grid:{display:false}}}}
+    });
+  } else { window.weekChart.update(); }
+
+  if(!window.catChart){
+    window.catChart = new Chart(document.getElementById('chart-cat'), {
+      type:'doughnut',
+      data:{labels:['Vestidos','Blusas','Calças','Saias','Acessórios'],
+        datasets:[{data:[34,22,20,14,10], backgroundColor:['#6d9c62','#9dc691','#cfe3c8','#3f6338','#b5793f']}]},
+      options:{plugins:{legend:{position:'bottom', labels:{boxWidth:10,font:{size:11}}}}}
+    });
+  }
+}
+
+/* ===================== FINANCEIRO ===================== */
+let financeRows = [
+  {date:'01/09', desc:'Venda balcão', cat:'Vendas', in:2480, out:0},
+  {date:'02/09', desc:'Fornecedor tecidos', cat:'Compras', in:0, out:1200},
+  {date:'03/09', desc:'Aluguel loja', cat:'Fixo', in:0, out:2600},
+  {date:'05/09', desc:'Venda balcão', cat:'Vendas', in:3120, out:0},
+];
+
+function renderFinance(){
+  const tbody = document.getElementById('finance-tbody');
+  tbody.innerHTML = financeRows.map((r,i)=>`
+    <tr>
+      <td contenteditable="true" onblur="editFinance(${i},'date',this.textContent)">${r.date}</td>
+      <td contenteditable="true" onblur="editFinance(${i},'desc',this.textContent)">${r.desc}</td>
+      <td contenteditable="true" onblur="editFinance(${i},'cat',this.textContent)">${r.cat}</td>
+      <td contenteditable="true" onblur="editFinance(${i},'in',this.textContent)" style="color:var(--sage-600);">${r.in? 'R$ '+r.in.toFixed(2).replace('.',','):''}</td>
+      <td contenteditable="true" onblur="editFinance(${i},'out',this.textContent)" style="color:var(--danger);">${r.out? 'R$ '+r.out.toFixed(2).replace('.',','):''}</td>
+      <td><button class="btn btn-sm btn-ghost btn-danger" onclick="removeFinance(${i})">Remover</button></td>
+    </tr>
+  `).join('');
+  const balance = financeRows.reduce((s,r)=>s+r.in-r.out,0);
+  document.getElementById('finance-balance').textContent = 'R$ '+balance.toFixed(2).replace('.',',');
+  document.getElementById('finance-balance').style.color = balance>=0 ? 'var(--sage-600)' : 'var(--danger)';
+}
+
+function editFinance(i,field,val){
+  if(field==='in'||field==='out'){ financeRows[i][field] = parseFloat(val.replace(/[^\d,.-]/g,'').replace(',','.'))||0; }
+  else financeRows[i][field]=val.trim();
+  renderFinance();
+}
+function addFinanceRow(){ financeRows.push({date:'',desc:'',cat:'',in:0,out:0}); renderFinance(); }
+function removeFinance(i){ financeRows.splice(i,1); renderFinance(); }
+
+/* ===================== FUNCIONÁRIOS ===================== */
+function renderEmployees(){
+  document.getElementById('employee-tbody').innerHTML = state.employees.map((e,i)=>`
+    <tr>
+      <td><strong>${e.name}</strong><div style="color:var(--ink-soft);font-size:11.5px;">${e.email}</div></td>
+      <td>${e.role}</td>
+      <td>${e.perms.map(p=>'<span class="chip">'+p+'</span>').join('')}</td>
+      <td><button class="btn btn-sm btn-ghost btn-danger" onclick="removeEmployee(${i})">Remover</button></td>
+    </tr>
+  `).join('');
+}
+function removeEmployee(i){ state.employees.splice(i,1); renderEmployees(); }
+
+function openEmployeeModal(){
+  document.getElementById('ne-perms').innerHTML = MODULES.map(m=>`
+    <label class="perm-toggle"><input type="checkbox" value="${m}"> ${m}</label>
+  `).join(' ');
+  document.getElementById('modal-employee').classList.add('open');
+}
+
+function saveEmployee(){
+  const name = document.getElementById('ne-name').value.trim();
+  if(!name){ alert('Digite o nome do funcionário.'); return; }
+  const perms = Array.from(document.querySelectorAll('#ne-perms input:checked')).map(c=>c.value);
+  state.employees.push({
+    name, email: document.getElementById('ne-email').value.trim(),
+    role: document.getElementById('ne-role').value, perms
+  });
+  ['ne-name','ne-email'].forEach(id=>document.getElementById(id).value='');
+  closeModal('modal-employee');
+  renderEmployees();
+}
+
+/* ===================== DASHBOARD STATS ===================== */
+function updateDashboardStats(){
+  const salesToday = state.sales.reduce((s,x)=>s+x.total,0);
+  document.getElementById('stat-vendas-hoje').textContent = 'R$ '+salesToday.toLocaleString('pt-BR');
+  const totalStock = state.products.reduce((s,p)=>s+p.qty,0);
+  document.getElementById('stat-estoque').textContent = totalStock.toLocaleString('pt-BR');
+  const lowStock = state.products.filter(p=>p.qty<=3).length;
+  document.getElementById('stat-estoque-baixo').textContent = lowStock+' itens em falta';
+  document.getElementById('tag-estoque').textContent = lowStock+' em falta';
+  document.getElementById('stat-clientes').textContent = state.clients.length.toLocaleString('pt-BR');
+}
+
+/* ===================== INIT ===================== */
+renderClients();
+renderProducts();
+renderCatalog();
+renderCart();
+renderFinance();
+renderEmployees();
+updateDashboardStats();
+</script>
+</body>
+</html>
