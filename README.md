@@ -32,42 +32,58 @@ Com a implementação da solução, a loja poderá reduzir a dependência de reg
 ## Como reproduzir o ambiente:
 
 1. **Provisionamento da VM (OpenTofu):**
-   ```bash
-   cd infraestrutura/
-   tofu init
-   tofu apply -auto-approve
-   ```
+    ```bash
+        cd infraestrutura/
+        tofu init
+        tofu apply -auto-approve
+    ```
 2. **Configuração do Ambiente (Ansible):**
     Atualize o IP retornado no arquivo "infraestrutura/ansible/invetory.ini" e execute:
     ```bash
-    cd infraestrutura/ansible/
-    ansible-playbook -i inventory.ini playbook.yml
+        cd infraestrutura/ansible/
+        ansible-playbook -i inventory.ini playbook.yml
     ```
 3. **Implantação da Aplicação:**
     ```bash
-    scp -r simulador/* debian@192.168.122.XX:/home/debian/app_simulador/
+        cd ./Projeto-Gardenia-unifeob/ # Na pasta raiz do projeto
+        scp -r gerador/* debian@192.168.122.XX:/home/debian/app_simulador/
     ```
 4. **Execução do Simulador na VM:**
     ```bash
-    ssh debian@192.168.122.XX
-    python3 /home/debian/app_simulador/simulador.py
+        ssh debian@192.168.122.XX
+        python3 /home/debian/app_simulador/gerador.py
+    ```
+
+5. **Para ligar a VM novamente após o boot:**
+    ```bash
+        # Ativa a rede virtual do libvirt
+        sudo virsh net-start default 2>/dev/null
+        # Liga a VM
+        sudo virsh start vm-simulador-data
+    ```
+
+6. **Para sair do terminal do Debian(VM):**
+    ```bash
+        exit
+    ```
 
 ⚠️ **Verifique se a sua pasta possui exatamente estes arquivos antes de dar push no git:**
 
 ```text
-projeto-data-science/
-├── .gitignore
-├── README.md
-├── dados/
-│   └── exemplo_dados.csv
-├── infraestrutura/
-│   ├── cloud_init.cfg
-│   ├── main.tf
-│   ├── variables.tf
-│   └── ansible/
-│       ├── inventory.ini
-│       └── playbook.yml
-└── simulador/
-    ├── requirements.txt
-    └── simulador.py
+    projeto-data-science/
+    ├── .gitignore
+    ├── README.md
+    ├── dados/
+    │   └── exemplo_dados.csv
+    ├── infraestrutura/
+    │   ├── cloud_init.cfg
+    │   ├── main.tf
+    │   ├── variables.tf
+    │   └── ansible/
+    │       ├── inventory.ini
+    │       └── playbook.yml
+    └── gerador/
+        ├── gerador.py
+        ├── requirements.md
+        └── requirements.txt
 ```
