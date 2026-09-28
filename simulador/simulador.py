@@ -3,9 +3,13 @@ import random
 import uuid
 import time
 from datetime import datetime, timedelta
+import threading
+import os
+import signal
+import sys
 
 class SimuladorDados:
-    def __init__(self, taxa_consistencia=100):
+    def __init__(self, taxa_consistencia=100, contador_arquivo=1):
         """
         Inicializa o simulador de dados
         
@@ -13,9 +17,11 @@ class SimuladorDados:
             taxa_consistencia (float): Taxa de consistência dos dados (0-100)
                                       0% = todos inconsistentes
                                       100% = nenhum inconsistente
+            contador_arquivo (int): Contador para numeração dos arquivos
         """
         self.taxa_consistencia = max(0, min(100, taxa_consistencia))
         self.data_simulacao = datetime.now()
+        self.contador_arquivo = contador_arquivo
         self.estatisticas = {
             'clientes': {'total': 0, 'consistentes': 0, 'inconsistentes': 0},
             'produtos': {'total': 0, 'consistentes': 0, 'inconsistentes': 0},
@@ -271,7 +277,7 @@ class SimuladorDados:
         Executa a simulação completa
         """
         print("=" * 70)
-        print("SIMULADOR DE DADOS")
+        print(f"SIMULADOR DE DADOS - CICLO #{self.contador_arquivo}")
         print("=" * 70)
         print(f"Data de simulação: {self.data_simulacao.strftime('%Y-%m-%d %H:%M:%S')}")
         print(f"Taxa de consistência: {self.taxa_consistencia}%")
@@ -302,10 +308,10 @@ class SimuladorDados:
         
         # Salva arquivos
         print("\nSalvando arquivos CSV...")
-        self.salvar_csv(clientes, "clientes.csv")
-        self.salvar_csv(produtos, "produtos.csv")
-        self.salvar_csv(compras, "compras.csv")
-        print("  ✓ Arquivos salvos com sucesso")
+        self.salvar_csv(clientes, f"clientes_{self.contador_arquivo}.csv")
+        self.salvar_csv(produtos, f"produtos_{self.contador_arquivo}.csv")
+        self.salvar_csv(compras, f"compras_{self.contador_arquivo}.csv")
+        print(f"  ✓ Arquivos salvos com sucesso (ciclo {self.contador_arquivo})")
         
         # Exibe relatório
         self.exibir_relatorio(tempo_total)
@@ -353,6 +359,59 @@ class SimuladorDados:
         print("=" * 70)
 
 
+class GerenciadorSimulacao:
+    def __init__(self, taxa_consistencia):
+        self.taxa_consistencia = taxa_consistencia
+        self.rodando = False
+        self.contador = 1
+    
+    def iniciar_loop(self):
+        """Inicia o loop de simulação"""
+        self.rodando = True
+        print("\n" + "=" * 70)
+        print("INICIANDO LOOP DE SIMULAÇÃO")
+        print("=" * 70)
+        print("Pressione CTRL + C para parar o loop")
+        print("=" * 70 + "\n")
+        
+        while self.rodando:
+            try:
+                simulador = SimuladorDados(
+                    taxa_consistencia=self.taxa_consistencia,
+                    contador_arquivo=self.contador
+                )
+                simulador.executar_simulacao()
+                
+                self.contador += 1
+                
+                if self.rodando:  # Só mostra a mensagem se ainda estiver rodando
+                    print(f"\n⏳ Aguardando 3 segundos para próximo ciclo...")
+                    print(f"💡 Pressione CTRL + C para parar\n")
+                    
+                    # Aguarda 3 segundos, mas verifica se deve parar
+                    for _ in range(30):  # 30 * 0.1 = 3 segundos
+                        if not self.rodando:
+                            break
+                        time.sleep(0.1)
+                        
+            except KeyboardInterrupt:
+                self.parar()
+                break
+            except Exception as e:
+                print(f"\n❌ Erro durante a simulação: {e}")
+                if self.rodando:
+                    time.sleep(3)
+    
+    def parar(self):
+        """Para o loop de simulação"""
+        self.rodando = False
+        print("\n" + "=" * 70)
+        print("LOOP DE SIMULAÇÃO PARADO")
+        print("=" * 70)
+        print(f"Total de ciclos executados: {self.contador - 1}")
+        print("=" * 70)
+
+
 def main():
     """
     Função principal
@@ -372,9 +431,11 @@ def main():
         except ValueError:
             print("Por favor, digite um número válido.")
     
-    # Cria e executa o simulador
-    simulador = SimuladorDados(taxa_consistencia=taxa)
-    simulador.executar_simulacao()
+    # Cria o gerenciador
+    gerenciador = GerenciadorSimulacao(taxa_consistencia=taxa)
+    
+    # Inicia o loop de simulação
+    gerenciador.iniciar_loop()
 
 
 if __name__ == "__main__":
