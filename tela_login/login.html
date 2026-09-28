@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&family=Yusei+Magic&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login / Cadastro</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      font-family: "Yusei Magic", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #808080, #323232);
+      color: #ddd;
+      padding: 24px;
+    }
+
+    .card {
+      width: min(100%, 400px);
+      background: #323232;
+      border-radius: 32px;
+      padding: 32px;
+      box-shadow: 0 18px 40px rgba(16, 24, 40, 0.16);
+    }
+
+    .brand {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .brand h1 {
+      margin: 0 0 8px;
+      font-size: 32px;
+    }
+
+    .brand p {
+      margin: 0;
+      color: #64748b;
+      font-size: 16px;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-weight: 640;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    input {
+      width: 100%;
+      padding: 16px 16px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      outline: none;
+      font-size: 16px;
+      transition: border-color .2s, box-shadow .2s;
+      background: #fff;
+      color: #1e293b;
+    }
+
+    input:focus {
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 4px rgba(80, 64, 256, .16);
+    }
+
+    input.valid { border-color: #16a34a; }
+    input.invalid { border-color: #dc2626; }
+    input:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .hint {
+      margin-top: 6px;
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    .status {
+      min-height: 20px;
+      margin: 4px 0 20px;
+      font-size: 16px;
+    }
+
+    .status.success { color: #4ade80; }
+    .status.error { color: #f87171; }
+    .status.loading { color: #94a3b8; }
+
+    button {
+      width: 100%;
+      border: 0;
+      border-radius: 8px;
+      padding: 16px;
+      font-family: "Merriweather Sans";
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      background: #4f46e5;
+      color: #fff;
+      transition: transform .16s, opacity .16s;
+    }
+
+    button:hover { transform: translateY(-1px); }
+    button:disabled {
+      opacity: .48;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    button.secondary {
+      background: #4b5563;
+      margin-top: 8px;
+    }
+
+    .result {
+      display: none;
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 8px;
+      background: #646464;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .result.show { display: block; }
+    .result strong { display: inline-block; min-width: 90px; }
+
+    .saved-users {
+      margin-top: 24px;
+      border-top: 1px solid #646464;
+      padding-top: 16px;
+    }
+
+    .saved-users h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+      color: #94a3b8;
+    }
+
+    .saved-users pre {
+      background: #404040;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 16px;
+      color: #ccddee;
+      max-height: 200px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+      margin: 0;
+    }
+
+    .footer {
+      margin-top: 20px;
+      text-align: center;
+      color: #94a3b8;
+      font-size: 8px;
+      line-height: 1.6;
+    }
+
+    .g-recaptcha {
+      display: flex;
+      justify-content: center;
+      margin: 16px 0;
+    }
+
+    .api-filled {
+      background-color: #eeeeee;
+      border-color: #16aaaa;
+    }
+
+    .email-validating {
+      background-color: #fef9c3;
+      border-color: #eab308;
+    }
+
+    .email-valid { background-color: #dcfce7; border-color: #16a34a; }
+    .email-invalid { background-color: #fee2e2; border-color: #dc2626; }
+
+    /* ============================================
+       ESTILOS DA TELA DE TERMOS
+       ============================================ */
+    .terms-view {
+      display: none;
+    }
+
+    .terms-view.show {
+      display: block;
+    }
+
+    .form-view.hide {
+      display: none;
+    }
+
+    .terms-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .terms-header h2 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      color: #e2e8f0;
+    }
+
+    .terms-header p {
+      margin: 0;
+      color: #94a3b8;
+      font-size: 14px;
+    }
+
+    .terms-scroll {
+      max-height: 340px;
+      overflow-y: auto;
+      padding: 16px;
+      background: #262626;
+      border-radius: 12px;
+      border: 1px solid #4b4b4b;
+      font-size: 14px;
+      line-height: 1.7;
+      color: #cbd5e1;
+      margin-bottom: 16px;
+      text-align: left;
+    }
+
+    .terms-scroll::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .terms-scroll::-webkit-scrollbar-track {
+      background: #1f1f1f;
+      border-radius: 4px;
+    }
+
+    .terms-scroll::-webkit-scrollbar-thumb {
+      background: #4f46e5;
+      border-radius: 4px;
+    }
+
+    .terms-scroll h3 {
+      color: #a5b4fc;
+      font-size: 16px;
+      margin: 18px 0 8px;
+    }
+
+    .terms-scroll h3:first-child {
+      margin-top: 0;
+    }
+
+    .terms-scroll p {
+      margin: 8px 0;
+    }
+
+    .terms-scroll ul {
+      margin: 8px 0;
+      padding-left: 20px;
+    }
+
+    .terms-scroll li {
+      margin-bottom: 4px;
+    }
+
+    .terms-scroll strong {
+      color: #e2e8f0;
+    }
+
+    .terms-scroll hr {
+      border: 0;
+      border-top: 1px solid #404040;
+      margin: 16px 0;
+    }
+
+    .terms-checkbox {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px;
+      background: #3a3a3a;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      cursor: pointer;
+      transition: background .2s;
+      text-align: left;
+    }
+
+    .terms-checkbox:hover {
+      background: #424242;
+    }
+
+    .terms-checkbox input[type="checkbox"] {
+      width: auto;
+      margin-top: 3px;
+      accent-color: #4f46e5;
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .terms-checkbox span {
+      font-size: 14px;
+      color: #e2e8f0;
+      line-height: 1.5;
+    }
+
+    .terms-actions {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .terms-actions button {
+      margin-bottom: 8px;
+    }
+
+    .terms-actions button:last-child {
+      margin-bottom: 0;
+    }
+
+    .user-summary {
+      background: #2a2a2a;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      font-size: 14px;
+      color: #94a3b8;
+      text-align: left;
+    }
+
+    .user-summary strong {
+      color: #e2e8f0;
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+
+    <!-- ============================================================
+         VIEW 1: FORMULÁRIO DE CADASTRO
+         ============================================================ -->
+    <div id="formView" class="form-view">
+      <div class="brand">
+        <h1>Entre ou Cadastre-se</h1>
+        <p><strong>Informe seus dados para continuar</strong></p>
+      </div>
+      <form id="loginForm">
+        <div class="field">
+          <p style="font-size: 12px; color: #808080; margin-bottom: 0px;">(opcional)</p>
+          <label for="cpf">| CPF:</label>
+          <input
+            id="cpf"
+            name="cpf"
+            type="text"
+            inputmode="numeric"
+            autocomplete="off"
+            maxlength="14"
+            placeholder="000.000.000-00"
+          />
+          <div class="hint"><strong>Preencha caso você gostaria de ser Cliente+</strong><br>O CPF será verificado antes do envio.</div>
+        </div>
+
+        <div class="field">
+          <label for="nome">| Nome:</label>
+          <input
+            id="nome"
+            name="nome"
+            type="text"
+            autocomplete="name"
+            placeholder="Digite seu lindo nome"
+            required
+          />
+        </div>
+
+        <div class="field">
+          <label for="email">| E-mail:</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            autocomplete="email"
+            placeholder="nome.usuario123@dominio.com"
+            required
+          />
+          <div class="hint">O E-mail é necessário para entrar em contato quando necessário. <strong>Nunca enviaremos spam!</strong></div>
+          <div id="emailStatus" style="font-size: 13px; margin-top: 4px; min-height: 20px;"></div>
+        </div>
+
+        <div id="status" class="status" role="status" aria-live="polite"></div>
+
+        <div class="field">
+          <div class="g-recaptcha" 
+            data-sitekey="6LfXpdQtAAAAABHrXHr6Y_7-2RIoE-3NXU0bc9mu"
+            data-callback="onCaptchaSuccess"
+            data-expired-callback="onCaptchaExpired">
+          </div>
+        </div>
+
+        <button id="submitBtn" type="submit" disabled>
+          Continuar
+        </button>
+      </form>
+
+      <div id="result" class="result"></div>
+
+      <div class="saved-users" id="savedUsersArea">
+        <h3>📁 Usuários cadastrados (localmente)</h3>
+        <pre id="savedUsersList">Nenhum usuário cadastrado ainda.</pre>
+      </div>
+
+      <div class="footer">
+        feito por alunos da UNIFEOB do curso de Ciência da Computação
+      </div>
+    </div>
+
+    <!-- ============================================================
+         VIEW 2: TERMOS DE SERVIÇO
+         ============================================================ -->
+    <div id="termsView" class="terms-view">
+      <div class="terms-header">
+        <h2>📜 Termos de Serviço</h2>
+        <p>Leia com atenção antes de continuar</p>
+      </div>
+
+      <!-- Resumo dos dados informados -->
+      <div class="user-summary" id="userSummary"></div>
+
+      <!-- Texto dos termos com scroll -->
+      <div class="terms-scroll" id="termsScroll">
+        <h3>Termos de Serviço – Gardênia Roupas</h3>
+        <p><em>Última atualização: <span id="termsDate"></span></em></p>
+
+        <p>Bem-vindo(a) à <strong>Gardênia</strong>, sua loja de roupas online. Ao acessar e utilizar nosso site, você concorda com os Termos de Serviço descritos abaixo. Leia com atenção antes de realizar qualquer compra ou cadastro.</p>
+
+        <hr>
+
+        <h3>1. Aceitação dos Termos</h3>
+        <p>Ao navegar, cadastrar-se ou efetuar compras no site da Gardênia, você declara ter lido, compreendido e aceito integralmente estes Termos de Serviço, bem como nossa Política de Privacidade. Caso não concorde com qualquer cláusula, recomendamos que não utilize nossos serviços.</p>
+
+        <h3>2. Cadastro e Conta do Usuário</h3>
+        <p><strong>2.1.</strong> Para aproveitar a experiência completa da Gardênia, o usuário poderá criar uma conta fornecendo informações verdadeiras, completas e atualizadas.</p>
+        <p><strong>2.2.</strong> O usuário é responsável pela confidencialidade de seus dados de acesso (login e senha), bem como por todas as atividades realizadas em sua conta.</p>
+        <p><strong>2.3.</strong> A Gardênia reserva-se o direito de suspender ou cancelar contas que apresentem informações falsas, uso indevido ou violação destes Termos.</p>
+
+        <h3>3. Coleta de Dados e Algoritmo de Compras</h3>
+        <p><strong>3.1.</strong> A Gardênia coleta dados fornecidos voluntariamente pelo usuário, como nome, e-mail, endereço, histórico de compras, preferências de estilo, tamanhos, cores e interações realizadas no site.</p>
+        <p><strong>3.2.</strong> Esses dados são utilizados para alimentar nosso algoritmo de compras personalizado, cujo objetivo é:</p>
+        <ul>
+          <li>Recomendar peças e coleções de acordo com o seu estilo e histórico;</li>
+          <li>Sugerir tamanhos e combinações mais adequadas ao seu perfil;</li>
+          <li>Melhorar a experiência de navegação e a relevância dos produtos exibidos;</li>
+          <li>Otimizar promoções, campanhas e comunicações direcionadas.</li>
+        </ul>
+        <p><strong>3.3.</strong> O algoritmo pode utilizar técnicas de análise de comportamento, aprendizado de máquina e filtragem de preferências. As recomendações são geradas de forma automatizada e têm caráter sugestivo, não constituindo obrigação de compra ou garantia de disponibilidade.</p>
+        <p><strong>3.4.</strong> O usuário poderá, a qualquer momento, solicitar a revisão, atualização ou exclusão de seus dados pessoais, bem como optar por não receber recomendações personalizadas, entrando em contato pelos canais oficiais de atendimento.</p>
+        <p><strong>3.5.</strong> A Gardênia compromete-se a tratar os dados conforme a Lei Geral de Proteção de Dados (LGPD – Lei nº 13.709/2018), garantindo segurança, transparência e finalidade legítima no uso das informações.</p>
+
+        <h3>4. Compras, Preços e Pagamentos</h3>
+        <p><strong>4.1.</strong> Os produtos exibidos no site estão sujeitos à disponibilidade de estoque.</p>
+        <p><strong>4.2.</strong> Os preços, promoções e condições de pagamento podem ser alterados sem aviso prévio, prevalecendo sempre o valor exibido no momento da finalização da compra.</p>
+        <p><strong>4.3.</strong> A Gardênia utiliza plataformas seguras de pagamento e não armazena dados sensíveis de cartões de crédito.</p>
+        <p><strong>4.4.</strong> O pedido somente será considerado confirmado após a aprovação do pagamento e o envio do e-mail de confirmação.</p>
+
+        <h3>5. Trocas, Devoluções e Cancelamentos</h3>
+        <p><strong>5.1.</strong> O usuário poderá solicitar troca ou devolução em até 7 (sete) dias corridos após o recebimento do produto, conforme o Código de Defesa do Consumidor.</p>
+        <p><strong>5.2.</strong> O produto deverá estar sem sinais de uso, com etiquetas e embalagem original.</p>
+        <p><strong>5.3.</strong> Casos específicos de defeito de fabricação serão analisados individualmente pela equipe Gardênia.</p>
+
+        <h3>6. Propriedade Intelectual</h3>
+        <p><strong>6.1.</strong> Todo o conteúdo do site — textos, imagens, logotipos, layout, marcas e código-fonte — pertence à Gardênia ou a seus parceiros, sendo protegido por direitos autorais e de propriedade industrial.</p>
+        <p><strong>6.2.</strong> É proibida a reprodução, distribuição ou uso indevido sem autorização prévia e por escrito.</p>
+
+        <h3>7. Responsabilidades do Usuário</h3>
+        <p>O usuário compromete-se a:</p>
+        <ul>
+          <li>Utilizar o site de forma ética e legal;</li>
+          <li>Não inserir informações falsas ou de terceiros sem autorização;</li>
+          <li>Não tentar burlar sistemas de segurança, algoritmos ou mecanismos de recomendação;</li>
+          <li>Respeitar os direitos de propriedade intelectual da Gardênia.</li>
+        </ul>
+
+        <h3>8. Limitação de Responsabilidade</h3>
+        <p><strong>8.1.</strong> A Gardênia não se responsabiliza por indisponibilidades temporárias do site, falhas de conexão, ou por decisões de compra tomadas exclusivamente com base nas sugestões do algoritmo.</p>
+        <p><strong>8.2.</strong> As recomendações geradas são apenas orientativas e não substituem a análise pessoal do consumidor quanto a tamanho, estilo e adequação do produto.</p>
+
+        <h3>9. Alterações nos Termos</h3>
+        <p>A Gardênia poderá atualizar estes Termos de Serviço a qualquer momento, visando melhorias ou adequações legais. Recomendamos a leitura periódica. O uso contínuo do site após alterações implica concordância com os novos termos.</p>
+
+        <h3>10. Contato</h3>
+        <p>Em caso de dúvidas, solicitações ou reclamações, entre em contato pelos canais oficiais:</p>
+        <ul>
+          <li><strong>E-mail:</strong> contato@gardeniaroupas.com.br</li>
+          <li><strong>Central de Atendimento:</strong> (16) 99999-0000</li>
+          <li><strong>Endereço:</strong> Av. das Flores, 1234 – Centro, São João da Boa Vista/SP</li>
+        </ul>
+      </div>
+
+      <!-- Checkbox de aceite -->
+      <label class="terms-checkbox" for="acceptTerms">
+        <input type="checkbox" id="acceptTerms" />
+        <span>Li e aceito os <strong>Termos de Serviço</strong> e a <strong>Política de Privacidade</strong> da Gardênia Roupas.</span>
+      </label>
+
+      <!-- Ações -->
+      <div class="terms-actions">
+        <button id="acceptBtn" type="button" disabled>
+          ✅ Aceitar e Cadastrar
+        </button>
+        <button id="backBtn" type="button" class="secondary">
+          ↩ Voltar e editar dados
+        </button>
+      </div>
+
+      <div class="footer">
+        feito por alunos da UNIFEOB do curso de Ciência da Computação
+      </div>
+    </div>
+
+  </main>
+
+  <script src="https://www.google.com/recaptcha/api.js" async defer>
+    // ============================================================
+    // CAPTCHA
+    // ============================================================
+    let captchaResolvido = false;
+    const RECAPTCHA_SITE_KEY = "6LfXpdQtAAAAABHrXHr6Y_7-2RIoE-3NXU0bc9mu"
+
+    // ============================================================
+    // CONFIGURAÇÃO
+    // ============================================================
+    const API_CPF_KEY = "5e5b5a955ae485def6f7c01ea3dcbfc46a8227b75db20fad4a7e1423f9d28bbf";
+    const API_EMAIL_KEY = "api-4872142E03524F7FAF002AD217165873";
+
+    const API_CPF_URL = "https://apiconsulta.com.br/painel";
+    const API_EMAIL_URL = "https://emailvalidation.abstractapi.com/v1/";
+
+    // ============================================================
+    // ELEMENTOS
+    // ============================================================
+    const form = document.getElementById("loginForm");
+    const nomeInput = document.getElementById("nome");
+    const emailInput = document.getElementById("email");
+    const cpfInput = document.getElementById("cpf");
+    const statusEl = document.getElementById("status");
+    const submitBtn = document.getElementById("submitBtn");
+    const resultEl = document.getElementById("result");
+    const savedUsersList = document.getElementById("savedUsersList");
+    const emailStatusEl = document.getElementById("emailStatus");
+
+    // Elementos das views
+    const formView = document.getElementById("formView");
+    const termsView = document.getElementById("termsView");
+    const userSummary = document.getElementById("userSummary");
+    const termsDate = document.getElementById("termsDate");
+    const acceptTerms = document.getElementById("acceptTerms");
+    const acceptBtn = document.getElementById("acceptBtn");
+    const backBtn = document.getElementById("backBtn");
+
+    // Dados temporários (pendentes de aceite)
+    let dadosPendentes = null;
+
+    // Estados
+    let cpfValido = false;
+    let cpfPreenchido = false;
+    let emailValido = false;
+    let emailVerificando = false;
+
+    // ============================================================
+    // FUNÇÕES
+    // ============================================================
+    function onCaptchaSuccess(token) {
+      captchaResolvido = true;
+      atualizarBotao(); // Reavalia se o botão pode ser habilitado
+    }
+
+    function onCaptchaExpired() {
+      captchaResolvido = false;
+      atualizarBotao();
+    }
+
+    function apenasNumeros(valor) {
+      return valor.replace(/\D/g, "");
+    }
+
+    function formatarCPF(valor) {
+      const cpf = apenasNumeros(valor).slice(0, 11);
+      if (cpf.length <= 3) return cpf;
+      if (cpf.length <= 6) return cpf.slice(0, 3) + "." + cpf.slice(3);
+      if (cpf.length <= 9) return cpf.slice(0, 3) + "." + cpf.slice(3, 6) + "." + cpf.slice(6);
+      return cpf.slice(0, 3) + "." + cpf.slice(3, 6) + "." + cpf.slice(6, 9) + "-" + cpf.slice(9);
+    }
+
+    function cpfPassaDigitosVerificadores(cpf) {
+      if (!/^\d{11}$/.test(cpf)) return false;
+      if (/^(\d)\1{10}$/.test(cpf)) return false;
+
+      let soma = 0;
+      for (let i = 0; i < 9; i++) soma += Number(cpf[i]) * (10 - i);
+      let resto = soma % 11;
+      let digito1 = resto < 2 ? 0 : 11 - resto;
+      if (digito1 !== Number(cpf[9])) return false;
+
+      soma = 0;
+      for (let i = 0; i < 10; i++) soma += Number(cpf[i]) * (11 - i);
+      resto = soma % 11;
+      let digito2 = resto < 2 ? 0 : 11 - resto;
+      return digito2 === Number(cpf[10]);
+    }
+
+    function validarSintaxeEmail(email) {
+      const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      return regex.test(email);
+    }
+
+    function setStatus(mensagem, tipo = "") {
+      statusEl.textContent = mensagem;
+      statusEl.className = "status " + tipo;
+    }
+
+    function setEmailStatus(mensagem, tipo = "") {
+      emailStatusEl.textContent = mensagem;
+      emailStatusEl.className = tipo;
+    }
+
+    function atualizarBotao() {
+      const nomeOk = nomeInput.value.trim().length > 0;
+      const emailOk = emailValido && !emailVerificando;
+      const cpfOk = !cpfPreenchido || cpfValido;
+      submitBtn.disabled = !(nomeOk && emailOk && cpfOk && captchaResolvido);
+    }
+
+    function salvarUsuario(dados) {
+      let usuarios = JSON.parse(localStorage.getItem("usuarios") || "[]");
+      dados.id = Date.now();
+      dados.cadastroEm = new Date().toISOString();
+      usuarios.push(dados);
+      localStorage.setItem("usuarios", JSON.stringify(usuarios));
+      return usuarios;
+    }
+
+    function exibirUsuariosSalvos() {
+      const usuarios = JSON.parse(localStorage.getItem("usuarios") || "[]");
+      if (usuarios.length === 0) {
+        savedUsersList.textContent = "Nenhum usuário cadastrado ainda.";
+      } else {
+        savedUsersList.textContent = JSON.stringify(usuarios, null, 2);
+      }
+    }
+
+    async function consultarCPF(cpf) {
+      if (!API_CPF_KEY) {
+        throw new Error("Configure sua chave da API no código antes de fazer a consulta.");
+      }
+      const url = `${API_CPF_URL}?cpf=${encodeURIComponent(cpf)}`;
+      const response = await fetch(url, {
+        method: "GET",
+        headers: { "X-API-KEY": API_CPF_KEY }
+      });
+      let data = {};
+      try { data = await response.json(); } catch (_) {}
+      if (!response.ok) {
+        throw new Error(data.message || `A API retornou HTTP ${response.status}.`);
+      }
+      return data;
+    }
+
+    async function validarEmail(email) {
+      if (!API_EMAIL_KEY) {
+        console.warn("Chave da API de e-mail não configurada. Usando validação de sintaxe apenas.");
+        return {
+          is_valid_format: validarSintaxeEmail(email),
+          is_disposable: false,
+          is_free_email: false,
+          is_smtp_valid: false,
+          deliverability: "UNKNOWN"
+        };
+      }
+      const url = `${API_EMAIL_URL}?api_key=${API_EMAIL_KEY}&email=${encodeURIComponent(email)}`;
+      try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return await response.json();
+      } catch (error) {
+        console.error("Erro ao validar e-mail:", error);
+        throw new Error("Não foi possível validar o e-mail. Verifique sua conexão.");
+      }
+    }
+
+    // ============================================================
+    // TROCA DE VIEWS
+    // ============================================================
+    function mostrarTermos() {
+      // Preenche o resumo dos dados
+      const partes = [
+        `<strong>Nome:</strong> ${dadosPendentes.nome}`,
+        `<strong>E-mail:</strong> ${dadosPendentes.email}`
+      ];
+      if (dadosPendentes.cpf) {
+        partes.push(`<strong>CPF:</strong> ${dadosPendentes.cpf}`);
+        partes.push(`<strong>Cliente+:</strong> ${dadosPendentes.clientemais === "sim" ? "Sim ✅" : "Não"}`);
+      } else {
+        partes.push(`<strong>CPF:</strong> não informado`);
+        partes.push(`<strong>Cliente+:</strong> Não`);
+      }
+      userSummary.innerHTML = partes.join("<br>");
+
+      // Data atual para os termos
+      termsDate.textContent = new Date().toLocaleDateString("pt-BR", {
+        day: "2-digit", month: "long", year: "numeric"
+      });
+
+      // Reseta o checkbox e o botão
+      acceptTerms.checked = false;
+      acceptBtn.disabled = true;
+
+      // Alterna as views
+      formView.classList.add("hide");
+      termsView.classList.add("show");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function voltarParaFormulario() {
+      termsView.classList.remove("show");
+      formView.classList.remove("hide");
+      dadosPendentes = null;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      resetCaptcha();
+    }
+
+    function resetCaptcha() {
+      if (window.grecaptcha && grecaptcha.reset) {
+        grecaptcha.reset();
+      }
+      captchaResolvido = false;
+      atualizarBotao();
+    }
+
+    // Habilita/desabilita o botão de aceitar conforme o checkbox
+    acceptTerms.addEventListener("change", () => {
+      acceptBtn.disabled = !acceptTerms.checked;
+    });
+
+    // Botão "Voltar"
+    backBtn.addEventListener("click", voltarParaFormulario);
+
+    // Botão "Aceitar e Cadastrar"
+    acceptBtn.addEventListener("click", () => {
+      if (!acceptTerms.checked || !dadosPendentes) return;
+
+      // Adiciona registro do aceite
+      dadosPendentes.aceitouTermos = true;
+      dadosPendentes.termosAceitosEm = new Date().toISOString();
+
+      // Salva no localStorage
+      salvarUsuario(dadosPendentes);
+      exibirUsuariosSalvos();
+
+      // Mostra a tela de sucesso
+      termsView.classList.remove("show");
+      formView.classList.remove("hide");
+
+      setStatus("✅ Conta criada e dados salvos com sucesso!", "success");
+      resultEl.innerHTML = `
+        <div><strong>✅ Cadastro realizado!</strong></div>
+        <div><strong>Nome:</strong> ${dadosPendentes.nome}</div>
+        <div><strong>E-mail:</strong> ${dadosPendentes.email}</div>
+        <div><strong>CPF:</strong> ${dadosPendentes.cpf || "não informado"}</div>
+        <div><strong>É Cliente+ ?:</strong> ${dadosPendentes.clientemais === "sim" ? "Sim" : "Não"}</div>
+        <div><strong>Termos aceitos em:</strong> ${new Date(dadosPendentes.termosAceitosEm).toLocaleString("pt-BR")}</div>
+        <div style="font-size:16px; color: #80aabb; margin-top: 8px;">Os dados foram salvos no database local.</div>
+      `;
+      resultEl.classList.add("show");
+
+      // Limpa o formulário
+      form.reset();
+      cpfValido = false;
+      cpfPreenchido = false;
+      emailValido = false;
+      emailVerificando = false;
+      cpfInput.classList.remove("valid", "invalid", "api-filled");
+      emailInput.classList.remove("email-valid", "email-invalid", "email-validating");
+      nomeInput.classList.remove("api-filled");
+      setEmailStatus("", "");
+      resetCaptcha();
+
+      dadosPendentes = null;
+    });
+
+    // ============================================================
+    // CPF
+    // ============================================================
+    let ultimaConsulta = "";
+
+    cpfInput.addEventListener("input", async () => {
+      const cpf = apenasNumeros(cpfInput.value);
+      cpfInput.value = formatarCPF(cpf);
+
+      cpfValido = false;
+      cpfPreenchido = (cpf.length > 0);
+      cpfInput.classList.remove("valid", "invalid");
+      resultEl.classList.remove("show");
+      atualizarBotao();
+
+      if (!cpfPreenchido) {
+        setStatus("");
+        return;
+      }
+
+      if (cpf.length < 11) {
+        setStatus("Digite os 11 dígitos do CPF.", "loading");
+        return;
+      }
+
+      if (!cpfPassaDigitosVerificadores(cpf)) {
+        cpfInput.classList.add("invalid");
+        setStatus("CPF inválido.", "error");
+        return;
+      }
+
+      if (ultimaConsulta === cpf && cpfValido) return;
+
+      ultimaConsulta = cpf;
+      setStatus("Verificando CPF...", "loading");
+
+      try {
+        const data = await consultarCPF(cpf);
+        cpfValido = true;
+        cpfInput.classList.add("valid");
+        setStatus("CPF localizado e validado com sucesso.", "success");
+
+        const pessoa = data?.data || {};
+        const nomeApi = pessoa.nome || pessoa.name || "";
+
+        if (nomeApi) {
+          nomeInput.value = nomeApi;
+          nomeInput.dataset.preenchidoApi = "true";
+          nomeInput.classList.add("api-filled");
+        }
+
+        atualizarBotao();
+      } catch (error) {
+        cpfValido = false;
+        cpfInput.classList.add("invalid");
+        setStatus(error.message || "Não foi possível validar o CPF.", "error");
+      }
+
+      atualizarBotao();
+    });
+
+    nomeInput.addEventListener("input", () => {
+      nomeInput.dataset.preenchidoApi = "false";
+      nomeInput.classList.remove("api-filled");
+      atualizarBotao();
+    });
+
+    // ============================================================
+    // EMAIL
+    // ============================================================
+    let timeoutEmail = null;
+
+    emailInput.addEventListener("input", async () => {
+      clearTimeout(timeoutEmail);
+
+      const email = emailInput.value.trim();
+
+      emailValido = false;
+      emailVerificando = false;
+      emailInput.classList.remove("email-valid", "email-invalid", "email-validating");
+      setEmailStatus("", "");
+      atualizarBotao();
+
+      if (!email) return;
+
+      if (!validarSintaxeEmail(email)) {
+        emailInput.classList.add("email-invalid");
+        setEmailStatus("✗ Formato de e-mail inválido", "error");
+        atualizarBotao();
+        return;
+      }
+
+      emailVerificando = true;
+      emailInput.classList.add("email-validating");
+      setEmailStatus("⏳ Verificando e-mail...", "loading");
+      atualizarBotao();
+
+      timeoutEmail = setTimeout(async () => {
+        try {
+          const result = await validarEmail(email);
+          emailVerificando = false;
+
+          const isValid = result.is_valid_format &&
+                         result.deliverability !== "UNDELIVERABLE" &&
+                         !result.is_disposable;
+
+          if (isValid) {
+            emailValido = true;
+            emailInput.classList.remove("email-validating", "email-invalid");
+            emailInput.classList.add("email-valid");
+            setEmailStatus("✓ E-mail validado com sucesso", "success");
+          } else {
+            emailValido = false;
+            emailInput.classList.remove("email-validating", "email-valid");
+            emailInput.classList.add("email-invalid");
+
+            let motivo = "";
+            if (!result.is_valid_format) motivo = "Formato inválido";
+            else if (result.is_disposable) motivo = "E-mail descartável não permitido";
+            else if (result.deliverability === "UNDELIVERABLE") motivo = "E-mail não entregável";
+            else motivo = "E-mail inválido";
+
+            setEmailStatus(`✗ ${motivo}`, "error");
+          }
+
+          if (result && result.deliverability) {
+            console.log("Detalhes da validação:", {
+              format: result.is_valid_format,
+              deliverability: result.deliverability,
+              disposable: result.is_disposable,
+              free: result.is_free_email,
+              score: result.quality_score
+            });
+          }
+
+          atualizarBotao();
+        } catch (error) {
+          emailVerificando = false;
+          emailValido = false;
+          emailInput.classList.remove("email-validating", "email-valid");
+          emailInput.classList.add("email-invalid");
+          setEmailStatus(`✗ ${error.message}`, "error");
+          atualizarBotao();
+        }
+      }, 800);
+    });
+
+    // ============================================================
+    // ENVIO DO FORMULÁRIO (agora vai para a tela de Termos)
+    // ============================================================
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const nome = nomeInput.value.trim();
+      const email = emailInput.value.trim();
+      const cpfFormatado = cpfInput.value.trim();
+      const clientemais = cpfPreenchido && cpfValido;
+
+      // Monta os dados pendentes (NÃO salva ainda)
+      dadosPendentes = {
+        nome,
+        email,
+        cpf: cpfFormatado || null,
+        clientemais: clientemais ? "sim" : "não"
+      };
+
+      // Vai para a tela de termos
+      mostrarTermos();
+    });
+
+    // ============================================================
+    // INICIALIZAÇÃO
+    // ============================================================
+    exibirUsuariosSalvos();
+    atualizarBotao();
+
+    console.log("ℹ️ Para usar a validação de e-mail, obtenha uma chave gratuita em: https://www.abstractapi.com/email-verification");
+    console.log("ℹ️ E substitua a variável API_EMAIL_KEY no código.");
+  </script>
+</body>
+</html>
