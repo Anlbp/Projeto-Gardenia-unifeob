@@ -1,4 +1,4 @@
-# Gerador de Dados - Gardênia
+# Simulador de Dados - Gardênia
 
 Simulador de dados para o projeto da loja de roupas Gardênia.
 
@@ -43,7 +43,7 @@ Entre na pasta do projeto:
 cd NOME_DA_PASTA
 ```
 
-Não é necessário executar `pip install`, pois o gerador não possui dependências externas.
+Não é necessário executar `pip install`, pois o simulador não possui dependências externas.
 
 ## Verificando o Python
 
@@ -63,16 +63,16 @@ O resultado deverá apresentar uma versão do Python igual ou superior à 3.10.
 
 ## Execução
 
-Execute o gerador pelo terminal:
+Execute o simulador pelo terminal:
 
 ```bash
-python gerador.py
+python simulador.py
 ```
 
 No Windows, também pode ser utilizado:
 
 ```bash
-py gerador.py
+py simulador.py
 ```
 
 O programa não possui interface gráfica e deve ser executado diretamente pelo terminal.
@@ -217,9 +217,9 @@ Ao final de cada ciclo, o simulador exibe um relatório com:
 ## Estrutura do projeto
 
 ```text
-gerador-dados/
+simulador/
 │
-├── gerador.py
+├── simulador.py
 ├── requirements.txt
 ├── README.md
 │
@@ -232,14 +232,14 @@ gerador-dados/
 └── ...
 ```
 
-Os arquivos CSV são criados automaticamente após a execução do `gerador.py`, com numeração sequencial a cada ciclo.
+Os arquivos CSV são criados automaticamente após a execução do `simulador.py`, com numeração sequencial a cada ciclo.
 
 ## Resumo da execução
 
 ```text
 Python 3
     ↓
-gerador.py
+simulador.py
     ↓
 Configuração da taxa de consistência
     ↓
