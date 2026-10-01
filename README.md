@@ -1,4 +1,4 @@
-# Projeto-Gardenia-unifeob
+# Projeto-Gardenia-unifeob (equipe 1)
 # Projeto Gardênia - UNIFEOB
 
 ## Descrição
