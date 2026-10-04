@@ -1,6 +1,14 @@
 # Projeto-Gardenia-unifeob (equipe 1)
 # Projeto Gardênia - UNIFEOB
 
+INTEGRANTES
+
+24000057	Andre Luis Bertelli Pena
+24000043	André Luis Carneiro Filho
+24001365	Caio Fernando Pereira Silva
+24001366	Cleudio de Faria
+24000603	Renan Augusto Cristi Avelar
+
 ## Descrição
 
 O **Projeto Gardênia** é uma solução desenvolvida para a loja de roupas Gardênia, com o objetivo de melhorar o processo de vendas, o controle de estoque e o armazenamento das informações da empresa. O projeto consiste na criação de um site de compras para retirada na loja, desenvolvido com **HTML, CSS e Python**, utilizando o **MongoDB** para armazenamento dos dados.
