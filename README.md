@@ -3,11 +3,11 @@
 
 INTEGRANTES
 
-24000057	Andre Luis Bertelli Pena
-24000043	André Luis Carneiro Filho
-24001365	Caio Fernando Pereira Silva
-24001366	Cleudio de Faria
-24000603	Renan Augusto Cristi Avelar
+24000057 &nbsp; &nbsp;    Andre Luis Bertelli Pena <br>
+24000043 &nbsp; &nbsp;	  André Luis Carneiro Filho <br>
+24001365 &nbsp; &nbsp;	  Caio Fernando Pereira Silva <br> 
+24001366 &nbsp; &nbsp;	  Cleudio de Faria <br> 
+24000603 &nbsp; &nbsp;	  Renan Augusto Cristi Avelar <br>
 
 ## Descrição
 
