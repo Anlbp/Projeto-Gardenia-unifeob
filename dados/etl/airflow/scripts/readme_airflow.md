@@ -1,6 +1,6 @@
 # 🚀 Airflow ETL - Guia para Iniciantes no Linux
 
-Bem-vindo! Este guia foi feito para quem **nunca usou Apache Airflow** e quer colocar um pipeline ETL (Extract, Transform, Load) rodando no Linux do zero.
+Este guia foi feito para quem **nunca usou Apache Airflow** e quer colocar um pipeline ETL (Extract, Transform, Load) rodando no Linux do zero.
 
 O projeto faz um fluxo simples e didático:
 
