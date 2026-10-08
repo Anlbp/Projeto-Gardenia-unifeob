@@ -243,8 +243,16 @@ Com base no perfil dos clusters, classifique cada grupo:
 # ------------------------------------------------------------
 # 11. EXPORTAÇÃO DOS RESULTADOS
 # ------------------------------------------------------------
+
+# ------------------------------------------------------------
+# 11. EXPORTAÇÃO DOS RESULTADOS
+# ------------------------------------------------------------
+rfm['Valor'] = rfm['Valor'].round(2)
+rfm['TicketMedio'] = rfm['TicketMedio'].round(2)
+
 rfm.to_csv('resultado_segmentacao.csv', index=False)
 perfil.to_csv('perfil_clusters.csv')
+
 print("Arquivos salvos:")
 print("  - resultado_segmentacao.csv")
 print("  - perfil_clusters.csv")
