@@ -14,10 +14,10 @@
 
 **Justificativa para Data Science:**
 *   **Automação e Escalabilidade:** O Airflow é a ferramenta ideal para gerenciar esse fluxo complexo. Ele permite agendar e monitorar as tarefas de ETL que o documento menciona. Por exemplo, uma DAG (Directed Acyclic Graph) no Airflow poderia ser criada para:
-    1.  Extrair dados do MongoDB.
-    2.  Carregar no Data Lake (armazenamento histórico).
-    3.  Executar o script de limpeza (remover compras duplicadas, valores inválidos).
-    4.  Carregar os dados tratados no Data Warehouse (Fato_Vendas).
+    1  Extrair dados do MongoDB.
+    2  Carregar no Data Lake (armazenamento histórico).
+    3  Executar o script de limpeza (remover compras duplicadas, valores inválidos).
+    4  Carregar os dados tratados no Data Warehouse (Fato_Vendas).
 *   **Monitoramento:** Como o projeto visa "monitoramento de grandes volumes de informações", o Airflow fornece logs e alertas caso alguma etapa do pipeline falhe (ex: se um produto não for encontrado na base).
 
 ### 3. Machine Learning de Segmentação: Análise e Valor de Negócio (Camada de Análise)
