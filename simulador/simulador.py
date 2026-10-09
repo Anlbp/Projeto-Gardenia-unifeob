@@ -137,7 +137,8 @@ class SimuladorDados:
             if inconsistente:
                 tipo_inconsistencia = random.choice([
                     'preco_negativo', 'estoque_negativo', 'preco_zero', 
-                    'nome_vazio', 'categoria_invalida', 'peso_negativo'
+                    'nome_vazio', 'categoria_invalida', 'peso_negativo',
+                    'satisfacao_invalida'
                 ])
                 
                 if tipo_inconsistencia == 'preco_negativo':
@@ -150,6 +151,8 @@ class SimuladorDados:
                     nome = random.choice(["", " ", None])
                 elif tipo_inconsistencia == 'categoria_invalida':
                     categoria = random.choice(["", "Categoria Inexistente", None, 123])
+                elif tipo_inconsistencia == 'satisfacao_invalida':
+                    satisfacao_media = random.choice([-1, 6, 10, 100, None])
                 else:  # peso_negativo
                     peso = round(random.uniform(-10, -0.01), 2)
                 
@@ -160,12 +163,15 @@ class SimuladorDados:
                     estoque = random.randint(0, 500)
                 if 'peso' not in locals():
                     peso = round(random.uniform(0.1, 50.0), 2)
+                if 'satisfacao_media' not in locals():
+                    satisfacao_media = round(random.uniform(0, 5), 1)
                 
                 self.estatisticas['produtos']['inconsistentes'] += 1
             else:
                 preco = round(random.uniform(10.0, 1000.0), 2)
                 estoque = random.randint(0, 500)
                 peso = round(random.uniform(0.1, 50.0), 2)
+                satisfacao_media = round(random.uniform(0, 5), 1)  # Nota de 0 a 5
                 
                 self.estatisticas['produtos']['consistentes'] += 1
             
@@ -176,6 +182,7 @@ class SimuladorDados:
                 "preco": preco,
                 "estoque": estoque,
                 "peso": peso,
+                "satisfacao_media": satisfacao_media,
                 "data_cadastro": self.data_simulacao.isoformat(),
                 "inconsistente": inconsistente
             }
@@ -206,7 +213,8 @@ class SimuladorDados:
             if inconsistente:
                 tipo_inconsistencia = random.choice([
                     'quantidade_negativa', 'valor_negativo', 'cliente_inexistente',
-                    'produto_inexistente', 'data_futura', 'desconto_maior_que_valor'
+                    'produto_inexistente', 'data_futura', 'desconto_maior_que_valor',
+                    'satisfacao_invalida'
                 ])
                 
                 if tipo_inconsistencia == 'quantidade_negativa':
@@ -219,6 +227,8 @@ class SimuladorDados:
                     produto_id = random.randint(90000, 99999)
                 elif tipo_inconsistencia == 'data_futura':
                     data_compra = (datetime.now() + timedelta(days=365)).isoformat()
+                elif tipo_inconsistencia == 'satisfacao_invalida':
+                    satisfacao = random.choice([-1, 6, 10, 100, None])
                 else:  # desconto_maior_que_valor
                     valor_total = 100.0
                     desconto = 150.0
@@ -232,6 +242,8 @@ class SimuladorDados:
                     data_compra = (self.data_simulacao - timedelta(days=random.randint(0, 365))).isoformat()
                 if 'desconto' not in locals():
                     desconto = round(valor_total * random.uniform(0, 0.3), 2)
+                if 'satisfacao' not in locals():
+                    satisfacao = random.randint(1, 5)
                 
                 self.estatisticas['compras']['inconsistentes'] += 1
             else:
@@ -239,6 +251,7 @@ class SimuladorDados:
                 valor_total = round(random.uniform(10.0, 5000.0), 2)
                 desconto = round(valor_total * random.uniform(0, 0.3), 2)
                 data_compra = (self.data_simulacao - timedelta(days=random.randint(0, 365))).isoformat()
+                satisfacao = random.randint(1, 5)  # Nota de 1 a 5
                 
                 self.estatisticas['compras']['consistentes'] += 1
             
@@ -251,6 +264,7 @@ class SimuladorDados:
                 "desconto": desconto,
                 "data_compra": data_compra,
                 "status": random.choice(["pendente", "pago", "enviado", "entregue", "cancelado"]),
+                "satisfacao": satisfacao,
                 "inconsistente": inconsistente
             }
             compras.append(compra)
