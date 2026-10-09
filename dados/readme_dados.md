@@ -13,11 +13,13 @@ O projeto consiste em um site de compras para retirada na loja, desenvolvido com
 5. [Os 5 Vs do Big Data no projeto](#os-5-vs-do-big-data-no-projeto)
 6. [Arquitetura de dados](#arquitetura-de-dados)
 7. [Estratégias de limpeza dos dados](#estratégias-de-limpeza-dos-dados)
-8. [Tecnologias e justificativas](#tecnologias-e-justificativas)
-9. [Infraestrutura](#infraestrutura)
-10. [Como reproduzir o ambiente](#como-reproduzir-o-ambiente)
-11. [Estrutura do repositório](#estrutura-do-repositório)
-12. [Entregáveis da disciplina de Big Data](#entregáveis-da-disciplina-de-big-data)
+8. [Sistema de algoritmo de cliques](#sistema-de-algoritmo-de-cliques)
+9. [Portal de funcionários](#portal-de-funcionários)
+10. [Tecnologias e justificativas](#tecnologias-e-justificativas)
+11. [Infraestrutura](#infraestrutura)
+12. [Como reproduzir o ambiente](#como-reproduzir-o-ambiente)
+13. [Estrutura do repositório](#estrutura-do-repositório)
+14. [Entregáveis da disciplina de Big Data](#entregáveis-da-disciplina-de-big-data)
 
 ---
 
@@ -43,6 +45,10 @@ Fluxo dos dados:
 - **Data Lake:** os dados são enviados para o Data Lake, onde permanecem no formato original. Isso mantém um histórico das operações, mesmo que os dados sejam modificados ou tratados depois.
 - **ETL:** os dados passam por verificações de qualidade (compras duplicadas, valores inválidos, produtos inexistentes, dados cadastrais inconsistentes) e por padronização de formatos.
 - **Data Warehouse:** após o tratamento, os dados são organizados no modelo dimensional. A tabela `Fato_Vendas` armazena os registros das vendas, e as dimensões `Dim_Cliente`, `Dim_Produto` e `Dim_Data` fornecem o contexto para a análise. Isso permite consultas específicas sem analisar diretamente os dados brutos do Data Lake.
+
+Além do fluxo de vendas, o sistema registra as **interações dos clientes com os produtos** (clique, permanência, favorito e compra). Esses dados alimentam o [sistema de algoritmo de cliques](#sistema-de-algoritmo-de-cliques), que atribui a cada cliente um perfil de recomendação.
+
+Todos os resultados, tanto os analíticos (vendas, clientes, estoque) quanto os do algoritmo de cliques, são exibidos no [portal de funcionários](#portal-de-funcionários), em gráficos e tabelas pesquisáveis.
 
 Com a solução, a loja reduz a dependência de registros em papel, melhora a organização das informações, facilita o processo de compra e passa a ter uma visão mais clara das vendas, dos clientes e do estoque.
 
@@ -112,6 +118,7 @@ Como a loja ainda registra tudo em papel, não há histórico digital. Por isso 
 - **Valores independentes:** `valor_total` é sorteado e não é calculado a partir de `preco` x `quantidade`, então essa relação não pode ser usada como regra de validação.
 - **CPFs sintéticos:** os CPFs são números aleatórios e não passam no cálculo dos dígitos verificadores. Na simulação, validamos apenas o formato.
 - **Sem duplicatas injetadas:** o gerador não cria compras duplicadas. A deduplicação serve de salvaguarda, por exemplo contra o reprocessamento do mesmo arquivo.
+- **Sem dados de cliques:** o gerador não produz eventos de interação (clique, permanência, favorito) nem o campo `segmento` dos produtos, necessários ao [sistema de algoritmo de cliques](#sistema-de-algoritmo-de-cliques). Esses dados vêm do site; para testar o portal antes do site ficar pronto, uma melhoria é estender o gerador com um arquivo `eventos_N.csv`.
 
 ## Os 5 Vs do Big Data no projeto
 
@@ -134,6 +141,13 @@ flowchart LR
     D --> T[("Data Lake<br/>trusted: dados limpos")]
     T --> E[("Data Warehouse<br/>esquema estrela")]
     E --> F["Análise e ML<br/>OLAP, K-Means, Spark"]
+    E --> P["Portal de funcionários<br/>gráficos e tabelas pesquisáveis"]
+    F --> P
+    S["Site: cliques, permanência,<br/>favoritos e compras"] --> M[("MongoDB<br/>interações")]
+    M --> AG["Agregação de pesos<br/>por produto e cliente"]
+    AG --> PR[("Tabelas prontas<br/>popularidade e algoritmos")]
+    PR --> P
+    M -.-> C
     G{{"Apache Airflow<br/>orquestração (DAG)"}} -.-> B
     G -.-> C
     G -.-> D
@@ -167,6 +181,7 @@ erDiagram
         int idade
         date data_nascimento
         bool cadastro_incompleto
+        string algoritmo_atribuido
     }
     DIM_PRODUTO {
         string id_produto PK
@@ -176,6 +191,7 @@ erDiagram
         int estoque
         float peso
         float satisfacao_media
+        string segmento
     }
     DIM_DATA {
         int id_data PK
@@ -317,6 +333,189 @@ def limpar_compras(df, clientes_ok, produtos_ok):
 3. **Auditoria com o gabarito:** usar a coluna `inconsistente` só para comparar. Entre os registros que o gerador marcou como inconsistentes, qual fração foi corrigida, anulada ou rejeitada? Entre os marcados como consistentes, houve rejeições indevidas (falsos positivos)? Registros com erro apenas de capitalização aparecem como "inconsistentes" no gabarito, mas devem ser **recuperados**, não rejeitados.
 4. **Teste de estresse com a taxa de consistência:** rodar o gerador com valores como 100, 80 e 50 e verificar se o pipeline mantém o mesmo comportamento e se as proporções de correção e rejeição acompanham a taxa configurada.
 
+## Sistema de algoritmo de cliques
+
+O site registra como cada cliente interage com os produtos e, a partir disso, atribui a ele um **algoritmo** (perfil de recomendação). Esses dados nascem **já formatados**: são gravados pelo próprio site em formato final, por isso **não passam pelas regras de limpeza** da seção anterior. O que importa é que sejam **digeríveis em tabelas e gráficos**.
+
+### Pesos das interações
+
+| Interação | Peso |
+|---|---|
+| Clicar no produto | 0,1 |
+| Permanecer no produto por mais de 10 segundos | 0,2 |
+| Favoritar o produto | 0,3 |
+| Comprar o produto | 0,5 |
+
+### Regra de atribuição do algoritmo
+
+1. Cada interação soma seu peso ao **peso total do cliente** e ao **peso do segmento** do produto interagido.
+2. Quando o peso total do cliente chega a **0,5**, ele recebe um algoritmo baseado no que interagiu. Uma compra, sozinha, já atinge esse limiar.
+3. Se as interações forem de **mais de um segmento**, o algoritmo é **misto**.
+4. O algoritmo é **recalculado a cada nova interação**, então o perfil acompanha a mudança de comportamento do cliente.
+
+| Algoritmo | Código | Observação |
+|---|---|---|
+| Masculino | `masculino` | |
+| Feminino | `feminino` | |
+| Masculino esportivo | `masculino_esportivo` | |
+| Feminino esportivo | `feminino_esportivo` | |
+| Infantil feminino | `infantil_feminino` | somente se a loja tiver a linha |
+| Infantil masculino | `infantil_masculino` | somente se a loja tiver a linha |
+| Misto | `misto` | combinação de dois ou mais segmentos |
+
+Para isso funcionar, cada produto precisa ter o campo `segmento` com um dos seis valores acima.
+
+### Fluxo dos dados
+
+1. O site grava cada interação como um **evento** no MongoDB.
+2. A cada evento, os pesos são somados de forma atômica nas tabelas de **popularidade do produto** e de **perfil do cliente**.
+3. Os eventos também seguem para a zona `raw` do Data Lake, mantendo o histórico completo.
+4. O portal de funcionários lê as tabelas prontas, sem etapa de ETL no caminho.
+
+### Modelo de dados
+
+**`eventos_interacao`** (um documento por interação)
+
+| Campo | Tipo | Descrição |
+|---|---|---|
+| `id_evento` | texto | Identificador único |
+| `id_cliente` | inteiro | Cliente que interagiu |
+| `id_produto` | inteiro | Produto da interação |
+| `tipo_evento` | texto | `clique`, `permanencia`, `favorito` ou `compra` |
+| `peso` | decimal | Peso da interação (0,1 / 0,2 / 0,3 / 0,5) |
+| `segmento_produto` | texto | Segmento do produto no momento do evento |
+| `data_hora` | data/hora | Momento da interação |
+
+**`perfil_cliente`** (um documento por cliente)
+
+| Campo | Tipo | Descrição |
+|---|---|---|
+| `id_cliente` | inteiro | Cliente |
+| `peso_total` | decimal | Soma de todos os pesos do cliente |
+| `pesos_segmento` | objeto | Peso acumulado por segmento |
+| `algoritmo` | texto | Algoritmo atribuído (vazio até chegar a 0,5) |
+| `atualizado_em` | data/hora | Última interação |
+
+**`popularidade_produto`** (um documento por produto) é a tabela que o portal exibe:
+
+| ID produto | Produto | Peso acumulado | Total de cliques | Total de compras | Total de favoritos | Ranking de popularidade |
+|---|---|---|---|---|---|---|
+| 12 | Camiseta Esportiva Masculina | 16,5 | 58 | 9 | 14 | 1 |
+| 31 | Vestido Floral | 11,0 | 40 | 6 | 10 | 2 |
+| 07 | Legging Esportiva | 7,9 | 35 | 3 | 7 | 3 |
+
+> Valores fictícios, apenas para ilustrar o formato. O peso acumulado inclui as permanências acima de 10 segundos (contadas à parte em `total_permanencias`, que pode virar uma coluna extra do portal).
+
+### Garantias para dados "prontos para uso"
+
+- **Esquema validado na gravação:** o MongoDB aceita só os campos e tipos definidos (validação de esquema), com `tipo_evento` restrito aos quatro valores. O dado já nasce correto, sem filtragem posterior.
+- **Pesos definidos no código do site**, não digitados, evitando valores fora do padrão.
+- **Uma linha por produto, colunas numéricas e nomes estáveis**, sem estruturas aninhadas na tabela exibida. Isso permite ordenar, buscar e plotar diretamente.
+- **Pesos sem erro de arredondamento:** guardar em décimos (1, 2, 3, 5) ou usar `Decimal`, porque somas de decimais como 0,1 + 0,2 acumulam erro de ponto flutuante.
+
+### Ranking de popularidade
+
+- **Peso acumulado do produto** = (cliques x 0,1) + (permanências x 0,2) + (favoritos x 0,3) + (compras x 0,5).
+- **Ranking:** posição por `peso_acumulado` em ordem decrescente; empates são desempatados por `total_compras` e depois por `total_cliques`.
+- O ranking é recalculado a cada atualização da tabela (consulta ordenada ou tarefa do Airflow) e exibido no portal.
+
+### Exemplo de implementação (Python + MongoDB)
+
+```python
+from datetime import datetime, timezone
+from pymongo import MongoClient, ReturnDocument
+
+PESOS = {"clique": 0.1, "permanencia": 0.2, "favorito": 0.3, "compra": 0.5}
+CONTADORES = {
+    "clique": "total_cliques",
+    "permanencia": "total_permanencias",
+    "favorito": "total_favoritos",
+    "compra": "total_compras",
+}
+LIMIAR = 0.5
+
+
+def definir_algoritmo(pesos_segmento):
+    ativos = [seg for seg, peso in pesos_segmento.items() if peso > 0]
+    return ativos[0] if len(ativos) == 1 else "misto"
+
+
+def registrar_interacao(db, id_cliente, produto, tipo_evento):
+    peso = PESOS[tipo_evento]
+    agora = datetime.now(timezone.utc)
+
+    db.eventos_interacao.insert_one({
+        "id_cliente": id_cliente,
+        "id_produto": produto["id"],
+        "tipo_evento": tipo_evento,
+        "peso": peso,
+        "segmento_produto": produto["segmento"],
+        "data_hora": agora,
+    })
+
+    db.popularidade_produto.update_one(
+        {"id_produto": produto["id"]},
+        {"$set": {"produto": produto["nome"]},
+         "$inc": {"peso_acumulado": peso, CONTADORES[tipo_evento]: 1}},
+        upsert=True,
+    )
+
+    perfil = db.perfil_cliente.find_one_and_update(
+        {"id_cliente": id_cliente},
+        {"$inc": {"peso_total": peso, f"pesos_segmento.{produto['segmento']}": peso},
+         "$set": {"atualizado_em": agora}},
+        upsert=True,
+        return_document=ReturnDocument.AFTER,
+    )
+
+    if perfil["peso_total"] >= LIMIAR:
+        db.perfil_cliente.update_one(
+            {"id_cliente": id_cliente},
+            {"$set": {"algoritmo": definir_algoritmo(perfil["pesos_segmento"])}},
+        )
+```
+
+### Pontos a definir com a equipe
+
+- **Limiar de 0,5:** a implementação acima considera o peso **total do cliente** (somando todos os produtos). Confirme se é essa a intenção.
+- **Definição de "misto":** hoje, qualquer interação em mais de um segmento torna o perfil misto. Para evitar que um único clique "fora do perfil" mude o algoritmo, pode-se exigir uma participação mínima (por exemplo, 20% do peso total) para o segmento contar.
+- **Linhas infantis:** `infantil_feminino` e `infantil_masculino` só entram se a loja tiver esses produtos.
+- **Permanência no portal:** decidir se `total_permanencias` aparece como coluna.
+
+## Portal de funcionários
+
+O portal é a **camada de entrega** do projeto: o funcionário vê os dados **prontos** em gráficos e tabelas, com **busca**, sem precisar mexer em arquivos nem em banco de dados.
+
+### Seções e fontes de dados
+
+| Seção | Fonte | O que mostra | Gráficos sugeridos |
+|---|---|---|---|
+| Vendas | Data Warehouse (`Fato_Vendas` + dimensões) | Vendas por período, categoria e status | Linha (vendas por mês), barras (por categoria), rosca (por status) |
+| Clientes | `Dim_Cliente`, segmentos do K-Means e algoritmo atribuído | Lista pesquisável por nome ou CPF, com segmento e algoritmo | Rosca (clientes por segmento e por algoritmo), tabela |
+| Produtos e estoque | `Dim_Produto` | Preço, estoque, categoria e segmento; alerta de estoque baixo | Barras (estoque por categoria), tabela |
+| Algoritmo de cliques | `popularidade_produto` e `perfil_cliente` | Tabela de popularidade e distribuição de perfis | Barras (top 10 por peso acumulado), rosca (clientes por algoritmo), linha (evolução dos pesos) |
+| Qualidade dos dados | Relatório de limpeza e zona `quarentena` | Registros corrigidos, anulados e rejeitados, com o motivo | Barras (rejeições por motivo), tabela |
+
+O caixa virtual faz parte do portal, mas é uma função operacional e não depende desta camada analítica.
+
+### Busca e navegação
+
+- Busca textual em todas as colunas e filtros por coluna.
+- Ordenação, paginação e filtro por período.
+- Exportação da tabela filtrada em CSV.
+- Indicação da data e hora da última atualização dos dados.
+
+### Princípios
+
+- **Lê apenas camadas prontas:** Data Warehouse, zona `curated` e as tabelas agregadas do algoritmo de cliques. Nunca lê a zona `raw` nem o MongoDB operacional, para não exibir dados sujos.
+- **Dados sensíveis protegidos:** CPF mascarado na tela (por exemplo `***.***.***-12`) e acesso por perfil de funcionário, em linha com a LGPD.
+- **Respostas rápidas:** os gráficos usam tabelas pré-agregadas e consultas OLAP, e não varrem o histórico completo a cada acesso.
+- **Fonte única de verdade:** os números do portal vêm das mesmas tabelas usadas na análise, então relatório e tela não divergem.
+
+### Ferramentas sugeridas
+
+Backend em Python (a mesma linguagem do site), gráficos com Chart.js ou Plotly e tabelas pesquisáveis com DataTables. São sugestões; a escolha final cabe à equipe do portal.
+
 ## Tecnologias e justificativas
 
 ### 1. MongoDB: coleta e armazenamento (camada de origem)
@@ -333,6 +532,7 @@ def limpar_compras(df, clientes_ok, produtos_ok):
   2. Carregar no Data Lake (zona `raw`).
   3. Executar a limpeza (regras da seção anterior), separando válidos e quarentena.
   4. Carregar os dados tratados no Data Warehouse (`Fato_Vendas` e dimensões).
+  5. Atualizar as tabelas prontas consumidas pelo portal de funcionários (incluindo o ranking de popularidade).
 - **Monitoramento:** o Airflow fornece logs e alertas caso alguma etapa falhe. Os contadores de limpeza (corrigidos, anulados, rejeitados) podem ser registrados a cada execução, e um aumento súbito de rejeições serve de alerta de qualidade.
 
 ### 3. Machine Learning de segmentação: análise e valor de negócio (camada de análise)
@@ -527,5 +727,5 @@ projeto-data-science/
 | 6. ETL/ELT e OLAP | Airflow + `pandas`; limpeza com quarentena; roll-up, drill-down, slice e dice no DW |
 | 7. Data Mining + Machine Learning | K-Means com variáveis RFM sobre dados limpos |
 | 8. Hadoop e/ou Spark | Spark (DataFrames e Spark SQL) sobre o conjunto acumulado de arquivos, com justificativa de escalabilidade |
-| 9. Insights finais | Segmentos de clientes ligados a ações de marketing, com limitações e próximos passos |
+| 9. Insights finais | Segmentos de clientes ligados a ações de marketing, algoritmo de cliques e popularidade dos produtos, exibidos no portal de funcionários, com limitações e próximos passos |
 | 10. Repositório e apresentação | GitHub atualizado + apresentação final (problema, arquitetura, método, resultados e conclusões) |
