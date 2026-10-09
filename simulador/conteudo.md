@@ -123,6 +123,7 @@ Contém informações dos produtos, como:
 * preço
 * estoque
 * peso
+* satisfação média (`satisfacao_media`)
 * data de cadastro
 * indicador de inconsistência (`inconsistente`)
 
@@ -138,6 +139,7 @@ Contém informações das compras, como:
 * desconto
 * data da compra
 * status
+* satisfação (`satisfacao`)
 * indicador de inconsistência (`inconsistente`)
 
 ## Dados inconsistentes
@@ -148,11 +150,17 @@ Entre os problemas simulados estão:
 
 **Clientes:**
 * e-mails inválidos (sem arroba, sem domínio, com espaços, vazios ou nulos)
+* e-mails com arroba faltando (`cliente1email.com` em vez de `cliente1@email.com`)
 * idades inválidas (negativas, zero, acima de 150 ou nulas)
 * telefones inválidos (curtos, com letras, vazios, nulos ou muito longos)
 * CPFs inválidos (curtos, repetidos, vazios ou nulos)
 * datas de nascimento futuras
 * campos vazios ou nulos
+* nomes com capitalização inconsistente:
+  * capitalização inicial (`João silva` em vez de `João Silva`)
+  * tudo maiúsculo (`JOÃO SILVA`)
+  * tudo minúsculo (`joão silva`)
+  * capitalização aleatória (`jOãO sIlVa`)
 
 **Produtos:**
 * preços negativos
@@ -161,6 +169,12 @@ Entre os problemas simulados estão:
 * nomes vazios ou nulos
 * categorias inválidas (vazias, inexistentes ou com tipo incorreto)
 * pesos negativos
+* satisfação média inválida (negativa, acima de 5, muito alta ou nula)
+* nomes com capitalização inconsistente:
+  * capitalização inicial (`Smartphone pro` em vez de `Smartphone Pro`)
+  * tudo maiúsculo (`SMARTPHONE PRO`)
+  * tudo minúsculo (`smartphone pro`)
+  * capitalização aleatória (`sMaRtPhOnE pRo`)
 
 **Compras:**
 * quantidades negativas
@@ -169,8 +183,15 @@ Entre os problemas simulados estão:
 * produtos inexistentes (IDs fora do intervalo gerado)
 * datas de compra futuras
 * descontos maiores que o valor total da compra
+* satisfação inválida (negativa, acima de 5, muito alta ou nula)
+* erros de digitação no status (`cacelado`, `etregue`, `pedente`, `paguo`, `envado`, entre outros)
+* status com capitalização inconsistente:
+  * capitalização inicial (`Pendente` em vez de `pendente`)
+  * tudo maiúsculo (`PENDENTE`)
+  * tudo minúsculo (`pendente`)
+  * capitalização aleatória (`PeNdEnTe`)
 
-Essas inconsistências podem posteriormente ser identificadas e corrigidas durante o processo de ETL.
+Essas inconsistências podem posteriormente ser identificadas e corrigidas durante o processo de ETL. Vale destacar que inconsistências de capitalização e erros de digitação não invalidam semanticamente os dados — eles continuam representando a mesma informação, apenas com formatação divergente, exigindo etapas de normalização e padronização no pipeline de dados.
 
 ## Quantidade de dados
 
@@ -259,3 +280,12 @@ Próximo ciclo (N + 1)
     ↓
 CTRL + C para interromper
 ```
+
+## Principais alterações realizadas nesta edição:
+
+1. **`produtos_N.csv`**: adicionado o campo `satisfacao_media` na descrição das colunas.
+2. **`compras_N.csv`**: adicionado o campo `satisfacao` na descrição das colunas.
+3. **Inconsistências de Clientes**: incluídas as novas categorias — arroba faltando em e-mails e variações de capitalização em nomes.
+4. **Inconsistências de Produtos**: incluída a satisfação média inválida e as variações de capitalização em nomes.
+5. **Inconsistências de Compras**: incluída a satisfação inválida, os erros de digitação no status (`cacelado`, `etregue`, `pedente`, etc.) e as variações de capitalização no status.
+6. **Nota explicativa** sobre inconsistências de capitalização e erros de digitação não invalidarem semanticamente os dados, reforçando a necessidade de etapas de normalização no ETL.
