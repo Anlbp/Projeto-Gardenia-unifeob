@@ -27,6 +27,15 @@ class SimuladorDados:
             'produtos': {'total': 0, 'consistentes': 0, 'inconsistentes': 0},
             'compras': {'total': 0, 'consistentes': 0, 'inconsistentes': 0}
         }
+        
+        # Mapeamento de erros de digitação para status
+        self.erros_digitacao_status = {
+            "pendente": ["pedente", "pendnete", "pndente", "pendente "],
+            "pago": ["pago ", "paguo", "pago0", "pago."],
+            "enviado": ["envado", "enviadio", "enviiado", "enviado "],
+            "entregue": ["etregue", "entrege", "entregu", "entregue "],
+            "cancelado": ["cacelado", "cancelado ", "canceldo", "canceladu"]
+        }
     
     def _deve_ser_inconsistente(self):
         """
@@ -34,6 +43,77 @@ class SimuladorDados:
         """
         chance_inconsistencia = (100 - self.taxa_consistencia) / 100
         return random.random() < chance_inconsistencia
+    
+    def _aplicar_inconsistencia_capitalizacao(self, texto):
+        """
+        Aplica inconsistências de capitalização a um texto.
+        Retorna uma tupla (texto_modificado, tipo_inconsistencia)
+        """
+        if texto is None or not isinstance(texto, str) or texto.strip() == "":
+            return texto, None
+        
+        tipo = random.choice([
+            'capitalizacao_inicial',  # Primeira letra maiúscula
+            'full_caps',              # TUDO MAIÚSCULO
+            'full_lower',             # tudo minúsculo
+            'capitalizacao_aleatoria' # CaPs AlEaTóRiAs
+        ])
+        
+        if tipo == 'capitalizacao_inicial':
+            return texto.capitalize(), tipo
+        elif tipo == 'full_caps':
+            return texto.upper(), tipo
+        elif tipo == 'full_lower':
+            return texto.lower(), tipo
+        else:  # capitalizacao_aleatoria
+            return ''.join(
+                c.upper() if random.random() > 0.5 else c.lower()
+                for c in texto
+            ), tipo
+    
+    def _aplicar_erro_digitacao_status(self, status):
+        """
+        Aplica erro de digitação a um status de compra.
+        Retorna uma tupla (status_modificado, tipo_inconsistencia)
+        """
+        if status in self.erros_digitacao_status:
+            return random.choice(self.erros_digitacao_status[status]), 'erro_digitacao'
+        return status, None
+    
+    def _remover_arroba_email(self, email):
+        """
+        Remove o @ de um email (mantendo o resto correto)
+        """
+        if email and '@' in email:
+            return email.replace('@', ''), 'arroba_faltando'
+        return email, None
+    
+    def _aplicar_inconsistencia_texto(self, texto):
+        """
+        Aplica uma inconsistência de texto (capitalização ou erro de digitação).
+        Retorna uma tupla (texto_modificado, tipo_inconsistencia)
+        """
+        if texto is None or not isinstance(texto, str) or texto.strip() == "":
+            return texto, None
+        
+        tipo = random.choice([
+            'capitalizacao_inicial',
+            'full_caps',
+            'full_lower',
+            'capitalizacao_aleatoria'
+        ])
+        
+        if tipo == 'capitalizacao_inicial':
+            return texto.capitalize(), tipo
+        elif tipo == 'full_caps':
+            return texto.upper(), tipo
+        elif tipo == 'full_lower':
+            return texto.lower(), tipo
+        else:
+            return ''.join(
+                c.upper() if random.random() > 0.5 else c.lower()
+                for c in texto
+            ), tipo
     
     def gerar_clientes(self, quantidade=5000):
         """
@@ -52,13 +132,23 @@ class SimuladorDados:
             
             # Decide se será inconsistente
             inconsistente = self._deve_ser_inconsistente()
+            tipo_inconsistencia = None
             
             if inconsistente:
                 # Gera dados inconsistentes
                 tipo_inconsistencia = random.choice([
                     'email_invalido', 'idade_invalida', 'telefone_invalido', 
-                    'cpf_invalido', 'data_nascimento_futura', 'campos_vazios'
+                    'cpf_invalido', 'data_nascimento_futura', 'campos_vazios',
+                    'capitalizacao_inicial', 'full_caps', 'full_lower', 
+                    'capitalizacao_aleatoria', 'arroba_faltando'
                 ])
+                
+                # Valores padrão iniciais
+                email = f"cliente{cliente_id}@email.com"
+                idade = random.randint(18, 80)
+                telefone = f"({random.randint(11, 99)}) 9{random.randint(1000, 9999)}-{random.randint(1000, 9999)}"
+                cpf = f"{random.randint(100, 999)}.{random.randint(100, 999)}.{random.randint(100, 999)}-{random.randint(10, 99)}"
+                data_nascimento = (datetime.now() - timedelta(days=idade*365 + random.randint(0, 364))).strftime("%Y-%m-%d")
                 
                 if tipo_inconsistencia == 'email_invalido':
                     email = random.choice([
@@ -73,22 +163,16 @@ class SimuladorDados:
                     cpf = random.choice(["123", "00000000000", "11111111111111", "", None])
                 elif tipo_inconsistencia == 'data_nascimento_futura':
                     data_nascimento = (datetime.now() + timedelta(days=365)).strftime("%Y-%m-%d")
-                else:  # campos_vazios
+                elif tipo_inconsistencia == 'campos_vazios':
                     email = None
                     telefone = None
                     cpf = None
-                
-                # Define valores padrão se não foram alterados
-                if 'email' not in locals():
-                    email = f"cliente{cliente_id}@email.com"
-                if 'idade' not in locals():
-                    idade = random.randint(18, 80)
-                if 'telefone' not in locals():
-                    telefone = f"({random.randint(11, 99)}) 9{random.randint(1000, 9999)}-{random.randint(1000, 9999)}"
-                if 'cpf' not in locals():
-                    cpf = f"{random.randint(100, 999)}.{random.randint(100, 999)}.{random.randint(100, 999)}-{random.randint(10, 99)}"
-                if 'data_nascimento' not in locals():
-                    data_nascimento = (datetime.now() - timedelta(days=random.randint(18*365, 80*365))).strftime("%Y-%m-%d")
+                elif tipo_inconsistencia == 'arroba_faltando':
+                    email, _ = self._remover_arroba_email(email)
+                elif tipo_inconsistencia in ('capitalizacao_inicial', 'full_caps', 
+                                              'full_lower', 'capitalizacao_aleatoria'):
+                    # Aplica inconsistência de capitalização ao nome
+                    nome, _ = self._aplicar_inconsistencia_capitalizacao(nome)
                 
                 self.estatisticas['clientes']['inconsistentes'] += 1
             else:
@@ -133,12 +217,20 @@ class SimuladorDados:
             
             # Decide se será inconsistente
             inconsistente = self._deve_ser_inconsistente()
+            tipo_inconsistencia = None
+            
+            # Valores padrão
+            preco = round(random.uniform(10.0, 1000.0), 2)
+            estoque = random.randint(0, 500)
+            peso = round(random.uniform(0.1, 50.0), 2)
+            satisfacao_media = round(random.uniform(0, 5), 1)
             
             if inconsistente:
                 tipo_inconsistencia = random.choice([
                     'preco_negativo', 'estoque_negativo', 'preco_zero', 
                     'nome_vazio', 'categoria_invalida', 'peso_negativo',
-                    'satisfacao_invalida'
+                    'satisfacao_invalida', 'capitalizacao_inicial', 
+                    'full_caps', 'full_lower', 'capitalizacao_aleatoria'
                 ])
                 
                 if tipo_inconsistencia == 'preco_negativo':
@@ -151,28 +243,17 @@ class SimuladorDados:
                     nome = random.choice(["", " ", None])
                 elif tipo_inconsistencia == 'categoria_invalida':
                     categoria = random.choice(["", "Categoria Inexistente", None, 123])
+                elif tipo_inconsistencia == 'peso_negativo':
+                    peso = round(random.uniform(-10, -0.01), 2)
                 elif tipo_inconsistencia == 'satisfacao_invalida':
                     satisfacao_media = random.choice([-1, 6, 10, 100, None])
-                else:  # peso_negativo
-                    peso = round(random.uniform(-10, -0.01), 2)
-                
-                # Define valores padrão
-                if 'preco' not in locals():
-                    preco = round(random.uniform(10.0, 1000.0), 2)
-                if 'estoque' not in locals():
-                    estoque = random.randint(0, 500)
-                if 'peso' not in locals():
-                    peso = round(random.uniform(0.1, 50.0), 2)
-                if 'satisfacao_media' not in locals():
-                    satisfacao_media = round(random.uniform(0, 5), 1)
+                elif tipo_inconsistencia in ('capitalizacao_inicial', 'full_caps', 
+                                              'full_lower', 'capitalizacao_aleatoria'):
+                    # Aplica inconsistência de capitalização ao nome do produto
+                    nome, _ = self._aplicar_inconsistencia_capitalizacao(nome)
                 
                 self.estatisticas['produtos']['inconsistentes'] += 1
             else:
-                preco = round(random.uniform(10.0, 1000.0), 2)
-                estoque = random.randint(0, 500)
-                peso = round(random.uniform(0.1, 50.0), 2)
-                satisfacao_media = round(random.uniform(0, 5), 1)  # Nota de 0 a 5
-                
                 self.estatisticas['produtos']['consistentes'] += 1
             
             produto = {
@@ -209,12 +290,23 @@ class SimuladorDados:
             
             # Decide se será inconsistente
             inconsistente = self._deve_ser_inconsistente()
+            tipo_inconsistencia = None
+            
+            # Valores padrão
+            quantidade_item = random.randint(1, 10)
+            valor_total = round(random.uniform(10.0, 5000.0), 2)
+            desconto = round(valor_total * random.uniform(0, 0.3), 2)
+            data_compra = (self.data_simulacao - timedelta(days=random.randint(0, 365))).isoformat()
+            status = random.choice(["pendente", "pago", "enviado", "entregue", "cancelado"])
+            satisfacao = random.randint(1, 5)
             
             if inconsistente:
                 tipo_inconsistencia = random.choice([
                     'quantidade_negativa', 'valor_negativo', 'cliente_inexistente',
                     'produto_inexistente', 'data_futura', 'desconto_maior_que_valor',
-                    'satisfacao_invalida'
+                    'satisfacao_invalida', 'erro_digitacao_status',
+                    'capitalizacao_inicial', 'full_caps', 'full_lower', 
+                    'capitalizacao_aleatoria'
                 ])
                 
                 if tipo_inconsistencia == 'quantidade_negativa':
@@ -227,32 +319,20 @@ class SimuladorDados:
                     produto_id = random.randint(90000, 99999)
                 elif tipo_inconsistencia == 'data_futura':
                     data_compra = (datetime.now() + timedelta(days=365)).isoformat()
-                elif tipo_inconsistencia == 'satisfacao_invalida':
-                    satisfacao = random.choice([-1, 6, 10, 100, None])
-                else:  # desconto_maior_que_valor
+                elif tipo_inconsistencia == 'desconto_maior_que_valor':
                     valor_total = 100.0
                     desconto = 150.0
-                
-                # Define valores padrão
-                if 'quantidade_item' not in locals():
-                    quantidade_item = random.randint(1, 10)
-                if 'valor_total' not in locals():
-                    valor_total = round(random.uniform(10.0, 5000.0), 2)
-                if 'data_compra' not in locals():
-                    data_compra = (self.data_simulacao - timedelta(days=random.randint(0, 365))).isoformat()
-                if 'desconto' not in locals():
-                    desconto = round(valor_total * random.uniform(0, 0.3), 2)
-                if 'satisfacao' not in locals():
-                    satisfacao = random.randint(1, 5)
+                elif tipo_inconsistencia == 'satisfacao_invalida':
+                    satisfacao = random.choice([-1, 6, 10, 100, None])
+                elif tipo_inconsistencia == 'erro_digitacao_status':
+                    status, _ = self._aplicar_erro_digitacao_status(status)
+                elif tipo_inconsistencia in ('capitalizacao_inicial', 'full_caps', 
+                                              'full_lower', 'capitalizacao_aleatoria'):
+                    # Aplica inconsistência de capitalização ao status
+                    status, _ = self._aplicar_inconsistencia_capitalizacao(status)
                 
                 self.estatisticas['compras']['inconsistentes'] += 1
             else:
-                quantidade_item = random.randint(1, 10)
-                valor_total = round(random.uniform(10.0, 5000.0), 2)
-                desconto = round(valor_total * random.uniform(0, 0.3), 2)
-                data_compra = (self.data_simulacao - timedelta(days=random.randint(0, 365))).isoformat()
-                satisfacao = random.randint(1, 5)  # Nota de 1 a 5
-                
                 self.estatisticas['compras']['consistentes'] += 1
             
             compra = {
@@ -263,7 +343,7 @@ class SimuladorDados:
                 "valor_total": valor_total,
                 "desconto": desconto,
                 "data_compra": data_compra,
-                "status": random.choice(["pendente", "pago", "enviado", "entregue", "cancelado"]),
+                "status": status,
                 "satisfacao": satisfacao,
                 "inconsistente": inconsistente
             }
@@ -398,12 +478,11 @@ class GerenciadorSimulacao:
                 
                 self.contador += 1
                 
-                if self.rodando:  # Só mostra a mensagem se ainda estiver rodando
+                if self.rodando:
                     print(f"\n⏳ Aguardando 3 segundos para próximo ciclo...")
                     print(f"💡 Pressione CTRL + C para parar\n")
                     
-                    # Aguarda 3 segundos, mas verifica se deve parar
-                    for _ in range(30):  # 30 * 0.1 = 3 segundos
+                    for _ in range(30):
                         if not self.rodando:
                             break
                         time.sleep(0.1)
@@ -434,7 +513,6 @@ def main():
     print("CONFIGURAÇÃO DA SIMULAÇÃO")
     print("=" * 70)
     
-    # Solicita a taxa de consistência ao usuário
     while True:
         try:
             taxa = float(input("\nDigite a taxa de consistência (0-100): "))
@@ -445,10 +523,7 @@ def main():
         except ValueError:
             print("Por favor, digite um número válido.")
     
-    # Cria o gerenciador
     gerenciador = GerenciadorSimulacao(taxa_consistencia=taxa)
-    
-    # Inicia o loop de simulação
     gerenciador.iniciar_loop()
 
 
