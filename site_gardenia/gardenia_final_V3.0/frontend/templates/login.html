@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrar ou Cadastrar — Gardênia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+<body class="auth-body">
+
+    <header class="auth-header">
+        <a class="logo" href="/">GARDÊNIA<span>.</span></a>
+        <a class="auth-back" href="/">← Voltar para a loja</a>
+    </header>
+
+    <main class="auth-main">
+        <div class="auth-card">
+            <div class="auth-tabs">
+                <button type="button" class="auth-tab active" id="tabCliente" data-tab="cliente">Sou Cliente</button>
+                <button type="button" class="auth-tab" id="tabFuncionario" data-tab="funcionario">Sou Funcionário</button>
+            </div>
+
+            <!-- ===== Painel: Cliente (login por padrão, com opção de cadastro) ===== -->
+            <section class="auth-panel" id="panelCliente">
+
+                <!-- Login do cliente -->
+                <div id="clienteLoginView">
+                    <span class="eyebrow">BEM-VINDA(O) DE VOLTA</span>
+                    <h1>Entrar na minha conta</h1>
+                    <p class="auth-sub">Entre com seu e-mail e senha pra continuar na loja.</p>
+
+                    <form id="clienteLoginForm" novalidate>
+                        <div class="form-group">
+                            <label for="clEmail">E-mail *</label>
+                            <input type="email" id="clEmail" required placeholder="voce@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="clSenha">Senha *</label>
+                            <input type="password" id="clSenha" required placeholder="••••••••">
+                        </div>
+
+                        <div class="auth-msg" id="clienteLoginMsg"></div>
+
+                        <button type="submit" class="primary-btn auth-submit">
+                            <span>Entrar</span>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </button>
+                    </form>
+
+                    <p class="auth-hint">Ainda não é cliente? <a href="#" id="goToCadastro" class="auth-link">Criar cadastro</a></p>
+                </div>
+
+                <!-- Cadastro do cliente -->
+                <div id="clienteCadastroView" hidden>
+                    <span class="eyebrow">NOVO POR AQUI?</span>
+                    <h1>Criar meu cadastro</h1>
+                    <p class="auth-sub">Cadastre-se para que a nossa equipe possa acompanhar seu histórico de compras e te atender melhor na loja.</p>
+
+                    <form id="cadastroForm" novalidate>
+                        <div class="form-group">
+                            <label for="cNome">Nome completo *</label>
+                            <input type="text" id="cNome" required placeholder="Ex.: Maria Silveira">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="cEmail">E-mail *</label>
+                                <input type="email" id="cEmail" required placeholder="voce@email.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="cNascimento">Data de nascimento *</label>
+                                <input type="date" id="cNascimento" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="cCpf">CPF *</label>
+                                <input type="text" id="cCpf" required placeholder="000.000.000-00">
+                            </div>
+                            <div class="form-group">
+                                <label for="cTelefone">Telefone / WhatsApp *</label>
+                                <input type="tel" id="cTelefone" required placeholder="(19) 99999-9999">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="cSenha">Crie uma senha *</label>
+                            <input type="password" id="cSenha" required placeholder="Pelo menos 4 caracteres">
+                        </div>
+
+                        <div class="auth-msg" id="cadastroMsg"></div>
+
+                        <button type="submit" class="primary-btn auth-submit">
+                            <span>Criar cadastro</span>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </button>
+                    </form>
+
+                    <p class="auth-hint">Já é cliente? <a href="#" id="goToClienteLogin" class="auth-link">Entrar</a></p>
+                </div>
+            </section>
+
+            <!-- ===== Painel: Login de funcionário ===== -->
+            <section class="auth-panel" id="panelFuncionario" hidden>
+                <span class="eyebrow">EQUIPE GARDÊNIA</span>
+                <h1>Acesso do funcionário</h1>
+                <p class="auth-sub">Entre com o e-mail e a senha cadastrados pela gerência para acessar o Portal do Funcionário.</p>
+
+                <form id="loginForm" novalidate>
+                    <div class="form-group">
+                        <label for="fEmail">E-mail *</label>
+                        <input type="email" id="fEmail" required placeholder="voce@gardeniamodas.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="fSenha">Senha *</label>
+                        <input type="password" id="fSenha" required placeholder="••••••••">
+                    </div>
+
+                    <div class="auth-msg" id="loginMsg"></div>
+
+                    <button type="submit" class="primary-btn auth-submit">
+                        <span>Entrar</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </button>
+                </form>
+
+                <p class="auth-hint">Ainda não tem uma conta? O cadastro de funcionários é feito pela gerência, dentro do Portal.</p>
+            </section>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Gardênia — Moda feminina contemporânea, sofisticada e essencial. Tecidos nobres, caimento impecável e elegância atemporal.">
+    <title>Gardênia — Moda Feminina Contemporânea & Atemporal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script>
+        // Suporte a abertura direta do arquivo HTML no navegador
+        if (window.location.protocol === 'file:') {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = '../static/css/style.css';
+            document.head.appendChild(link);
+        }
+    </script>
+</head>
+<body>
+
+    <!-- Barra de Anúncios Superior -->
+    <div class="top-banner" id="topBanner">
+        <div class="top-banner-content">
+            <span>✨ <strong>FRETE GRÁTIS</strong> nas compras acima de R$ 250</span>
+            <span class="banner-divider">•</span>
+            <span>Use o cupom <strong>GARDENIA10</strong> para 10% OFF no primeiro pedido</span>
+        </div>
+        <button class="banner-close" id="closeBanner" aria-label="Fechar aviso">✕</button>
+    </div>
+
+    <!-- Header / Navbar Principal -->
+    <header class="navbar" id="navbar">
+        <div class="nav-container">
+            <button class="menu-btn" id="menuBtn" aria-label="Abrir menu de navegação">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+
+            <a class="logo" href="#inicio">GARDÊNIA<span>.</span></a>
+
+            <nav class="nav-links" id="navLinks">
+                <a href="#inicio" class="nav-item active">Início</a>
+                <a href="#produtos" class="nav-item nav-dept-link" data-dept="Feminino">Feminino</a>
+                <a href="#produtos" class="nav-item nav-dept-link" data-dept="Masculino">Masculino</a>
+                <a href="#colecoes" class="nav-item">Coleções</a>
+                <a href="#sobre" class="nav-item">Sobre</a>
+                <a href="#depoimentos" class="nav-item">Avaliações</a>
+                <a href="#contato" class="nav-item">Contato</a>
+            </nav>
+
+            <div class="nav-actions">
+                <button class="action-btn" id="searchBtn" title="Buscar produtos" aria-label="Buscar produtos">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </button>
+                <button class="action-btn" id="wishlistBtn" title="Lista de Desejos" aria-label="Lista de desejos">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                    <span class="badge" id="wishlistCount">0</span>
+                </button>
+                {% if client %}
+                <a class="action-btn" href="/logout" title="Sair ({{ client.name.split(' ')[0] }})" aria-label="Sair da minha conta" style="color: var(--color-accent);">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </a>
+                {% else %}
+                <a class="action-btn" href="/login" title="Entrar / Cadastrar" aria-label="Entrar ou cadastrar">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </a>
+                {% endif %}
+                <button class="cart-btn" id="cartBtn" title="Sacola de Compras" aria-label="Sacola de compras">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <path d="M16 10a4 4 0 0 1-8 0"></path>
+                    </svg>
+                    <span class="cart-label">Sacola</span>
+                    <span class="cart-count" id="cartCount">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Seção Hero -->
+        <section class="hero" id="inicio">
+            <div class="hero-overlay"></div>
+            <div class="hero-content reveal">
+                <span class="eyebrow-badge">COLEÇÃO OUTONO / INVERNO 2026</span>
+                <h1>Elegância que<br><em>acompanha você.</em></h1>
+                <p class="hero-text">Peças atemporais e corte impecável, feitas em fibras nobres para expressar a sua autenticidade com leveza e sofisticação diária.</p>
+                <div class="hero-cta-group">
+                    <a href="#produtos" class="primary-btn">
+                        <span>Explorar Coleção</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </a>
+                    <a href="#colecoes" class="secondary-btn">Ver Coleções</a>
+                </div>
+            </div>
+            <div class="hero-scroll" id="scrollIndicator">
+                <span>EXPLORE</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+        </section>
+
+        <!-- Faixa de Diferenciais -->
+        <section class="features-bar">
+            <div class="features-container">
+                <div class="feature-item">
+                    <span class="feature-icon">🌿</span>
+                    <div>
+                        <h4>Fibras Nobres</h4>
+                        <p>Linho puro e algodão certificado</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🚚</span>
+                    <div>
+                        <h4>Frete Grátis</h4>
+                        <p>Em compras acima de R$ 250</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">↺</span>
+                    <div>
+                        <h4>Troca Fácil</h4>
+                        <p>30 dias sem custo de devolução</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">💳</span>
+                    <div>
+                        <h4>Até 6x Sem Juros</h4>
+                        <p>Ou 5% de desconto no PIX</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Manifesto / Essência -->
+        <section class="intro section reveal">
+            <span class="eyebrow">A ESSÊNCIA GARDÊNIA</span>
+            <h2>Menos excesso.<br><em>Mais autenticidade.</em></h2>
+            <div class="intro-line"></div>
+            <p>Acreditamos em um guarda-roupa inteligente onde cada peça conversa entre si. Unimos alfaiataria contemporânea, toques artesanais e caimento sublime para que você se sinta confiante e elegante do amanhecer à noite.</p>
+        </section>
+
+        <!-- Seção de Coleções -->
+        <section class="collections section" id="colecoes">
+            <div class="section-heading reveal">
+                <div>
+                    <span class="eyebrow">CURADORIA EXCLUSIVA</span>
+                    <h2>Nossas Coleções</h2>
+                </div>
+                <button class="text-link-btn" id="viewAllCollectionsBtn" data-target-filter="Todos">Ver todas as peças →</button>
+            </div>
+
+            <div class="collection-grid">
+                <article class="collection-card collection-large reveal" data-category="Vestidos">
+                    <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1200&q=85" alt="Coleção Vestidos Gardênia" loading="lazy">
+                    <div class="collection-overlay"></div>
+                    <div class="collection-info">
+                        <span class="collection-tag">01 · FLUIDEZ & FORMA</span>
+                        <h3>Vestidos</h3>
+                        <p>Modelagens fluidas em linho e crepe para celebrações ou cotidiano sofisticado.</p>
+                        <button class="collection-link-btn" data-category="Vestidos">
+                            <span>Descobrir Peças</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </button>
+                    </div>
+                </article>
+
+                <article class="collection-card reveal" data-category="Casual">
+                    <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=900&q=85" alt="Coleção Casual Gardênia" loading="lazy">
+                    <div class="collection-overlay"></div>
+                    <div class="collection-info">
+                        <span class="collection-tag">02 · LEVEZA DIÁRIA</span>
+                        <h3>Casual Chic</h3>
+                        <button class="collection-link-btn" data-category="Casual">
+                            <span>Descobrir Peças</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </button>
+                    </div>
+                </article>
+
+                <article class="collection-card reveal" data-category="Alfaiataria">
+                    <img src="https://images.unsplash.com/photo-1548624313-0396c75e4b1a?auto=format&fit=crop&w=900&q=85" alt="Coleção Alfaiataria Gardênia" loading="lazy">
+                    <div class="collection-overlay"></div>
+                    <div class="collection-info">
+                        <span class="collection-tag">03 · ESTRUTURA & PODER</span>
+                        <h3>Alfaiataria</h3>
+                        <button class="collection-link-btn" data-category="Alfaiataria">
+                            <span>Descobrir Peças</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </button>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Seção de Produtos -->
+        <section class="products section" id="produtos">
+            <div class="products-header-box reveal">
+                <div class="section-heading">
+                    <div>
+                        <span class="eyebrow">CURADORIA ATEMPORAL</span>
+                        <h2>Favoritos da Temporada</h2>
+                    </div>
+
+                    <!-- Abas de Departamento Principal (Feminino / Masculino / Todos) -->
+                    <div class="dept-tabs-wrapper">
+                        <div class="dept-tabs" id="deptTabs" role="tablist">
+                            <button class="dept-tab active" data-dept="Feminino" role="tab" aria-selected="true">
+                                <span class="dept-icon">♀</span>
+                                <span>Feminino</span>
+                            </button>
+                            <button class="dept-tab" data-dept="Masculino" role="tab" aria-selected="false">
+                                <span class="dept-icon">♂</span>
+                                <span>Masculino</span>
+                            </button>
+                            <button class="dept-tab" data-dept="Todos" role="tab" aria-selected="false">
+                                <span>Todas as Peças</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sub-Filtros de Categoria Dinâmicos -->
+                <div class="category-filters-wrapper">
+                    <div class="filters" id="filters" role="tablist">
+                        <button class="filter active" data-filter="Todos">Todas as Categorias</button>
+                        <button class="filter" data-filter="Vestidos">Vestidos</button>
+                        <button class="filter" data-filter="Camisas">Camisas</button>
+                        <button class="filter" data-filter="Básicos">Básicos</button>
+                        <button class="filter" data-filter="Alfaiataria">Alfaiataria</button>
+                        <button class="filter" data-filter="Malhas">Malhas</button>
+                        <button class="filter" data-filter="Casual">Casual</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grid de Produtos -->
+            <div class="product-grid" id="productGrid">
+                {% for product in products %}
+                <article class="product-card reveal" data-id="{{ product.id }}" data-gender="{{ product.gender }}" data-category="{{ product.category }}" data-name="{{ product.name }}">
+                    <div class="product-image-container">
+                        <img src="{{ product.image }}" alt="{{ product.name }}" loading="lazy" class="product-thumb">
+                        
+                        {% if product.tag %}
+                        <span class="product-badge">{{ product.tag }}</span>
+                        {% endif %}
+
+                        <button class="heart-btn" data-id="{{ product.id }}" aria-label="Adicionar aos favoritos" title="Favoritar">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </button>
+
+                        <div class="product-actions-overlay">
+                            <button class="quick-view-btn" data-id="{{ product.id }}">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                                Olhar Rápido
+                            </button>
+                            <button class="add-to-cart-btn" data-id="{{ product.id }}" data-name="{{ product.name }}" data-price="{{ product.price }}">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                Adicionar à Sacola
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="product-meta">
+                        <div class="product-meta-header">
+                            <span class="product-cat">{{ product.category }}</span>
+                            <div class="product-rating">
+                                <span class="stars">★</span>
+                                <span class="rating-num">{{ product.rating }}</span>
+                            </div>
+                        </div>
+                        <h3 class="product-title">{{ product.name }}</h3>
+                        <div class="product-price-box">
+                            {% if product.old_price %}
+                            <span class="old-price">R$ {{ "%.2f"|format(product.old_price)|replace(".", ",") }}</span>
+                            {% endif %}
+                            <strong class="current-price">R$ {{ "%.2f"|format(product.price)|replace(".", ",") }}</strong>
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+
+            <!-- Estado Vazio para Filtro -->
+            <div class="empty-products-state" id="emptyProducts" style="display: none;">
+                <p>Nenhuma peça encontrada para a categoria selecionada.</p>
+                <button class="secondary-btn" id="resetFilterBtn">Ver Todas as Peças</button>
+            </div>
+        </section>
+
+        <!-- Quiz Interativo de Estilo -->
+        <section class="style-section section reveal">
+            <div class="style-container">
+                <div class="style-copy">
+                    <span class="eyebrow" style="color: #cad4c2;">PERSONAL STYLIST VIRTUAL</span>
+                    <h2>Qual é o seu<br><em>estilo principal?</em></h2>
+                    <p>Toque em uma personalidade estética para ver as combinações e peças que foram desenhadas especialmente para harmonizar com a sua rotina.</p>
+                </div>
+
+                <div class="style-interactive">
+                    <div class="style-options" id="styleOptions">
+                        <button class="style-btn active" data-style="Minimalista" data-cat="Básicos" data-desc="Você valoriza linhas limpas, tecidos puros e uma paleta neutra que simplifica as escolhas com elegância irrepreensível.">
+                            <span class="num">01</span>
+                            <span class="name">Minimalista</span>
+                            <span class="arrow">→</span>
+                        </button>
+                        <button class="style-btn" data-style="Casual Chic" data-cat="Casual" data-desc="Praticidade com personalidade. Roupas confortáveis que transitam com facilidade entre um almoço e um compromisso de trabalho.">
+                            <span class="num">02</span>
+                            <span class="name">Casual Chic</span>
+                            <span class="arrow">→</span>
+                        </button>
+                        <button class="style-btn" data-style="Elegante Atemporal" data-cat="Alfaiataria" data-desc="Cortes precisos, lapelas bem desenhadas e postura impecável. O luxo silencioso que nunca sai de moda.">
+                            <span class="num">03</span>
+                            <span class="name">Elegante Atemporal</span>
+                            <span class="arrow">→</span>
+                        </button>
+                        <button class="style-btn" data-style="Romântico Contemporâneo" data-cat="Vestidos" data-desc="Fluidez, toques sutis de delicadeza, texturas naturais e movimento leve em cada passo.">
+                            <span class="num">04</span>
+                            <span class="name">Romântico & Fluido</span>
+                            <span class="arrow">→</span>
+                        </button>
+                    </div>
+
+                    <div class="style-result-box" id="styleResultBox">
+                        <div class="style-result-badge">Recomendação Gardênia</div>
+                        <h4 id="styleResultTitle">Estilo Minimalista</h4>
+                        <p id="styleResultText">Você valoriza linhas limpas, tecidos puros e uma paleta neutra que simplifica as escolhas com elegância irrepreensível.</p>
+                        <button class="primary-btn light-btn" id="styleFilterActionBtn" data-target="Básicos">
+                            Ver Peças Deste Estilo →
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sobre a Marca / Ateliê -->
+        <section class="about section" id="sobre">
+            <div class="about-image-wrapper reveal">
+                <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&w=1200&q=85" alt="Ateliê Gardênia" class="about-img" loading="lazy">
+                <div class="about-floating-badge">
+                    <span class="badge-number">100%</span>
+                    <span class="badge-text">Fibras conscientes & modelagem autoral</span>
+                </div>
+            </div>
+
+            <div class="about-copy reveal">
+                <span class="eyebrow">SOBRE A GARDÊNIA</span>
+                <h2>Feita para durar.<br><em>Feita para inspirar.</em></h2>
+                <p>Nascemos do desejo de desapegar do descartável. Em nosso ateliê, cada molde é exaustivamente testado para abraçar o corpo feminino com conforto anatômico e liberdade.</p>
+                <p>Priorizamos matérias-primas nobres de origem certificada — linho, algodão pima e lã virgem — que ganham beleza e personalidade com o passar dos anos.</p>
+                
+                <div class="about-metrics">
+                    <div class="metric-item">
+                        <strong>+12k</strong>
+                        <span>Mulheres vestidas</span>
+                    </div>
+                    <div class="metric-item">
+                        <strong>4.9★</strong>
+                        <span>Avaliação média</span>
+                    </div>
+                    <div class="metric-item">
+                        <strong>Zero</strong>
+                        <span>Plástico no envio</span>
+                    </div>
+                </div>
+
+                <div class="about-actions">
+                    <button class="secondary-btn" id="openMeasurementGuideBtn">Ver Guia de Medidas</button>
+                    <button class="secondary-btn" id="openReturnsPolicyBtn">Trocas & Devoluções</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Avaliações dos Clientes -->
+        <section class="reviews section reveal" id="depoimentos">
+            <div class="section-center-heading">
+                <span class="eyebrow">QUEM VESTE, SE APAIXONA</span>
+                <h2>Histórias que Inspiram</h2>
+                <p class="section-subtext">Mais de 12.000 clientes satisfeitas compartilham suas experiências com a Gardênia.</p>
+            </div>
+
+            <div class="review-grid">
+                <article class="review-card">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-quote">“O caimento do Vestido Aurora é inacreditável. O tecido tem um peso nobre que não amassa fácil. Já virou minha peça favorita de 2026!”</p>
+                    <div class="review-author">
+                        <div class="author-avatar">ML</div>
+                        <div>
+                            <strong>Mariana L.</strong>
+                            <small>Curitiba, PR • Compra Verificada</small>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="review-card">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-quote">“A camisa de linho e o blazer olive são o combo perfeito para os meus dias de reuniões. Elegância sem esforço nenhum. Parabéns pelo carinho!”</p>
+                    <div class="review-author">
+                        <div class="author-avatar">CR</div>
+                        <div>
+                            <strong>Camila R.</strong>
+                            <small>São Paulo, SP • Compra Verificada</small>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="review-card">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-quote">“A entrega foi surpreendentemente rápida e a embalagem cheirosa, sem nada de plástico. Você percebe o respeito ao cliente em cada detalhe.”</p>
+                    <div class="review-author">
+                        <div class="author-avatar">BM</div>
+                        <div>
+                            <strong>Beatriz M.</strong>
+                            <small>Belo Horizonte, MG • Compra Verificada</small>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Newsletter & Cupom Exclusivo -->
+        <section class="newsletter section reveal" id="contato">
+            <div class="newsletter-content">
+                <div>
+                    <span class="eyebrow" style="color: #b7c3b0;">CLUBE EXCLUSIVO GARDÊNIA</span>
+                    <h2>Faça parte do círculo.</h2>
+                    <p>Cadastre seu e-mail para receber lançamentos em primeira mão, convites para pré-vendas e um <strong>cupom de 10% OFF</strong> imediato.</p>
+                </div>
+
+                <form id="newsletterForm" class="newsletter-form">
+                    <div class="input-wrapper">
+                        <input type="email" id="newsletterEmail" placeholder="Digite seu melhor e-mail..." required>
+                        <button type="submit" class="newsletter-submit-btn">
+                            <span>Quero Receber</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </button>
+                    </div>
+                    <p class="form-help-text" id="newsletterFeedback"></p>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Rodapé Completo -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-col brand-col">
+                <a class="logo footer-logo" href="#inicio">GARDÊNIA<span>.</span></a>
+                <p class="footer-tagline">Moda feminina contemporânea concebida com calma, elegância e responsabilidade ambiental.</p>
+                <div class="footer-socials">
+                    <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram" class="social-icon">Instagram ↗</a>
+                    <a href="https://pinterest.com" target="_blank" rel="noopener" aria-label="Pinterest" class="social-icon">Pinterest ↗</a>
+                    <a href="https://tiktok.com" target="_blank" rel="noopener" aria-label="TikTok" class="social-icon">TikTok ↗</a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Navegação</h4>
+                <a href="#inicio">Início</a>
+                <a href="#colecoes">Coleções</a>
+                <a href="#produtos">Produtos</a>
+                <a href="#sobre">Nossa História</a>
+                <a href="#depoimentos">Avaliações</a>
+            </div>
+
+            <div class="footer-col">
+                <h4>Atendimento & Ajuda</h4>
+                <button class="footer-link-btn" id="footerMeasureBtn">Guia de Medidas</button>
+                <button class="footer-link-btn" id="footerReturnsBtn">Trocas e Devoluções</button>
+                <button class="footer-link-btn" id="footerFaqBtn">Perguntas Frequentes</button>
+                <a href="https://wa.me/5511999999999?text=Olá!%20Gostaria%20de%20tirar%20uma%20dúvida%20sobre%20as%20peças%20da%20Gardênia." target="_blank" rel="noopener">Fale no WhatsApp ↗</a>
+            </div>
+
+            <div class="footer-col">
+                <h4>Pagamento & Segurança</h4>
+                <div class="payment-methods">
+                    <span class="pay-tag">PIX (5% OFF)</span>
+                    <span class="pay-tag">Cartão até 6x</span>
+                    <span class="pay-tag">Boleto</span>
+                </div>
+                <div class="security-badge">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    <span>Ambiente Seguro 256-Bit SSL</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="footer-bottom-content">
+                <span>© 2026 Gardênia Moda Contemporânea Ltda. Todos os direitos reservados.</span>
+                <div class="footer-bottom-links">
+                    <span>Privacidade & Termos</span>
+                    <button class="back-to-top" id="backToTopBtn" aria-label="Voltar ao topo">
+                        Subir ao Topo ↑
+                    </button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== MODAIS & DRAWERS ==================== -->
+
+    <!-- Gaveta da Sacola de Compras (Cart Drawer) -->
+    <div class="drawer-overlay" id="cartOverlay"></div>
+    <aside class="cart-drawer" id="cartDrawer" aria-hidden="true" aria-label="Sacola de Compras">
+        <div class="drawer-header">
+            <div class="drawer-title-box">
+                <h3>Sua Sacola</h3>
+                <span class="drawer-count" id="cartDrawerCount">(0 itens)</span>
+            </div>
+            <button class="drawer-close" id="closeCartBtn" aria-label="Fechar sacola">✕</button>
+        </div>
+
+        <!-- Barra de Progresso de Frete Grátis -->
+        <div class="shipping-bar-container">
+            <div class="shipping-bar-text" id="shippingBarText">Faltam R$ 250,00 para <strong>FRETE GRÁTIS</strong>!</div>
+            <div class="progress-track">
+                <div class="progress-fill" id="shippingProgressFill" style="width: 0%;"></div>
+            </div>
+        </div>
+
+        <!-- Itens do Carrinho -->
+        <div class="cart-items" id="cartItemsList">
+            <!-- Renderizado via JS -->
+        </div>
+
+        <!-- Rodapé do Carrinho -->
+        <div class="cart-footer" id="cartFooter">
+            <!-- Cupom de Desconto -->
+            <div class="coupon-box">
+                <div class="coupon-input-group">
+                    <input type="text" id="couponInput" placeholder="Possui cupom? (Ex: GARDENIA10)">
+                    <button id="applyCouponBtn">Aplicar</button>
+                </div>
+                <div class="coupon-message" id="couponMessage"></div>
+            </div>
+
+            <div class="cart-summary">
+                <div class="summary-line">
+                    <span>Subtotal:</span>
+                    <strong id="cartSubtotal">R$ 0,00</strong>
+                </div>
+                <div class="summary-line discount-line" id="discountRow" style="display: none;">
+                    <span>Desconto (Cupom):</span>
+                    <strong id="cartDiscount">- R$ 0,00</strong>
+                </div>
+                <div class="summary-line">
+                    <span>Frete:</span>
+                    <strong id="cartShipping">Calcular</strong>
+                </div>
+                <div class="summary-line total-line">
+                    <span>Total estimado:</span>
+                    <strong id="cartTotal">R$ 0,00</strong>
+                </div>
+            </div>
+
+            <div class="cart-cta-actions">
+                <button class="primary-btn checkout-btn" id="startCheckoutBtn">
+                    <span>Finalizar Pedido</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
+                <button class="secondary-btn continue-shopping-btn" id="continueShoppingBtn">
+                    Continuar Comprando
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Gaveta de Favoritos (Wishlist Drawer) -->
+    <div class="drawer-overlay" id="wishlistOverlay"></div>
+    <aside class="wishlist-drawer" id="wishlistDrawer" aria-hidden="true" aria-label="Lista de Desejos">
+        <div class="drawer-header">
+            <div class="drawer-title-box">
+                <h3>Lista de Desejos</h3>
+                <span class="drawer-count" id="wishlistDrawerCount">(0 itens)</span>
+            </div>
+            <button class="drawer-close" id="closeWishlistBtn" aria-label="Fechar lista de desejos">✕</button>
+        </div>
+
+        <div class="wishlist-items" id="wishlistItemsList">
+            <!-- Renderizado via JS -->
+        </div>
+
+        <div class="wishlist-footer" id="wishlistFooter">
+            <button class="secondary-btn" id="clearWishlistBtn">Limpar Favoritos</button>
+        </div>
+    </aside>
+
+    <!-- Modal de Busca Rápida (Quick Search) -->
+    <div class="search-modal" id="searchPanel" aria-hidden="true">
+        <div class="search-modal-inner">
+            <div class="search-modal-header">
+                <span class="eyebrow">BUSCA GARDÊNIA</span>
+                <button class="close-search-btn" id="closeSearch" aria-label="Fechar busca">✕</button>
+            </div>
+
+            <div class="search-input-wrapper">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="search-icon-input">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input id="searchInput" type="search" placeholder="O que você procura hoje? Ex: Vestido, Linho, Blazer..." autocomplete="off">
+            </div>
+
+            <div class="search-tags">
+                <span class="tag-title">Buscas frequentes:</span>
+                <button class="search-tag-chip" data-search="Vestido">Vestidos</button>
+                <button class="search-tag-chip" data-search="Linho">100% Linho</button>
+                <button class="search-tag-chip" data-search="Blazer">Blazers</button>
+                <button class="search-tag-chip" data-search="Masculino">Masculino</button>
+                <button class="search-tag-chip" data-search="Feminino">Feminino</button>
+                <button class="search-tag-chip" data-search="Camisa">Camisas</button>
+                <button class="search-tag-chip" data-search="Tricot">Tricot</button>
+            </div>
+
+            <!-- Resultados Dinâmicos -->
+            <div class="search-results-area" id="searchResultsArea">
+                <div class="search-empty-hint">Digite o nome de uma peça ou selecione uma sugestão acima.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Detalhes Rápidos do Produto (Quick View) -->
+    <div class="modal-overlay" id="quickViewOverlay"></div>
+    <div class="product-modal" id="quickViewModal" aria-hidden="true">
+        <button class="modal-close-btn" id="closeQuickViewBtn" aria-label="Fechar visualização rápida">✕</button>
+        <div class="product-modal-grid">
+            <div class="modal-gallery">
+                <img id="modalProductImg" src="" alt="" class="modal-main-img">
+                <span class="modal-tag-badge" id="modalProductTag"></span>
+            </div>
+            <div class="modal-info">
+                <span class="modal-cat" id="modalProductCategory">Categoria</span>
+                <h2 class="modal-title" id="modalProductName">Nome do Produto</h2>
+                
+                <div class="modal-rating-box">
+                    <span class="stars">★★★★★</span>
+                    <span class="modal-rating-val" id="modalProductRating">5.0</span>
+                    <span class="modal-reviews-count" id="modalProductReviews">(30 avaliações)</span>
+                </div>
+
+                <div class="modal-price-box">
+                    <span class="modal-old-price" id="modalProductOldPrice"></span>
+                    <strong class="modal-price" id="modalProductPrice">R$ 0,00</strong>
+                </div>
+
+                <p class="modal-desc" id="modalProductDesc">Descrição da peça...</p>
+
+                <div class="modal-composition-box">
+                    <strong>Composição:</strong> <span id="modalProductComposition">100% Algodão</span>
+                </div>
+
+                <!-- Seletor de Tamanhos -->
+                <div class="size-selector-box">
+                    <div class="size-header">
+                        <label>Selecione o Tamanho:</label>
+                        <button class="size-guide-inline-btn" id="inlineSizeGuideBtn">Ver medidas 📏</button>
+                    </div>
+                    <div class="size-options-grid" id="modalSizeOptions">
+                        <!-- Gerado dinamicamente -->
+                    </div>
+                </div>
+
+                <!-- Quantidade e Ação -->
+                <div class="modal-cta-row">
+                    <div class="quantity-stepper">
+                        <button type="button" id="modalQtyMinus">-</button>
+                        <span id="modalQtyVal">1</span>
+                        <button type="button" id="modalQtyPlus">+</button>
+                    </div>
+                    <button class="primary-btn modal-add-btn" id="modalAddToCartBtn">
+                        Adicionar à Sacola
+                    </button>
+                </div>
+
+                <div class="modal-perks">
+                    <span>✓ Em estoque e pronto para envio</span>
+                    <span>✓ Troca gratuita em até 30 dias</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Guia de Medidas -->
+    <div class="modal-overlay" id="measureOverlay"></div>
+    <div class="info-modal" id="measureModal" aria-hidden="true">
+        <div class="info-modal-header">
+            <h3>Guia de Medidas Gardênia</h3>
+            <button class="modal-close-btn" id="closeMeasureBtn">✕</button>
+        </div>
+        <div class="info-modal-body">
+            <p>Utilize uma fita métrica sem apertar para encontrar o tamanho perfeito para o seu corpo.</p>
+            <div class="table-responsive">
+                <table class="measure-table">
+                    <thead>
+                        <tr>
+                            <th>Tamanho</th>
+                            <th>Manequim</th>
+                            <th>Busto (cm)</th>
+                            <th>Cintura (cm)</th>
+                            <th>Quadril (cm)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>PP</strong></td><td>34 - 36</td><td>82 - 86</td><td>64 - 68</td><td>90 - 94</td></tr>
+                        <tr><td><strong>P</strong></td><td>38</td><td>86 - 90</td><td>68 - 72</td><td>94 - 98</td></tr>
+                        <tr><td><strong>M</strong></td><td>40</td><td>90 - 96</td><td>72 - 78</td><td>98 - 104</td></tr>
+                        <tr><td><strong>G</strong></td><td>42 - 44</td><td>96 - 102</td><td>78 - 84</td><td>104 - 110</td></tr>
+                        <tr><td><strong>GG</strong></td><td>46</td><td>102 - 108</td><td>84 - 90</td><td>110 - 116</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="measure-tips">
+                <h4>Como tirar suas medidas:</h4>
+                <ul>
+                    <li><strong>Busto:</strong> Meça ao redor da parte mais saliente do tórax.</li>
+                    <li><strong>Cintura:</strong> Meça na curvatura natural da cintura, cerca de dois dedos acima do umbigo.</li>
+                    <li><strong>Quadril:</strong> Meça na parte mais volumosa do quadril com os pés juntos.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Trocas e Devoluções -->
+    <div class="modal-overlay" id="returnsOverlay"></div>
+    <div class="info-modal" id="returnsModal" aria-hidden="true">
+        <div class="info-modal-header">
+            <h3>Trocas e Devoluções Descomplicadas</h3>
+            <button class="modal-close-btn" id="closeReturnsBtn">✕</button>
+        </div>
+        <div class="info-modal-body">
+            <p>Na Gardênia, queremos que você ame cada peça que vestir. Caso não sirva ou queira trocar por outro modelo, facilitamos tudo para você.</p>
+            <div class="returns-steps">
+                <div class="step-card">
+                    <span class="step-num">1</span>
+                    <h4>Prazo de 30 Dias</h4>
+                    <p>Você tem até 30 dias corridos após o recebimento para solicitar a primeira troca 100% gratuita.</p>
+                </div>
+                <div class="step-card">
+                    <span class="step-num">2</span>
+                    <h4>Código de Postagem Reverso</h4>
+                    <p>Geramos o código dos Correios ou coleta sem você pagar frete de retorno.</p>
+                </div>
+                <div class="step-card">
+                    <span class="step-num">3</span>
+                    <h4>Novo Envio Rápido</h4>
+                    <p>Assim que postado, despachamos o novo tamanho ou liberamos o crédito integral.</p>
+                </div>
+            </div>
+            <div class="returns-footer-cta">
+                <a href="https://wa.me/5511999999999?text=Olá!%20Desejo%20solicitar%20uma%20troca%20de%20pedido%20Gardênia." class="primary-btn" target="_blank" rel="noopener">Falar com Suporte de Trocas</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Checkout / Finalização -->
+    <div class="modal-overlay" id="checkoutOverlay"></div>
+    <div class="info-modal checkout-modal" id="checkoutModal" aria-hidden="true">
+        <div class="info-modal-header">
+            <h3>Finalizar Pedido Gardênia</h3>
+            <button class="modal-close-btn" id="closeCheckoutBtn">✕</button>
+        </div>
+        <div class="info-modal-body">
+            <div class="checkout-grid">
+                <div class="checkout-form-col">
+                    <h4>Dados de Entrega</h4>
+                    <form id="checkoutForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="checkoutName">Nome Completo *</label>
+                                <input type="text" id="checkoutName" required placeholder="Ex: Maria Silveira">
+                            </div>
+                            <div class="form-group">
+                                <label for="checkoutPhone">WhatsApp / Telefone *</label>
+                                <input type="tel" id="checkoutPhone" required placeholder="(11) 99999-9999">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="checkoutCep">CEP *</label>
+                                <input type="text" id="checkoutCep" required placeholder="00000-000">
+                            </div>
+                            <div class="form-group">
+                                <label for="checkoutCity">Cidade / UF *</label>
+                                <input type="text" id="checkoutCity" required placeholder="São Paulo / SP">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="checkoutAddress">Endereço e Número *</label>
+                            <input type="text" id="checkoutAddress" required placeholder="Rua Oscar Freire, 120 - Apto 42">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Forma de Pagamento Preferida:</label>
+                            <div class="payment-options-radios">
+                                <label class="radio-label">
+                                    <input type="radio" name="paymentMethod" value="PIX" checked>
+                                    <span>⚡ PIX (5% de Desconto Imediato)</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="paymentMethod" value="Cartão">
+                                    <span>💳 Cartão de Crédito (até 6x sem juros)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="checkout-actions">
+                            <button type="submit" class="primary-btn submit-order-btn">
+                                <span>Confirmar & Gerar Pedido</span>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="checkout-summary-col">
+                    <h4>Resumo da Compra</h4>
+                    <div class="checkout-items-summary" id="checkoutItemsSummary">
+                        <!-- Inserido dinamicamente -->
+                    </div>
+                    <div class="checkout-totals" id="checkoutTotals">
+                        <!-- Totais -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Container de Toasts Flutuantes -->
+    <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+    <!-- Dados dos Produtos para JavaScript (compatível com Flask e abertura direta) -->
+    <script id="product-data" type="application/json">
+{{ products | tojson if products is defined else '[]' }}
+    </script>
+    <script>
+        try {
+            const raw = document.getElementById("product-data").textContent.trim();
+            if (raw && !raw.startsWith("{" + "{")) {
+                window.products = JSON.parse(raw);
+            }
+        } catch(e) {
+            window.products = [];
+        }
+    </script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        if (window.location.protocol === 'file:') {
+            const s = document.createElement('script');
+            s.src = '../static/js/script.js';
+            document.body.appendChild(s);
+        }
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,92 @@
+[
+  {
+    "sku": "789123456001",
+    "name": "Vestido Linho Areia",
+    "category": "Vestidos",
+    "size": "M",
+    "color": "Areia",
+    "price": 189.0,
+    "qty": 14
+  },
+  {
+    "sku": "789123456002",
+    "name": "Vestido Longo Floral",
+    "category": "Vestidos",
+    "size": "P",
+    "color": "Floral",
+    "price": 229.0,
+    "qty": 3
+  },
+  {
+    "sku": "789123456003",
+    "name": "Blusa Cropped Verde",
+    "category": "Blusas",
+    "size": "P",
+    "color": "Verde",
+    "price": 119.0,
+    "qty": 22
+  },
+  {
+    "sku": "789123456004",
+    "name": "Blusa Manga Longa",
+    "category": "Blusas",
+    "size": "G",
+    "color": "Branco",
+    "price": 95.0,
+    "qty": 6
+  },
+  {
+    "sku": "789123456005",
+    "name": "Calça Alfaiataria",
+    "category": "Calças",
+    "size": "38",
+    "color": "Preto",
+    "price": 219.0,
+    "qty": 9
+  },
+  {
+    "sku": "789123456006",
+    "name": "Calça Wide Leg",
+    "category": "Calças",
+    "size": "40",
+    "color": "Bege",
+    "price": 229.0,
+    "qty": 2
+  },
+  {
+    "sku": "789123456007",
+    "name": "Saia Midi Plissada",
+    "category": "Saias",
+    "size": "M",
+    "color": "Terracota",
+    "price": 169.0,
+    "qty": 11
+  },
+  {
+    "sku": "789123456008",
+    "name": "Cinto Trança",
+    "category": "Acessórios",
+    "size": "Único",
+    "color": "Caramelo",
+    "price": 79.0,
+    "qty": 1
+  },
+  {
+    "sku": "789123456009",
+    "name": "Brinco Dourado",
+    "category": "Acessórios",
+    "size": "Único",
+    "color": "Dourado",
+    "price": 59.0,
+    "qty": 31
+  },
+  {
+    "sku": "789123456010",
+    "name": "Lenço de Seda",
+    "category": "Acessórios",
+    "size": "Único",
+    "color": "Verde-oliva",
+    "price": 89.0,
+    "qty": 0
+  }
+]

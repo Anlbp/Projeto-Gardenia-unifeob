@@ -1,0 +1,302 @@
+[
+  {
+    "id": 1,
+    "name": "Vestido Aurora",
+    "gender": "Feminino",
+    "category": "Vestidos",
+    "price": 249.9,
+    "old_price": 289.9,
+    "tag": "Novo",
+    "image": "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=900&q=85",
+    "description": "Vestido midi em crepe fluido com caimento evasê impecável e decote suave para qualquer momento especial.",
+    "sizes": [
+      "PP",
+      "P",
+      "M",
+      "G"
+    ],
+    "composition": "100% Viscose de Reflorestamento",
+    "rating": 4.9,
+    "reviews_count": 28
+  },
+  {
+    "id": 2,
+    "name": "Camisa Essencial Linho",
+    "gender": "Feminino",
+    "category": "Básicos",
+    "price": 139.9,
+    "old_price": 169.9,
+    "tag": "100% Linho",
+    "image": "https://images.unsplash.com/photo-1605763240000-7e93b172d754?auto=format&fit=crop&w=900&q=85",
+    "description": "Camisa clássica com corte despojado em puro linho respirável, gola estruturada e toque macio ao corpo.",
+    "sizes": [
+      "P",
+      "M",
+      "G",
+      "GG"
+    ],
+    "composition": "100% Linho Puro Certificado",
+    "rating": 5.0,
+    "reviews_count": 42
+  },
+  {
+    "id": 3,
+    "name": "Blazer Olive Tailored",
+    "gender": "Feminino",
+    "category": "Alfaiataria",
+    "price": 299.9,
+    "old_price": 349.9,
+    "tag": "Destaque",
+    "image": "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=900&q=85",
+    "description": "Blazer estruturado em tom verde oliva elegante, forro acetinado premium e lapela refinada com caimento impecável.",
+    "sizes": [
+      "PP",
+      "P",
+      "M",
+      "G"
+    ],
+    "composition": "70% Lã Tropical, 30% Poliéster Reciclado",
+    "rating": 4.9,
+    "reviews_count": 35
+  },
+  {
+    "id": 4,
+    "name": "Tricot Serena Canelado",
+    "gender": "Feminino",
+    "category": "Malhas",
+    "price": 179.9,
+    "old_price": null,
+    "tag": "Mais Vendido",
+    "image": "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=900&q=85",
+    "description": "Tricot canelado com toque aveludado de algodão e lã leve. Confortável para os dias amenos e sobreposições.",
+    "sizes": [
+      "P",
+      "M",
+      "G"
+    ],
+    "composition": "60% Algodão Pima, 40% Lã Merino",
+    "rating": 4.8,
+    "reviews_count": 19
+  },
+  {
+    "id": 5,
+    "name": "Saia Luna Midi Evasê",
+    "gender": "Feminino",
+    "category": "Casual",
+    "price": 159.9,
+    "old_price": 189.9,
+    "tag": "Tendência",
+    "image": "https://images.unsplash.com/photo-1584273143981-41c073dfe8f8?auto=format&fit=crop&w=900&q=85",
+    "description": "Saia evasê de cintura alta em sarja suave acetinada, com fenda discreta e bolsos laterais utilitários.",
+    "sizes": [
+      "PP",
+      "P",
+      "M",
+      "G",
+      "GG"
+    ],
+    "composition": "98% Algodão, 2% Elastano",
+    "rating": 4.9,
+    "reviews_count": 23
+  },
+  {
+    "id": 6,
+    "name": "Calça Alfaiataria Íris",
+    "gender": "Feminino",
+    "category": "Alfaiataria",
+    "price": 229.9,
+    "old_price": null,
+    "tag": "Ateliê",
+    "image": "https://images.unsplash.com/photo-1591369822096-ffd140ec948f?auto=format&fit=crop&w=900&q=85",
+    "description": "Calça reta com cós anatômico duplo, pregas frontais sofisticadas e caimento que alonga a silhueta.",
+    "sizes": [
+      "36",
+      "38",
+      "40",
+      "42",
+      "44"
+    ],
+    "composition": "92% Viscose Sarjada, 8% Poliéster",
+    "rating": 5.0,
+    "reviews_count": 31
+  },
+  {
+    "id": 7,
+    "name": "Vestido Botânica Linho",
+    "gender": "Feminino",
+    "category": "Vestidos",
+    "price": 269.9,
+    "old_price": 310.0,
+    "tag": "Exclusivo",
+    "image": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=900&q=85",
+    "description": "Vestido em mistura nobre de linho com detalhes pespontados, mangas amplas delicadas e amarração na cintura.",
+    "sizes": [
+      "PP",
+      "P",
+      "M",
+      "G"
+    ],
+    "composition": "55% Linho Puro, 45% Viscose",
+    "rating": 4.9,
+    "reviews_count": 14
+  },
+  {
+    "id": 8,
+    "name": "Regata Ribbed Areia",
+    "gender": "Feminino",
+    "category": "Básicos",
+    "price": 89.9,
+    "old_price": null,
+    "tag": "Essencial",
+    "image": "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=900&q=85",
+    "description": "Regata em malha canelada encorpada com decote halter elegante. A base perfeita para qualquer composição.",
+    "sizes": [
+      "PP",
+      "P",
+      "M",
+      "G"
+    ],
+    "composition": "95% Algodão Pima Peruano, 5% Elastano",
+    "rating": 4.7,
+    "reviews_count": 51
+  },
+  {
+    "id": 9,
+    "name": "Cardigan Off-White Brisa",
+    "gender": "Feminino",
+    "category": "Malhas",
+    "price": 209.9,
+    "old_price": 249.9,
+    "tag": "Conforto",
+    "image": "https://images.unsplash.com/photo-1516762689617-e1cffcef479d?auto=format&fit=crop&w=900&q=85",
+    "description": "Cardigan oversized em ponto fang artesanal com botões de matéria orgânica. Quente, leve e super versátil.",
+    "sizes": [
+      "P",
+      "M",
+      "G"
+    ],
+    "composition": "70% Acrílico Soft Touch, 30% Algodão",
+    "rating": 4.9,
+    "reviews_count": 17
+  },
+  {
+    "id": 10,
+    "name": "Camisa Linho Riviera",
+    "gender": "Masculino",
+    "category": "Camisas",
+    "price": 189.9,
+    "old_price": 229.9,
+    "tag": "100% Linho Puro",
+    "image": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=900&q=85",
+    "description": "Camisa manga longa em puro linho respirável, gola francesa despojada e botões ecológicos em corozo.",
+    "sizes": [
+      "P",
+      "M",
+      "G",
+      "GG"
+    ],
+    "composition": "100% Linho Europeu Puro",
+    "rating": 5.0,
+    "reviews_count": 38
+  },
+  {
+    "id": 11,
+    "name": "Blazer Alfaiataria Areia",
+    "gender": "Masculino",
+    "category": "Alfaiataria",
+    "price": 349.9,
+    "old_price": 399.9,
+    "tag": "Destaque",
+    "image": "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=900&q=85",
+    "description": "Blazer desestruturado em sarja leve com forro de cetim italiano e caimento elegante para eventos e reuniões.",
+    "sizes": [
+      "48",
+      "50",
+      "52",
+      "54"
+    ],
+    "composition": "65% Lã Virgem, 35% Algodão Orgânico",
+    "rating": 4.9,
+    "reviews_count": 27
+  },
+  {
+    "id": 12,
+    "name": "Calça Chino Confort",
+    "gender": "Masculino",
+    "category": "Alfaiataria",
+    "price": 229.9,
+    "old_price": null,
+    "tag": "Essencial",
+    "image": "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?auto=format&fit=crop&w=900&q=85",
+    "description": "Calça chino em corte reto contemporâneo com toque peletizado macio, bolsos embutidos e flexibilidade.",
+    "sizes": [
+      "38",
+      "40",
+      "42",
+      "44"
+    ],
+    "composition": "97% Algodão Nobre, 3% Elastano",
+    "rating": 4.9,
+    "reviews_count": 44
+  },
+  {
+    "id": 13,
+    "name": "Tricot Canelado Terracota",
+    "gender": "Masculino",
+    "category": "Malhas",
+    "price": 199.9,
+    "old_price": 239.9,
+    "tag": "Mais Vendido",
+    "image": "https://images.unsplash.com/photo-1614975058789-41316d0e2e9c?auto=format&fit=crop&w=900&q=85",
+    "description": "Suéter clássico gola careca em trama de algodão e lã premium. Perfeito para sobreposições em dias amenos.",
+    "sizes": [
+      "P",
+      "M",
+      "G",
+      "GG"
+    ],
+    "composition": "50% Algodão Pima, 50% Lã Merino",
+    "rating": 4.8,
+    "reviews_count": 22
+  },
+  {
+    "id": 14,
+    "name": "Camiseta Pima Essential",
+    "gender": "Masculino",
+    "category": "Básicos",
+    "price": 99.9,
+    "old_price": null,
+    "tag": "Algodão Pima",
+    "image": "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=900&q=85",
+    "description": "Camiseta gola C em algodão Pima peruano com caimento regular e toque extremamente aveludado.",
+    "sizes": [
+      "P",
+      "M",
+      "G",
+      "GG"
+    ],
+    "composition": "100% Algodão Pima Peruano",
+    "rating": 5.0,
+    "reviews_count": 65
+  },
+  {
+    "id": 15,
+    "name": "Jaqueta Overshirt Safari",
+    "gender": "Masculino",
+    "category": "Casual",
+    "price": 289.9,
+    "old_price": 329.9,
+    "tag": "Novo",
+    "image": "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=900&q=85",
+    "description": "Overshirt utilitária encorpada com quatro bolsos frontais, corte quadrado contemporâneo e toque aveludado.",
+    "sizes": [
+      "P",
+      "M",
+      "G",
+      "GG"
+    ],
+    "composition": "100% Sarja Pesada de Algodão",
+    "rating": 4.9,
+    "reviews_count": 19
+  }
+]

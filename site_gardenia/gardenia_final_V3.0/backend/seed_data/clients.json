@@ -1,0 +1,199 @@
+[
+  {
+    "id": "123.456.789-01",
+    "name": "Marina Costa",
+    "email": "marina.costa@email.com",
+    "birth_date": "1994-03-12",
+    "phone": "(19) 99876-5432",
+    "cpf": "123.456.789-01",
+    "purchases": [
+      {
+        "date": "12/09/2026",
+        "items": "Vestido Linho Areia, Cinto Trança",
+        "total": 289
+      },
+      {
+        "date": "02/08/2026",
+        "items": "Blusa Cropped Verde",
+        "total": 119
+      }
+    ],
+    "senha_hash": "scrypt:32768:8:1$kgrKWnAsdEZhhPSq$d1bf72987763992ced6b64da5d2e148c82886b4802715e0139e160a62f4348581da7599c5d6699f7d3e2758a35f1b262956ee6c206237a0b240cba3237ed5cbe"
+  },
+  {
+    "id": "234.567.890-12",
+    "name": "Ana Paula Ribeiro",
+    "email": "anapaula.ribeiro@email.com",
+    "birth_date": "1990-07-22",
+    "phone": "(19) 98123-4567",
+    "cpf": "234.567.890-12",
+    "purchases": [
+      {
+        "date": "10/09/2026",
+        "items": "Calça Alfaiataria",
+        "total": 219
+      }
+    ],
+    "senha_hash": "scrypt:32768:8:1$AU3A75LQOkmbXLwO$9b047a9c856465dd763c1e7e3c15c49257ec570d1ec6ee129ea1d78e301ccbc0618d19573e43c4be56aae32daeafef5aa8af58c8a1216afe99b0ce80aafb166d"
+  },
+  {
+    "id": "345.678.901-23",
+    "name": "Beatriz Lemos",
+    "email": "bia.lemos@email.com",
+    "birth_date": "1998-11-05",
+    "phone": "(11) 97722-1190",
+    "cpf": "345.678.901-23",
+    "purchases": [
+      {
+        "date": "01/09/2026",
+        "items": "Saia Midi Plissada",
+        "total": 169
+      }
+    ],
+    "senha_hash": "scrypt:32768:8:1$FPJNMm9q0yvnu0o8$3e885c0d6499abc61cbed32e1fbd076bae8065b6af1270689debc9e1c24cb2478ac6148551f70a50f862cc761c857720047b7c5b417783d9c23113bcd7757eab"
+  },
+  {
+    "id": "456.789.012-34",
+    "name": "Carla Nogueira",
+    "email": "carla.nogueira@email.com",
+    "birth_date": "1987-01-30",
+    "phone": "(19) 99654-3321",
+    "cpf": "456.789.012-34",
+    "purchases": [
+      {
+        "date": "14/09/2026",
+        "items": "Vestido Longo Floral, Brinco Dourado",
+        "total": 349
+      }
+    ],
+    "senha_hash": "scrypt:32768:8:1$CFdBlX2yuC15JPbF$02ee26d8c7fafaa2730cd23f8af466dc5cd359ee41ba1c8b6170b138ee89c71340f7f6fb470949332367b4c55dacf047ca716a632003c35bd62ace3d308531a9"
+  },
+  {
+    "id": "567.890.123-45",
+    "name": "Débora Martins",
+    "email": "debora.martins@email.com",
+    "birth_date": "2000-05-18",
+    "phone": "(19) 98877-6655",
+    "cpf": "567.890.123-45",
+    "purchases": [
+      {
+        "date": "20/08/2026",
+        "items": "Blusa Manga Longa",
+        "total": 95
+      }
+    ],
+    "senha_hash": "scrypt:32768:8:1$v0LEn1WmnetvmkVR$4a3bda063b7f3946cde9df27cf4466ea53beb5f215fc4658628dfb2d6828e12242753975373bbc4e13fd4f0c6448336723e29842bcc36047f2811491eae062a0"
+  },
+  {
+    "id": "678.901.234-56",
+    "name": "Fernanda Prado",
+    "email": "fe.prado@email.com",
+    "birth_date": "1993-09-09",
+    "phone": "(16) 99123-8842",
+    "cpf": "678.901.234-56",
+    "purchases": [
+      {
+        "date": "05/09/2026",
+        "items": "Calça Wide Leg",
+        "total": 229
+      }
+    ],
+    "senha_hash": "scrypt:32768:8:1$DmNUfHQeVFLg4TZb$3f511f3145baa8694126a333ad9354c58e97ca4f3d1f39fbc014859684360c9b832f8e09eb41c3f844c07556b833b6c25250895ac331a1266e11d1a743295785"
+  },
+  {
+    "id": "789.012.345-67",
+    "name": "Gabriela Souza",
+    "email": "gabi.souza@email.com",
+    "birth_date": "1996-12-01",
+    "phone": "(19) 99001-2233",
+    "cpf": "789.012.345-67",
+    "purchases": [
+      {
+        "date": "13/09/2026",
+        "items": "Vestido Linho Areia",
+        "total": 189
+      }
+    ],
+    "senha_hash": "scrypt:32768:8:1$9XWolJP5d0xzQgjj$998e05d55761ad32bd93e90bc07363a1eb51610b8d1cd25dcd5dc72e61003540ef808f83e9da6878cde2895e64f2b18a6646859c0d062b5d73cbd869cf068461"
+  },
+  {
+    "id": "890.123.456-78",
+    "name": "Helena Duarte",
+    "email": "helena.duarte@email.com",
+    "birth_date": "1985-04-27",
+    "phone": "(19) 97654-1122",
+    "cpf": "890.123.456-78",
+    "purchases": [
+      {
+        "date": "28/08/2026",
+        "items": "Cinto Trança",
+        "total": 79
+      }
+    ],
+    "senha_hash": "scrypt:32768:8:1$5T1LsECMnY499IL8$eba47e84222521f069aadaba3bb7b9ffcf593408975bc90d7ab8f60014da54a4c7b0cd71f8d178e4691c753e2c92631ce4b633da3c0fafe7ada4172bade20336"
+  },
+  {
+    "id": "901.234.567-89",
+    "name": "Isabela Freitas",
+    "email": "isa.freitas@email.com",
+    "birth_date": "1999-02-14",
+    "phone": "(14) 99887-4455",
+    "cpf": "901.234.567-89",
+    "purchases": [
+      {
+        "date": "09/09/2026",
+        "items": "Saia Midi Plissada, Brinco Dourado",
+        "total": 249
+      }
+    ],
+    "senha_hash": "scrypt:32768:8:1$GlpCx4HsVAzecMVv$cf655100cb58cf4ef1ecab9325fd2d22ccd4dd77b00fe2a139a6793f9991f833effb46549e1e69b22e6e03e36491804fe225cbe7beb5035ed5b137d7f7e53b18"
+  },
+  {
+    "id": "012.345.678-90",
+    "name": "Juliana Prado",
+    "email": "ju.prado@email.com",
+    "birth_date": "1992-06-08",
+    "phone": "(19) 99321-6644",
+    "cpf": "012.345.678-90",
+    "purchases": [
+      {
+        "date": "11/09/2026",
+        "items": "Vestido Longo Floral",
+        "total": 229
+      }
+    ],
+    "senha_hash": "scrypt:32768:8:1$zq2o2rHM7dNVhGrp$f51c2ec05d002b0a724b72b04be2d212c17bde009876976ba16c3eafa93bea69de34869d746151e274899d824e5d1ab626964df245d74d7de26b3033b99610eb"
+  },
+  {
+    "id": "112.233.445-56",
+    "name": "Larissa Torres",
+    "email": "lari.torres@email.com",
+    "birth_date": "1995-10-19",
+    "phone": "(19) 98456-7789",
+    "cpf": "112.233.445-56",
+    "purchases": [
+      {
+        "date": "19/08/2026",
+        "items": "Blusa Cropped Verde",
+        "total": 119
+      }
+    ],
+    "senha_hash": "scrypt:32768:8:1$nTdNlYtrYeY3c8jN$98386c0f476d3947c12d452ffa4abba68216e9fbd22d548b66802897a4f94025a9c7a90425226f226641960a0afda404927f68ad0eee759de2ad07359baa8782"
+  },
+  {
+    "id": "223.344.556-67",
+    "name": "Patrícia Vale",
+    "email": "patricia.vale@email.com",
+    "birth_date": "1989-08-25",
+    "phone": "(19) 99887-1234",
+    "cpf": "223.344.556-67",
+    "purchases": [
+      {
+        "date": "15/09/2026",
+        "items": "Vestido Linho Areia, Calça Alfaiataria",
+        "total": 408
+      }
+    ],
+    "senha_hash": "scrypt:32768:8:1$yfuHLuZEwQSOmH9q$bc9e49c967a75fbb042390fdf3b081093335d76fa0ece9d9bac7b974dc01a4f009aa25bf0d26b55128896674ce2ffa38bcef9ca9dc7db8847d4f8fef74c6689c"
+  }
+]
