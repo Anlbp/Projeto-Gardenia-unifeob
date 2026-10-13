@@ -41,19 +41,20 @@ Com a implementação da solução, a loja poderá reduzir a dependência de reg
 
 1. **Provisionamento da VM (OpenTofu):**
     ```bash
-        cd infraestrutura/
+        # Na raiz do projeto
+        cd ./dados/infraestrutura/
         tofu init
         tofu apply -auto-approve
     ```
 2. **Configuração do Ambiente (Ansible):**
-    Atualize o IP retornado no arquivo "infraestrutura/ansible/invetory.ini" e execute:
+    Copie o IP retornado no terminal e cole no arquivo "/ansible/invetory.ini" e execute:
     ```bash
-        cd infraestrutura/ansible/
+        cd ./ansible/
         ansible-playbook -i inventory.ini playbook.yml
     ```
 3. **Implantação da Aplicação:**
     ```bash
-        cd ./Projeto-Gardenia-unifeob/ # Na pasta raiz do projeto
+        cd ../ # Execute varias vezes até voltar na pasta raiz do projeto
         scp -r gerador/* debian@192.168.122.XX:/home/debian/app_simulador/
     ```
 4. **Execução do Simulador na VM:**
@@ -61,7 +62,6 @@ Com a implementação da solução, a loja poderá reduzir a dependência de reg
         ssh debian@192.168.122.XX
         python3 /home/debian/app_simulador/gerador.py
     ```
-
 5. **Para ligar a VM novamente após o boot:**
     ```bash
         # Ativa a rede virtual do libvirt
@@ -69,29 +69,13 @@ Com a implementação da solução, a loja poderá reduzir a dependência de reg
         # Liga a VM
         sudo virsh start vm-simulador-data
     ```
-
 6. **Para sair do terminal do Debian(VM):**
     ```bash
         exit
     ```
+<br>
+<b>Feitos pelos alunos do curso de Ciência da Computação.</b> 👨‍💻🎓
 
-⚠️ **Verifique se a sua pasta possui exatamente estes arquivos antes de dar push no git:**
+<br>
 
-```text
-    projeto-data-science/
-    ├── .gitignore
-    ├── README.md
-    ├── dados/
-    │   └── exemplo_dados.csv
-    ├── infraestrutura/
-    │   ├── cloud_init.cfg
-    │   ├── main.tf
-    │   ├── variables.tf
-    │   └── ansible/
-    │       ├── inventory.ini
-    │       └── playbook.yml
-    └── gerador/
-        ├── gerador.py
-        ├── requirements.md
-        └── requirements.txt
-```
+![Logo da Faculdade UNIFEOB](https://s3.sa-east-1.amazonaws.com/lyceum.backups/arquivosimport/logo_branco_atual_2023.png)
