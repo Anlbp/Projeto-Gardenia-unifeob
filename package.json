@@ -1,0 +1,29 @@
+{
+  "dependencies": {
+    "dotenv": "^18.0.7",
+    "express": "^5.3.0"
+  },
+  "name": "projeto-gardenia-unifeob",
+  "version": "1.0.0",
+  "description": "INTEGRANTES",
+  "main": "index.js",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "scripts": {
+    "start": "http-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Anlbp/Projeto-Gardenia-unifeob.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Anlbp/Projeto-Gardenia-unifeob/issues"
+  },
+  "homepage": "https://github.com/Anlbp/Projeto-Gardenia-unifeob#readme"
+}

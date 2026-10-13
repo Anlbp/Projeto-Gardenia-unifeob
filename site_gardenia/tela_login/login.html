@@ -393,9 +393,11 @@
 
         <div id="status" class="status" role="status" aria-live="polite"></div>
 
+        <!-- Se retornar erro de chave de site inválido (invalid domain for site key) 
+        Então tem que ativar a opção "Desativar vericação de domínio" nas configurações do Cloud Console -->
         <div class="field">
           <div class="g-recaptcha" 
-            data-sitekey="6LfXpdQtAAAAABHrXHr6Y_7-2RIoE-3NXU0bc9mu"
+            data-sitekey="6LesVu0tAAAAAMPmYsJLmIMnwQAOQgfsdxHwB7_p"
             data-callback="onCaptchaSuccess"
             data-expired-callback="onCaptchaExpired">
           </div>
@@ -523,19 +525,13 @@
 
   </main>
 
-  <script src="https://www.google.com/recaptcha/api.js" async defer>
-    // ============================================================
-    // CAPTCHA
-    // ============================================================
-    let captchaResolvido = false;
-    const RECAPTCHA_SITE_KEY = "6LfXpdQtAAAAABHrXHr6Y_7-2RIoE-3NXU0bc9mu"
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+  <script>
 
     // ============================================================
     // CONFIGURAÇÃO
     // ============================================================
-    const API_CPF_KEY = "5e5b5a955ae485def6f7c01ea3dcbfc46a8227b75db20fad4a7e1423f9d28bbf";
-    const API_EMAIL_KEY = "api-4872142E03524F7FAF002AD217165873";
-
     const API_CPF_URL = "https://apiconsulta.com.br/painel";
     const API_EMAIL_URL = "https://emailvalidation.abstractapi.com/v1/";
 
@@ -657,38 +653,24 @@
         throw new Error("Configure sua chave da API no código antes de fazer a consulta.");
       }
       const url = `${API_CPF_URL}?cpf=${encodeURIComponent(cpf)}`;
-      const response = await fetch(url, {
-        method: "GET",
-        headers: { "X-API-KEY": API_CPF_KEY }
-      });
-      let data = {};
-      try { data = await response.json(); } catch (_) {}
-      if (!response.ok) {
+      const response = await fetch(url);
+      const payload = await response.json().catch(() => ({}));
+
+      if (!response.ok || !payload.success) {
         throw new Error(data.message || `A API retornou HTTP ${response.status}.`);
       }
-      return data;
+      return payload.data;
     }
 
     async function validarEmail(email) {
-      if (!API_EMAIL_KEY) {
-        console.warn("Chave da API de e-mail não configurada. Usando validação de sintaxe apenas.");
-        return {
-          is_valid_format: validarSintaxeEmail(email),
-          is_disposable: false,
-          is_free_email: false,
-          is_smtp_valid: false,
-          deliverability: "UNKNOWN"
-        };
-      }
       const url = `${API_EMAIL_URL}?api_key=${API_EMAIL_KEY}&email=${encodeURIComponent(email)}`;
-      try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        return await response.json();
-      } catch (error) {
-        console.error("Erro ao validar e-mail:", error);
-        throw new Error("Não foi possível validar o e-mail. Verifique sua conexão.");
+      const response = await fetch(url);
+      const payload = await response.json().catch(() => ({}));
+      
+      if (!response.ok || !pauload.success){
+        throw new Error(payload.message || `Erro HTTP ${response.status}`);
       }
+      return payload.data;
     }
 
     // ============================================================
@@ -833,7 +815,7 @@
         cpfInput.classList.add("valid");
         setStatus("CPF localizado e validado com sucesso.", "success");
 
-        const pessoa = data?.data || {};
+        const pessoa = data?.data || data || {};
         const nomeApi = pessoa.nome || pessoa.name || "";
 
         if (nomeApi) {
@@ -941,7 +923,7 @@
     // ============================================================
     // ENVIO DO FORMULÁRIO (agora vai para a tela de Termos)
     // ============================================================
-    form.addEventListener("submit", (event) => {
+    form.addEventListener("submit", async (event) => {
       event.preventDefault();
 
       const nome = nomeInput.value.trim();
@@ -957,8 +939,41 @@
         clientemais: clientemais ? "sim" : "não"
       };
 
-      // Vai para a tela de termos
-      mostrarTermos();
+      const recaptchaField = document.querySelector('[name="g-recaptcha-response"]');
+      const recaptchaToken = recaptchaField?.value;
+
+      if (!recaptchaToken) {
+          setStatus("Por favor, complete o reCAPTCHA.", "error");
+          return;
+      }
+
+      // Envia os dados para o backend
+      try {
+        const response = await fetch('/api/validar-cadastro', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            ...dadosPendentes,
+            recaptchaToken // Inclui o token no corpo
+          })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            // O backend validou o reCAPTCHA e os dados. Prossiga para a tela de termos.
+            mostrarTermos();
+        } else {
+          setStatus(result.message || "Erro na validação. Tente novamente.", "error");
+          // É importante resetar o reCAPTCHA para que o usuário possa tentar de novo
+          if (window.grecaptcha) grecaptcha.reset();
+            onCaptchaExpired(); // Atualiza o estado do botão
+        }
+        } catch (error) {
+          setStatus("Erro de conexão. Verifique sua internet.", "error");
+        }
     });
 
     // ============================================================
