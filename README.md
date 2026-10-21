@@ -1,13 +1,25 @@
-# Projeto-Gardenia-unifeob (equipe 1)
-# Projeto Gardênia - UNIFEOB
+# Projeto Gardênia - UNIFEOB (Equipe 1)
+[![Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)]()
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue)]()
+[![MongoDB](https://img.shields.io/badge/MongoDB-6.0%2B-green)]()
 
-INTEGRANTES
+Sistema de vendas e análise de dados para a loja de roupas **Gardênia**, com site de compras (retirada na loja), portal de funcionários e pipeline de Big Data para geração de insights.
 
-24000057 &nbsp; &nbsp;    Andre Luis Bertelli Pena <br>
-24000043 &nbsp; &nbsp;	  André Luis Carneiro Filho <br>
-24001365 &nbsp; &nbsp;	  Caio Fernando Pereira Silva <br> 
-24001366 &nbsp; &nbsp;	  Cleudio de Faria <br> 
-24000603 &nbsp; &nbsp;	  Renan Augusto Cristi Avelar <br>
+## Sumário
+
+- [Integrantes](#integrantes)
+- [Sobre o projeto](#descrição)
+- [Problema a ser corrigido](#situação-problema)
+- [Solução proposta](#solução)
+- [Tutorial de instalação](#como-reproduzir-o-ambiente)
+
+## Integrantes 👨‍👨
+
+24000057 &emsp; &emsp; Andre Luis Bertelli Pena <br>
+24000043 &emsp; &emsp; André Luis Carneiro Filho <br>
+24001365 &emsp; &emsp; Caio Fernando Pereira Silva <br> 
+24001366 &emsp; &emsp; Cleudio de Faria <br> 
+24000603 &emsp; &emsp; Renan Augusto Cristi Avelar <br>
 
 ## Descrição
 
@@ -15,13 +27,13 @@ O **Projeto Gardênia** é uma solução desenvolvida para a loja de roupas Gard
 
 O sistema permitirá que os clientes consultem os produtos disponíveis, visualizem as roupas pela frente e pelo verso e tenham acesso a informações como marca e material. Também haverá um sistema de clientes, no qual o comprador poderá informar seu **CPF** para ter acesso a descontos e benefícios exclusivos do site e da loja.
 
-## Situação-problema
+## Situação-problema 
 
 Atualmente, a loja utiliza **arquivamento em papel** para registrar algumas de suas informações e não possui um sistema centralizado para armazenar os dados de cada compra. Isso dificulta a consulta e organização das informações, além de prejudicar o controle de estoque, o acompanhamento das vendas e o conhecimento sobre os clientes.
 
 A falta de armazenamento adequado dos dados também representa um **gasto de oportunidade**, pois informações importantes sobre as compras e os clientes deixam de ser aproveitadas para gerar análises e auxiliar nas decisões da loja.
 
-## Solução
+## Solução 💡
 
 Como solução, será desenvolvido um **site de compras para retirada na loja**, permitindo que os clientes consultem os produtos e realizem seus pedidos de forma digital. O sistema contará também com um **portal para funcionários**, oferecendo recursos como análise de vendas, caixa virtual, pesquisa de clientes e controle de estoque.
 
@@ -43,9 +55,9 @@ Com a implementação da solução, a loja poderá reduzir a dependência de reg
 
 Antes de iniciar, garanta que a máquina local possui as ferramentas necessárias instaladas:
 
-*⚠️ Ansible, Libvirt/QEMU e OpenTofu requer um ambiente Linux para rodar e gerenciar o hipervisor local.*
+⚠️ *Ansible, Libvirt/QEMU e OpenTofu requer um ambiente Linux para rodar e gerenciar o hipervisor local.*
 
-**Linux: (Debian/Ubuntu)**
+**Linux: (Debian/Ubuntu):**
 ```bash
     sudo apt update
     sudo apt install -y git python3 python3-pip openssh-client qemu-kvm libvirt-daemon-system libvirt-clients virt-manager ansible
