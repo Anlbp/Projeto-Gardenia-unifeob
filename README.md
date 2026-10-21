@@ -74,7 +74,7 @@ Com a implementação da solução, a loja poderá reduzir a dependência de reg
         python3 pipeline_vm2.py vigiar --origem debian@<IP_VM1>:/home/debian/simulador/saida --intervalo 15
         exit
     ```
-    Terceira VM:
+    **VM3 (Big Data / Spark):**
     ```bash
         ssh debian@192.168.122.XXX
         cd ./spark_work
