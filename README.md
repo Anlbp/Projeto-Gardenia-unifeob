@@ -39,7 +39,25 @@ Com a implementação da solução, a loja poderá reduzir a dependência de reg
 
 ## Como reproduzir o ambiente:
 
-1. **Provisionamento da Infraestrutura (OpenTofu):**
+1. **Pré-requisitos (Máquina Hospedeira)**
+
+Antes de iniciar, garanta que a máquina local possui as ferramentas necessárias instaladas:
+
+*⚠️ Ansible, Libvirt/QEMU e OpenTofu requer um ambiente Linux para rodar e gerenciar o hipervisor local.*
+
+**Linux: (Debian/Ubuntu)**
+```bash
+    sudo apt update
+    sudo apt install -y git python3 python3-pip openssh-client qemu-kvm libvirt-daemon-system libvirt-clients virt-manager ansible
+    curl -fsSL [https://get.opentofu.org/install-opentofu.sh](https://get.opentofu.org/install-opentofu.sh) -o install-opentofu.sh
+    ./install-opentofu.sh --install-method deb
+    rm install-opentofu.sh
+    # Permissões
+    sudo usermod -aG libvirt $USER
+    sudo usermod -aG kvm $USER
+```
+
+2. **Provisionamento da Infraestrutura (OpenTofu):**
     ```bash
         # A partir da raiz do projeto
         cd ./infraestrutura/
@@ -47,18 +65,18 @@ Com a implementação da solução, a loja poderá reduzir a dependência de reg
         tofu apply -auto-approve
     ```
 
-2. **Identificas as IP atribuidas as VMs**
+3. **Identificas as IP atribuidas as VMs**
     ```bash
         sudo virsh net-dhcp-leases default
     ```
 
-3. **Configuração do Ambiente e Aplicação (Ansible):**
+4. **Configuração do Ambiente e Aplicação (Ansible):**
     Copie os IPv4 exibidos no passo anterior e cole no arquivo "/ansible/invetory.ini" para cada VM. Em seguida, execute:
     ```bash
         cd ./ansible/
         ansible-playbook -i inventory.ini playbook.yml
     ```
-4. **Execução das VMs:**
+5. **Execução das VMs:**
 
     **VM1 (Simulador):**
     ```bash
@@ -81,7 +99,7 @@ Com a implementação da solução, a loja poderá reduzir a dependência de reg
         python3 pipeline_vm3.py vigiar --origem debian@<IP_VM2>:/home/debian/gardenia/saida --intervalo 30
         exit
     ```
-5. **Para ligar a VM novamente após o boot:**
+6. **Para ligar a VM novamente após o boot:**
     ```bash
         # Ativa a rede virtual do libvirt
         sudo virsh net-start default 2>/dev/null
