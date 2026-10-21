@@ -11,7 +11,6 @@ Sistema de vendas e análise de dados para a loja de roupas **Gardênia**, com s
 - [Descrição](#descrição)
 - [Situação-problema](#situação-problema)
 - [Solução](#solução)
-- [Estrutura de pastas](#estrutura-de-pastas)
 - [Como reproduzir o ambiente](#como-reproduzir-o-ambiente)
 
 ## Integrantes
@@ -51,16 +50,6 @@ Os dados armazenados passarão posteriormente pelo processo de ETL. Durante essa
 Após o tratamento, os dados serão organizados de acordo com o modelo dimensional definido para o projeto. A tabela Fato_Vendas será responsável por armazenar os registros das vendas, enquanto as dimensões Dim_Cliente, Dim_Produto, Dim_Data e Dim_Funcionario fornecerão os contextos necessários para a análise. Essa separação permitirá realizar consultas específicas sem a necessidade de analisar diretamente os dados brutos armazenados no Data Lake.
 
 Com a implementação da solução, a loja poderá reduzir a dependência de registros em papel, melhorar a organização das informações, facilitar o processo de compra e utilizar os dados armazenados para obter uma visão mais clara das vendas, clientes e estoque.
-
-## Estrutura de pastas
-
-    Projeto-Gardenia-unifeob/
-    ├── infraestrutura/ # OpenTofu (provisionamento das VMs)
-    ├── ansible/ # Playbook e inventory.ini
-    ├── simulador/ # Simulador de vendas (VM1)
-    ├── gardenia/ # Pipeline de tratamento (VM2)
-    ├── spark_work/ # Pipeline Big Data (VM3)
-    └── README.md
 
 ## Como reproduzir o ambiente:
 
@@ -141,10 +130,13 @@ Copie os IPv4 exibidos no passo anterior e cole no arquivo "/ansible/inventory.i
 ```
 #
 ### 6. Ligar a VM novamente após o boot:
+
+Ativa a rede virtual do libvirt:
 ```bash
-    # Ativa a rede virtual do libvirt
     sudo virsh net-start default 2>/dev/null
-    # Liga as três VMs do cluster
+``` 
+Liga as três VMs do cluster
+```bash
     sudo virsh start vm1-simulador
     sudo virsh start vm2-tratamento
     sudo virsh start vm3-spark
