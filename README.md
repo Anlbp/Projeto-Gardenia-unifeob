@@ -8,18 +8,21 @@ Sistema de vendas e análise de dados para a loja de roupas **Gardênia**, com s
 ## Sumário
 
 - [Integrantes](#integrantes)
-- [Sobre o projeto](#descrição)
-- [Problema a ser corrigido](#situação-problema)
-- [Solução proposta](#solução)
-- [Tutorial de instalação](#como-reproduzir-o-ambiente)
+- [Descrição](#descrição)
+- [Situação-problema](#situação-problema)
+- [Solução](#solução)
+- [Estrutura de pastas](#estrutura-de-pastas)
+- [Como reproduzir o ambiente](#como-reproduzir-o-ambiente)
 
-## Integrantes 👨‍👨
+## Integrantes
 
-24000057 &emsp; &emsp; Andre Luis Bertelli Pena <br>
-24000043 &emsp; &emsp; André Luis Carneiro Filho <br>
-24001365 &emsp; &emsp; Caio Fernando Pereira Silva <br> 
-24001366 &emsp; &emsp; Cleudio de Faria <br> 
-24000603 &emsp; &emsp; Renan Augusto Cristi Avelar <br>
+| RA | Nome |
+| - | - |
+| 24000057 | Andre Luis Bertelli Pena |
+| 24000043 | André Luis Carneiro Filho |
+| 24001365 | Caio Fernando Pereira Silva | 
+| 24001366 | Cleudio de Faria | 
+| 24000603 | Renan Augusto Cristi Avelar |
 
 ## Descrição
 
@@ -27,13 +30,13 @@ O **Projeto Gardênia** é uma solução desenvolvida para a loja de roupas Gard
 
 O sistema permitirá que os clientes consultem os produtos disponíveis, visualizem as roupas pela frente e pelo verso e tenham acesso a informações como marca e material. Também haverá um sistema de clientes, no qual o comprador poderá informar seu **CPF** para ter acesso a descontos e benefícios exclusivos do site e da loja.
 
-## Situação-problema 
+## Situação-problema
 
 Atualmente, a loja utiliza **arquivamento em papel** para registrar algumas de suas informações e não possui um sistema centralizado para armazenar os dados de cada compra. Isso dificulta a consulta e organização das informações, além de prejudicar o controle de estoque, o acompanhamento das vendas e o conhecimento sobre os clientes.
 
 A falta de armazenamento adequado dos dados também representa um **gasto de oportunidade**, pois informações importantes sobre as compras e os clientes deixam de ser aproveitadas para gerar análises e auxiliar nas decisões da loja.
 
-## Solução 💡
+## Solução
 
 Como solução, será desenvolvido um **site de compras para retirada na loja**, permitindo que os clientes consultem os produtos e realizem seus pedidos de forma digital. O sistema contará também com um **portal para funcionários**, oferecendo recursos como análise de vendas, caixa virtual, pesquisa de clientes e controle de estoque.
 
@@ -49,80 +52,103 @@ Após o tratamento, os dados serão organizados de acordo com o modelo dimension
 
 Com a implementação da solução, a loja poderá reduzir a dependência de registros em papel, melhorar a organização das informações, facilitar o processo de compra e utilizar os dados armazenados para obter uma visão mais clara das vendas, clientes e estoque.
 
+## Estrutura de pastas
+
+    Projeto-Gardenia-unifeob/
+    ├── infraestrutura/ # OpenTofu (provisionamento das VMs)
+    ├── ansible/ # Playbook e inventory.ini
+    ├── simulador/ # Simulador de vendas (VM1)
+    ├── gardenia/ # Pipeline de tratamento (VM2)
+    ├── spark_work/ # Pipeline Big Data (VM3)
+    └── README.md
+
 ## Como reproduzir o ambiente:
 
-1. **Pré-requisitos (Máquina Hospedeira)**
+### 1. Pré-requisitos (Máquina Hospedeira):
 
-Antes de iniciar, garanta que a máquina local possui as ferramentas necessárias instaladas:
-
-⚠️ *Ansible, Libvirt/QEMU e OpenTofu requer um ambiente Linux para rodar e gerenciar o hipervisor local.*
+Antes de iniciar, garanta que a máquina local possua:
+* CPU com suporte a virtualização (VT-x / AMD-V habilitado na BIOS)
+* No mínimo 8GB de RAM, 4 vCPUs, 40GB de disco livre
+* Sistema Linux - obrigatório para Ansible, Libvirt/QEMU e OpenTofu
 
 **Linux: (Debian/Ubuntu):**
 ```bash
     sudo apt update
     sudo apt install -y git python3 python3-pip openssh-client qemu-kvm libvirt-daemon-system libvirt-clients virt-manager ansible
-    curl -fsSL [https://get.opentofu.org/install-opentofu.sh](https://get.opentofu.org/install-opentofu.sh) -o install-opentofu.sh
+    curl -fsSL https://get.opentofu.org/install-opentofu.sh -o install-opentofu.sh
+    chmod +x install-opentofu.sh
     ./install-opentofu.sh --install-method deb
     rm install-opentofu.sh
-    # Permissões
-    sudo usermod -aG libvirt $USER
-    sudo usermod -aG kvm $USER
+```
+Adicionar permissões às ferramentas:
+```bash
+        sudo usermod -aG libvirt $USER
+        sudo usermod -aG kvm $USER
+```
+Em seguida reinicie o computador ou execute:
+```bash
+        newgrp libvirt
+```
+#
+### 2. Provisionamento da Infraestrutura (OpenTofu):
+
+A partir da raiz do projeto, execute:
+```bash
+    cd ./infraestrutura/
+    tofu init
+    tofu apply -auto-approve
+```
+#
+### 3. Identificas as IP atribuidas as VMs
+```bash
+    sudo virsh net-dhcp-leases default
+```
+#
+### 4. Configuração do Ambiente e Aplicação (Ansible):
+
+Copie os IPv4 exibidos no passo anterior e cole no arquivo "/ansible/inventory.ini" para cada VM. Em seguida, execute:
+```bash
+    cd ./ansible/
+    ansible-playbook -i inventory.ini playbook.yml
+```
+#
+### 5. Execução das VMs:
+
+> ⚠️ **Atenção!**<br>Execute cada VM em um **terminal separado**, e **nesta ordem**: primeiro a VM1, depois a VM2, depois a VM3. A VM2 lê a saída da VM1, e a VM3 lê a saída da VM2.
+
+**VM1 (Simulador):**
+```bash
+    ssh debian@192.168.122.XXX
+    cd ./simulador
+    python3 simulador.py --ciclos 0 --intervalo 10
+    exit
 ```
 
-2. **Provisionamento da Infraestrutura (OpenTofu):**
-    ```bash
-        # A partir da raiz do projeto
-        cd ./infraestrutura/
-        tofu init
-        tofu apply -auto-approve
-    ```
+**VM2 (Tratamento e Limpeza):**
+```bash
+    ssh debian@192.168.122.XXX
+    cd ./gardenia
+    python3 pipeline_vm2.py vigiar --origem debian@<IP_VM1>:/home/debian/simulador/saida --intervalo 15
+    exit
+```
 
-3. **Identificas as IP atribuidas as VMs**
-    ```bash
-        sudo virsh net-dhcp-leases default
-    ```
-
-4. **Configuração do Ambiente e Aplicação (Ansible):**
-    Copie os IPv4 exibidos no passo anterior e cole no arquivo "/ansible/invetory.ini" para cada VM. Em seguida, execute:
-    ```bash
-        cd ./ansible/
-        ansible-playbook -i inventory.ini playbook.yml
-    ```
-5. **Execução das VMs:**
-
-    **VM1 (Simulador):**
-    ```bash
-        ssh debian@192.168.122.XXX
-        cd ./simulador
-        python3 simulador.py --ciclos 0 --intervalo 10
-        exit # Sair do terminal do debian(VM)
-    ```
-    **VM2 (Tratamento e Limpeza):**
-    ```bash
-        ssh debian@192.168.122.XXX
-        cd ./gardenia
-        python3 pipeline_vm2.py vigiar --origem debian@<IP_VM1>:/home/debian/simulador/saida --intervalo 15
-        exit
-    ```
-    **VM3 (Big Data / Spark):**
-    ```bash
-        ssh debian@192.168.122.XXX
-        cd ./spark_work
-        python3 pipeline_vm3.py vigiar --origem debian@<IP_VM2>:/home/debian/gardenia/saida --intervalo 30
-        exit
-    ```
-6. **Para ligar a VM novamente após o boot:**
-    ```bash
-        # Ativa a rede virtual do libvirt
-        sudo virsh net-start default 2>/dev/null
-        # Liga as três VMs do cluster
-        sudo virsh start vm1-simulador
-        sudo virsh start vm2-tratamento
-        sudo virsh start vm3-spark
-    ```
-##
-<b>Feitos pelos alunos do curso de Ciência da Computação.</b> 👨‍💻🎓
-
-<br>
-
-![Logo da Faculdade UNIFEOB](https://s3.sa-east-1.amazonaws.com/lyceum.backups/arquivosimport/logo_branco_atual_2023.png)
+**VM3 (Big Data / Spark):**
+```bash
+    ssh debian@192.168.122.XXX
+    cd ./spark_work
+    python3 pipeline_vm3.py vigiar --origem debian@<IP_VM2>:/home/debian/gardenia/saida --intervalo 30
+    exit
+```
+#
+### 6. Ligar a VM novamente após o boot:
+```bash
+    # Ativa a rede virtual do libvirt
+    sudo virsh net-start default 2>/dev/null
+    # Liga as três VMs do cluster
+    sudo virsh start vm1-simulador
+    sudo virsh start vm2-tratamento
+    sudo virsh start vm3-spark
+```
+#
+<b>Feitos pelos alunos do curso de Ciência da Computação da UNIFEOB.</b> 👨‍💻🎓
+<br><p align="center"><img src="https://s3.sa-east-1.amazonaws.com/lyceum.backups/arquivosimport/logo_branco_atual_2023.png" alt="Logo UNIFEOB" width="256"></p>
