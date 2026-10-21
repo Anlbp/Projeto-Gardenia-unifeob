@@ -39,41 +39,58 @@ Com a implementação da solução, a loja poderá reduzir a dependência de reg
 
 ## Como reproduzir o ambiente:
 
-1. **Provisionamento da VM (OpenTofu):**
+1. **Provisionamento da Infraestrutura (OpenTofu):**
     ```bash
-        # Na raiz do projeto
-        cd ./dados/infraestrutura/
+        # A partir da raiz do projeto
+        cd ./infraestrutura/
         tofu init
         tofu apply -auto-approve
     ```
-2. **Configuração do Ambiente (Ansible):**
-    Copie o IP retornado no terminal e cole no arquivo "/ansible/invetory.ini" e execute:
+
+2. **Identificas as IP atribuidas as VMs**
+    ```bash
+        sudo virsh net-dhcp-leases default
+    ```
+
+3. **Configuração do Ambiente e Aplicação (Ansible):**
+    Copie os IPv4 exibidos no passo anterior e cole no arquivo "/ansible/invetory.ini" para cada VM. Em seguida, execute:
     ```bash
         cd ./ansible/
         ansible-playbook -i inventory.ini playbook.yml
     ```
-3. **Implantação da Aplicação:**
+4. **Execução das VMs:**
+
+    **VM1 (Simulador):**
     ```bash
-        cd ../ # Execute varias vezes até voltar na pasta raiz do projeto
-        scp -r gerador/* debian@192.168.122.XX:/home/debian/app_simulador/
+        ssh debian@192.168.122.XXX
+        cd ./simulador
+        python3 simulador.py --ciclos 0 --intervalo 10
+        exit # Sair do terminal do debian(VM)
     ```
-4. **Execução do Simulador na VM:**
+    **VM2 (Tratamento e Limpeza):**
     ```bash
-        ssh debian@192.168.122.XX
-        python3 /home/debian/app_simulador/gerador.py
+        ssh debian@192.168.122.XXX
+        cd ./gardenia
+        python3 pipeline_vm2.py vigiar --origem debian@<IP_VM1>:/home/debian/simulador/saida --intervalo 15
+        exit
+    ```
+    Terceira VM:
+    ```bash
+        ssh debian@192.168.122.XXX
+        cd ./spark_work
+        python3 pipeline_vm3.py vigiar --origem debian@<IP_VM2>:/home/debian/gardenia/saida --intervalo 30
+        exit
     ```
 5. **Para ligar a VM novamente após o boot:**
     ```bash
         # Ativa a rede virtual do libvirt
         sudo virsh net-start default 2>/dev/null
-        # Liga a VM
-        sudo virsh start vm-simulador-data
+        # Liga as três VMs do cluster
+        sudo virsh start vm1-simulador
+        sudo virsh start vm2-tratamento
+        sudo virsh start vm3-spark
     ```
-6. **Para sair do terminal do Debian(VM):**
-    ```bash
-        exit
-    ```
-<br>
+##
 <b>Feitos pelos alunos do curso de Ciência da Computação.</b> 👨‍💻🎓
 
 <br>
