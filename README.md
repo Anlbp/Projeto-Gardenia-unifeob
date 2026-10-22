@@ -9,7 +9,7 @@ Sistema de vendas e análise de dados para a loja de roupas **Gardênia**, com s
 
 - [Integrantes](#integrantes)
 - [Descrição](#descrição)
-- [Situação-problema](#situação-problema)
+- [Problema](#situação-problema)
 - [Solução](#solução)
 - [Como reproduzir o ambiente](#como-reproduzir-o-ambiente)
 
@@ -29,7 +29,7 @@ O **Projeto Gardênia** é uma solução desenvolvida para a loja de roupas Gard
 
 O sistema permitirá que os clientes consultem os produtos disponíveis, visualizem as roupas pela frente e pelo verso e tenham acesso a informações como marca e material. Também haverá um sistema de clientes, no qual o comprador poderá informar seu **CPF** para ter acesso a descontos e benefícios exclusivos do site e da loja.
 
-## Situação-problema
+## Problema
 
 Atualmente, a loja utiliza **arquivamento em papel** para registrar algumas de suas informações e não possui um sistema centralizado para armazenar os dados de cada compra. Isso dificulta a consulta e organização das informações, além de prejudicar o controle de estoque, o acompanhamento das vendas e o conhecimento sobre os clientes.
 
@@ -63,7 +63,7 @@ Antes de iniciar, garanta que a máquina local possua:
 **Linux: (Debian/Ubuntu):**
 ```bash
     sudo apt update
-    sudo apt install -y git python3 python3-pip openssh-client qemu-kvm libvirt-daemon-system libvirt-clients virt-manager ansible
+    sudo apt install -y git r-base r-cran-tidyverse r-cran-optparse r-cran-jsonlite openssh-client qemu-kvm libvirt-daemon-system libvirt-clients virt-manager ansible
     curl -fsSL https://get.opentofu.org/install-opentofu.sh -o install-opentofu.sh
     chmod +x install-opentofu.sh
     ./install-opentofu.sh --install-method deb
@@ -109,7 +109,7 @@ Copie os IPv4 exibidos no passo anterior e cole no arquivo "/ansible/inventory.i
 ```bash
     ssh debian@192.168.122.XXX
     cd ./simulador
-    python3 simulador.py --ciclos 0 --intervalo 10
+    Rscript simulador.R --ciclos 0 --intervalo 10
     exit
 ```
 
@@ -117,7 +117,7 @@ Copie os IPv4 exibidos no passo anterior e cole no arquivo "/ansible/inventory.i
 ```bash
     ssh debian@192.168.122.XXX
     cd ./gardenia
-    python3 pipeline_vm2.py vigiar --origem debian@<IP_VM1>:/home/debian/simulador/saida --intervalo 15
+    Rscript pipeline_vm2.R -o debian@<IP_VM1>:/home/debian/simulador/saida -i 15
     exit
 ```
 
@@ -125,7 +125,7 @@ Copie os IPv4 exibidos no passo anterior e cole no arquivo "/ansible/inventory.i
 ```bash
     ssh debian@192.168.122.XXX
     cd ./spark_work
-    python3 pipeline_vm3.py vigiar --origem debian@<IP_VM2>:/home/debian/gardenia/saida --intervalo 30
+    Rscript pipeline_vm3.R -o debian@<IP_VM2>:/home/debian/gardenia/saida -i 30
     exit
 ```
 #

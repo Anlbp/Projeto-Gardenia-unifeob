@@ -1,6 +1,45 @@
+# OpenTofu / Terraform
 *.tfstate
 *.tfstate.*
 .terraform/
+.tofu/
+*.tfvars
+*.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraform.lock.hcl
+.tofu.lock.hcl
+crash.log
+
+# Libvirt & Cloud-Init (Imagens e Discos)
+*.qcow2
+*.iso
+*.img
+
+# Chaves de Acesso e Segredos
 *.pem
 id_rsa
-*.qcow2
+id_rsa.pub
+*.key
+
+# Logs e Arquivos Temporários de Execução
+*.log
+*.tmp
+
+# Artefatos do R e RStudio
+.Rhistory
+.RData
+.RDataTmp
+.Rproj.user/
+
+# Artefatos do Python (caso restem scripts)
+__pycache__/
+*.py[cod]
+
+# Sistema Operacional e IDEs
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

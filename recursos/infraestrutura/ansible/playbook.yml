@@ -4,6 +4,19 @@
   hosts: vm_simulador
   become: yes
   tasks:
+    - name: Garantir permissões do usuário debian em sua pasta home
+      file:
+        path: /home/debian
+        owner: debian
+        group: debian
+        recurse: yes
+
+    - name: Instalar r
+      apt:
+        name: r-base
+        state: present
+        update_cache: yes
+        
     - name: Criar diretórios
       file:
         path: /home/debian/simulador/saida
@@ -13,8 +26,8 @@
 
     - name: Copiar código do Simulador
       copy:
-        src: ../../simulador/simulador.py
-        dest: /home/debian/simulador/simulador.py
+        src: ../../simulador/simulador.R
+        dest: /home/debian/simulador/simulador.R
         owner: debian
         mode: '0755'
 
@@ -23,9 +36,16 @@
   hosts: vm_tratamento
   become: yes
   tasks:
-    - name: Instalar dependências de sistema e Python
+    - name: Garantir permissões do usuário debian em sua pasta home
+      file:
+        path: /home/debian
+        owner: debian
+        group: debian
+        recurse: yes
+
+    - name: Instalar dependências de sistema e R
       apt:
-        name: [python3-pandas, python3-numpy, python3-matplotlib]
+        name: [r-base, r-cran-tidyverse, r-cran-optparse, r-cran-jsonlite]
         state: present
         update_cache: yes
 
@@ -36,10 +56,10 @@
         owner: debian
         group: debian
 
-    - name: Copiar pipeline_vm2.py
+    - name: Copiar pipeline_vm2.R
       copy:
-        src: ../../simulador/pipeline_vm2.py
-        dest: /home/debian/gardenia/pipeline_vm2.py
+        src: ../../simulador/pipeline_vm2.R
+        dest: /home/debian/gardenia/pipeline_vm2.R
         owner: debian
         mode: '0755'
 
@@ -48,20 +68,38 @@
   hosts: vm_spark
   become: yes
   tasks:
-    - name: Instalar Java 17 e Pacotes de Dados
+    - name: Instalar Java, R e dependências do sistema
       apt:
-        name: [default-jre-headless, python3-pip, python3-pandas, python3-numpy, python3-matplotlib]
+        name: 
+          - default-jre-headless
+          - r-base
+          - r-base-dev
+          - r-cran-tidyverse
+          - r-cran-jsonlite
+          - r-cran-optparse
+          - libssl-dev
+          - libcurl4-openssl-dev
+          - libxml2-dev
         state: present
         update_cache: yes
 
-    - name: Instalar PySpark via Pip
-      pip:
-        name: pyspark
-        executable: pip3
-        # Burla uma medida de segurança
-        # Necessario para a instalação do Spark na VM
-        extra_args: --break-system-packages
+    - name: Garantir permissões do usuário debian em sua pasta home
+      file:
+        path: /home/debian
+        owner: debian
+        group: debian
+        recurse: yes
 
+    - name: Instalar sparklyr via CRAN
+      command: Rscript -e "if (!require('sparklyr', quietly = TRUE)) install.packages('sparklyr', repos='https://cloud.r-project.org')"
+      register: sparklyr_install
+      changed_when: "'installing' in sparklyr_install.stdout or 'installing' in sparklyr_install.stderr"
+
+    - name: Baixar e Instalar binários do Apache Spark no R para o usuário debian
+      become: yes
+      become_user: debian
+      command: >
+        Rscript -e "avail <- sparklyr::spark_available_versions(); v3 <- tail(avail$spark[startsWith(avail$spark, '3.')], 1); if (nrow(sparklyr::spark_installed_versions()) == 0) sparklyr::spark_install(version = v3)"
     - name: Criar diretórios de trabalho
       file:
         path: /home/debian/spark_work
@@ -69,9 +107,9 @@
         owner: debian
         group: debian
 
-    - name: Copiar pipeline_vm3.py
+    - name: Copiar pipeline_vm3.R
       copy:
-        src: ../../simulador/pipeline_vm3.py
-        dest: /home/debian/spark_work/pipeline_vm3.py
+        src: ../../simulador/pipeline_vm3.R
+        dest: /home/debian/spark_work/pipeline_vm3.R
         owner: debian
         mode: '0755'
