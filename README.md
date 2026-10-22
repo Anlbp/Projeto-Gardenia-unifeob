@@ -1,6 +1,8 @@
 # Projeto Gardênia - UNIFEOB (Equipe 1)
 [![Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)]()
-[![Python](https://img.shields.io/badge/Python-3.10%2B-blue)]()
+![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)
+![Debian](https://img.shields.io/badge/Debian-%23D70A53.svg?style=for-the-badge&logo=debian&logoColor=white)
+![R](https://img.shields.io/badge/r-%23276DC3.svg?style=for-the-badge&logo=r&logoColor=white)
 [![MongoDB](https://img.shields.io/badge/MongoDB-6.0%2B-green)]()
 
 Sistema de vendas e análise de dados para a loja de roupas **Gardênia**, com site de compras (retirada na loja), portal de funcionários e pipeline de Big Data para geração de insights.
