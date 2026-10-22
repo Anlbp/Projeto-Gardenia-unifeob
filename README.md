@@ -3,6 +3,7 @@
 ![](/github/last-commit/vladkens/macmon)
 [![Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)]()
 [![GitHub latest commit](https://badgen.net/github/last-commit/Anlbp/Projeto-Gardenia-unifeob)](https://badgen.net/github/last-commit/Anlbp/Projeto-Gardenia-unifeob)
+[![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 [![R](https://img.shields.io/badge/-script-276DC3.svg?style=flat&logo=R)](https://cran.r-project.org)
 [![MongoDB](https://img.shields.io/badge/MongoDB-6.0%2B-green)]()
 
