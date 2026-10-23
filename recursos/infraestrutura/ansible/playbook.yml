@@ -31,6 +31,31 @@
         owner: debian
         mode: '0755'
 
+    - name: Criar serviço Systemd para o Simulador
+      copy:
+        dest: /etc/systemd/system/gardenia-simulador.service
+        content: |
+          [Unit]
+          Description=Servico Simulador de Dados R (VM1)
+          After=network.target
+
+          [Service]
+          Type=simple
+          User=debian
+          WorkingDirectory=/home/debian/simulador
+          ExecStart=/usr/bin/Rscript /home/debian/simulador/simulador.R --ciclos 0 --intervalo 10
+          Restart=always
+
+          [Install]
+          WantedBy=multi-user.target
+
+    - name: Ativar e iniciar o servico do Simulador
+      systemd:
+        name: gardenia-simulador
+        state: started
+        enabled: yes
+        daemon_reload: yes
+
 # Configuração da VM 2 (Tratamento / Limpeza)
 - name: Configurar VM 2 - Pipeline de Limpeza
   hosts: vm_tratamento
@@ -63,12 +88,37 @@
         owner: debian
         mode: '0755'
 
-# Configuração da VM 3 (Big Data / Spark)
+    - name: Criar serviço Systemd para o Tratamento
+      copy:
+        dest: /etc/systemd/system/gardenia-vm2.service
+        content: |
+          [Unit]
+          Description=Servico Tratamento em R (VM2)
+          After=network.target
+
+          [Service]
+          Type=simple
+          User=debian
+          WorkingDirectory=/home/debian/gardenia
+          ExecStart=/usr/bin/Rscript /home/debian/gardenia/pipeline_vm2.R -o debian@192.168.122.124:/home/debian/simulador/saida -i 15
+          Restart=always
+
+          [Install]
+          WantedBy=multi-user.target
+
+    - name: Ativar e iniciar o servico da VM2
+      systemd:
+        name: gardenia-vm2
+        state: started
+        enabled: yes
+        daemon_reload: yes
+
+# Configuração da VM 3 (Big Data / Spark e MongoDB)
 - name: Configurar VM 3 - Spark Big Data
   hosts: vm_spark
   become: yes
   tasks:
-    - name: Instalar Java, R e dependências do sistema
+    - name: Instalar Java, R, chaves do MongoDB e dependências do sistema
       apt:
         name: 
           - default-jre-headless
@@ -80,8 +130,15 @@
           - libssl-dev
           - libcurl4-openssl-dev
           - libxml2-dev
+          - mongodb
         state: present
         update_cache: yes
+    
+    - name: Garantir que o serviço do MongoDB está ativo
+      systemd:
+        name: mongodb
+        state: started
+        enabled: yes
 
     - name: Garantir permissões do usuário debian em sua pasta home
       file:
@@ -90,8 +147,14 @@
         group: debian
         recurse: yes
 
-    - name: Instalar sparklyr via CRAN
-      command: Rscript -e "if (!require('sparklyr', quietly = TRUE)) install.packages('sparklyr', repos='https://cloud.r-project.org')"
+    - name: Instalar sparklyr e mongolite via CRAN
+      become_user: debian
+      command: >
+        Rscript -e "
+          if (!require('sparklyr', quietly = TRUE)) install.packages('sparklyr', repos='https://cloud.r-project.org');
+          if (!require('mongolite', quietly = TRUE)) install.packages('mongolite', repos='https://cloud.r-project.org')
+        "
+
       register: sparklyr_install
       changed_when: "'installing' in sparklyr_install.stdout or 'installing' in sparklyr_install.stderr"
 
@@ -99,7 +162,11 @@
       become: yes
       become_user: debian
       command: >
-        Rscript -e "avail <- sparklyr::spark_available_versions(); v3 <- tail(avail$spark[startsWith(avail$spark, '3.')], 1); if (nrow(sparklyr::spark_installed_versions()) == 0) sparklyr::spark_install(version = v3)"
+        Rscript -e "
+          avail <- sparklyr::spark_available_versions();
+          v3 <- tail(avail$spark[startsWith(avail$spark, '3.')], 1);
+          if (nrow(sparklyr::spark_installed_versions()) == 0) sparklyr::spark_install(version = v3)
+        "
     - name: Criar diretórios de trabalho
       file:
         path: /home/debian/spark_work
@@ -113,3 +180,28 @@
         dest: /home/debian/spark_work/pipeline_vm3.R
         owner: debian
         mode: '0755'
+
+    - name: Criar serviço Systemd para Spark + MongoDB
+      copy:
+        dest: /etc/systemd/system/gardenia-vm3.service
+        content: |
+          [Unit]
+          Description=Servico Spark e MongoDB em R (VM3)
+          After=network.target mongodb.service
+
+          [Service]
+          Type=simple
+          User=debian
+          WorkingDirectory=/home/debian/spark_work
+          ExecStart=/usr/bin/Rscript /home/debian/spark_work/pipeline_vm3.R -o debian@192.168.122.125:/home/debian/gardenia/saida -i 30
+          Restart=always
+
+          [Install]
+          WantedBy=multi-user.target
+
+    - name: Ativar e iniciar o servico da VM3
+      systemd:
+        name: gardenia-vm3
+        state: started
+        enabled: yes
+        daemon_reload: yes
