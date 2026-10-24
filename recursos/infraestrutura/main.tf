@@ -60,7 +60,7 @@ resource "libvirt_domain" "vm_1" {
 
   network_interface {
     network_name   = "default"
-    wait_for_lease = false
+    wait_for_lease = true
   }
 
   disk {
@@ -90,7 +90,7 @@ resource "libvirt_domain" "vm_2" {
 
   network_interface {
     network_name   = "default"
-    wait_for_lease = false
+    wait_for_lease = true
   }
 
   disk {
@@ -120,7 +120,7 @@ resource "libvirt_domain" "vm_3" {
 
   network_interface {
     network_name   = "default"
-    wait_for_lease = false
+    wait_for_lease = true
   }
 
   disk {
@@ -167,5 +167,5 @@ ansible_ssh_private_key_file=~/.ssh/id_rsa
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 EOF
 
-  filename = "${path.module}/../ansible/inventory.ini"
+  filename = "${path.module}/ansible/inventory.ini"
 }
