@@ -89,6 +89,8 @@
         mode: '0755'
 
     - name: Criar serviço Systemd para o Tratamento
+      vars:
+        ip_vm1: "{{ hostvars[groups['vm_simulador'][0]].ansible_host}}"
       copy:
         dest: /etc/systemd/system/gardenia-vm2.service
         content: |
@@ -100,7 +102,7 @@
           Type=simple
           User=debian
           WorkingDirectory=/home/debian/gardenia
-          ExecStart=/usr/bin/Rscript /home/debian/gardenia/pipeline_vm2.R -o debian@192.168.122.124:/home/debian/simulador/saida -i 15
+          ExecStart=/usr/bin/Rscript /home/debian/gardenia/pipeline_vm2.R -o debian@{{ ip_vm1 }}:/home/debian/simulador/saida -i 15
           Restart=always
 
           [Install]
@@ -114,11 +116,11 @@
         daemon_reload: yes
 
 # Configuração da VM 3 (Big Data / Spark e MongoDB)
-- name: Configurar VM 3 - Spark Big Data
+- name: Configurar VM 3 - Spark Big Data e Mongo DB
   hosts: vm_spark
   become: yes
   tasks:
-    - name: Instalar Java, R, chaves do MongoDB e dependências do sistema
+    - name: Instalar pacotes necessários
       apt:
         name: 
           - default-jre-headless
@@ -130,13 +132,39 @@
           - libssl-dev
           - libcurl4-openssl-dev
           - libxml2-dev
-          - mongodb
+          - libsasl2-dev
+          - curl
+          - gnupg
+        state: present
+        update_cache: yes
+    
+    - name: Criar diretório para chaves de repositórios (keyrings)
+      file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: '0755'
+    
+    - name: Adicionar chave GPG oficial do MongoDB
+      get_url:
+        url: https://www.mongodb.org/static/pgp/server-7.0.asc
+        dest: /etc/apt/trusted.gpg.d/mongodb-org-7.0.asc
+        mode: '0644'
+
+    - name: Adicionar repositório oficial do MongoDB
+      copy:
+        dest: /etc/apt/sources.list.d/mongodb-org-7.0.list
+        content: "deb [signed-by=/etc/apt/keyrings/mongodb-org-7.0.asc] https://repo.mongodb.org/apt/debian bookworm/mongodb-org/7.0 main\n"
+        mode: '0644'
+
+    - name: Instalar MongoDB Community Server (mongodb-org)
+      apt:
+        name: mongodb-org
         state: present
         update_cache: yes
     
     - name: Garantir que o serviço do MongoDB está ativo
       systemd:
-        name: mongodb
+        name: mongod
         state: started
         enabled: yes
 
@@ -148,18 +176,13 @@
         recurse: yes
 
     - name: Instalar sparklyr e mongolite via CRAN
-      become_user: debian
       command: >
         Rscript -e "
           if (!require('sparklyr', quietly = TRUE)) install.packages('sparklyr', repos='https://cloud.r-project.org');
           if (!require('mongolite', quietly = TRUE)) install.packages('mongolite', repos='https://cloud.r-project.org')
         "
 
-      register: sparklyr_install
-      changed_when: "'installing' in sparklyr_install.stdout or 'installing' in sparklyr_install.stderr"
-
     - name: Baixar e Instalar binários do Apache Spark no R para o usuário debian
-      become: yes
       become_user: debian
       command: >
         Rscript -e "
@@ -182,18 +205,20 @@
         mode: '0755'
 
     - name: Criar serviço Systemd para Spark + MongoDB
+      vars:
+        ip_vm2: "{{ hostvars[groups['vm_tratamento'][0]].ansible_host }}"
       copy:
         dest: /etc/systemd/system/gardenia-vm3.service
         content: |
           [Unit]
           Description=Servico Spark e MongoDB em R (VM3)
-          After=network.target mongodb.service
+          After=network.target mongod.service
 
           [Service]
           Type=simple
           User=debian
           WorkingDirectory=/home/debian/spark_work
-          ExecStart=/usr/bin/Rscript /home/debian/spark_work/pipeline_vm3.R -o debian@192.168.122.125:/home/debian/gardenia/saida -i 30
+          ExecStart=/usr/bin/Rscript /home/debian/spark_work/pipeline_vm3.R -o debian@{{ ip_vm2 }}:/home/debian/gardenia/saida -i 30
           Restart=always
 
           [Install]

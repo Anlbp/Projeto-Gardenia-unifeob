@@ -148,3 +148,24 @@ output "ips_das_vms" {
     vm3_spark      = try(libvirt_domain.vm_3.network_interface[0].addresses[0], "Consulte via virsh net-dhcp-leases default")
   }
 }
+
+# Obter IPs das VMs dinamicamente
+resource "local_file" "ansible_inventory" {
+  content = <<EOF
+[vm_simulador]
+vm1 ansible_host=${libvirt_domain.vm_1.network_interface[0].addresses[0]}
+
+[vm_tratamento]
+vm2 ansible_host=${libvirt_domain.vm_2.network_interface[0].addresses[0]}
+
+[vm_spark]
+vm3 ansible_host=${libvirt_domain.vm_3.network_interface[0].addresses[0]}
+
+[all:vars]
+ansible_user=debian
+ansible_ssh_private_key_file=~/.ssh/id_rsa
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+EOF
+
+  filename = "${path.module}/../ansible/inventory.ini"
+}

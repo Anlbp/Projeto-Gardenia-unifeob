@@ -78,62 +78,87 @@ Adicionar permissões às ferramentas:
         sudo usermod -aG libvirt $USER
         sudo usermod -aG kvm $USER
 ```
-Em seguida reinicie o computador ou execute:
+Em seguida reinicie o computador **OU** execute:
 ```bash
         newgrp libvirt
 ```
-#
 ### 2. Provisionamento da Infraestrutura (OpenTofu):
 
 A partir da raiz do projeto, execute:
 ```bash
-    cd ./infraestrutura/
+    cd ./recursos/infraestrutura/
     tofu init
     tofu apply -auto-approve
 ```
+> ⚠️ **Atenção:**<br>O OpenTofu criará as 3 VMs no Libvirt e gerará automaticamente o arquivo ansible/inventory.ini com os IPs atribuídos pelo DHCP.
 #
-### 3. Identificas as IP atribuidas as VMs
-```bash
-    sudo virsh net-dhcp-leases default
-```
-#
-### 4. Configuração do Ambiente e Aplicação (Ansible):
+### 3. Configuração, instalações e tarefas das virtualizações:
 
-Copie os IPv4 exibidos no passo anterior e cole no arquivo "/ansible/inventory.ini" para cada VM. Em seguida, execute:
 ```bash
     cd ./ansible/
     ansible-playbook -i inventory.ini playbook.yml
 ```
-#
-### 5. Execução das VMs:
+### 4. Execução das VMs:
 
-> ⚠️ **Atenção!**<br>Execute cada VM em um **terminal separado**, e **nesta ordem**: primeiro a VM1, depois a VM2, depois a VM3. A VM2 lê a saída da VM1, e a VM3 lê a saída da VM2.
+> ⚙️ **Automação Ativa:**<br>Os serviços do pipeline R e do MongoDB já iniciam e se sincronizam automaticamente no boot das VMs via systemd.<br>Não é necessário rodar os scripts R manualmente.
+
+Para verificar o status ou acompanhar os logs em tempo real, conecte-se à VM desejada (utilize o IP presente no ```inventory.ini```)
 
 **VM1 (Simulador):**
 ```bash
-    ssh debian@192.168.122.XXX
-    cd ./simulador
-    Rscript simulador.R --ciclos 0 --intervalo 10
-    exit
+    ssh debian@<IP_VM1> "sudo systemctl status gardenia-simulador"
+```
+e para acompanhar os logs em tempo real:
+```bash
+    ssh debian@<IP_VM1> "journalctl -u gardenia-simulador -f"
 ```
 
 **VM2 (Tratamento e Limpeza):**
 ```bash
-    ssh debian@192.168.122.XXX
-    cd ./gardenia
-    Rscript pipeline_vm2.R -o debian@<IP_VM1>:/home/debian/simulador/saida -i 15
-    exit
+    ssh debian@<IP_VM2> "sudo systemctl status gardenia-vm2"
+```
+e para acompanhar os logs em tempo real:
+```bash
+    ssh debian@<IP_VM2> "journalctl -u gardenia-vm2 -f"
 ```
 
 **VM3 (Big Data / Spark):**
 ```bash
-    ssh debian@192.168.122.XXX
-    cd ./spark_work
-    Rscript pipeline_vm3.R -o debian@<IP_VM2>:/home/debian/gardenia/saida -i 30
+    ssh debian@<IP_VM3> "sudo systemctl status gardenia-vm3"
+```
+e para acompanhar os logs em tempo real:
+```bash
+    ssh debian@<IP_VM3> "journalctl -u gardenia-vm3 -f"
+```
+### 5. Validação dos dados salvos no MongoDB (VM3)
+```bash
+    ssh debian@<IP_VM3>
+    Rscript -e "m <- mongolite::mongo('segmentacao_rfm', 'gardenia'); print(m$find())"
     exit
 ```
-#
-### 6. Ligar a VM novamente após o boot:
+### 6. Pausar, interromper ou desligar as VMs:
+Como o Apache Spark e os serviços em segundo plano consomem memória RAM de forma contínua, você pode pausar ou desligar as VMs conforme necessário:
+#### Opção A: Parar apenas os scripts (sem desligar as VMs)
+```bash
+    ssh debian@<IP_VM1> "sudo systemctl stop gardenia-simulador"
+    ssh debian@<IP_VM2> "sudo systemctl stop gardenia-vm2"
+    ssh debian@<IP_VM3> "sudo systemctl stop gardenia-vm3"
+```
+> **Dica:**<br>Para reativar o pipeline a qualquer momento, troque stop por start nos comandos acima.
+#### Opção B: Desligar as VMs para liberar RAM no computador hospedeiro
+* Desligamento recomendado:
+```bash
+    sudo virsh shutdown vm1
+    sudo virsh shutdown vm2
+    sudo virsh shutdown vm3
+```
+* Desligamento forçado / imediato
+```bash
+    sudo virsh destroy vm1
+    sudo virsh destroy vm2
+    sudo virsh destroy vm3
+```
+### 7. Religar o cluster após o desligamento/boot do host:
 
 Ativa a rede virtual do libvirt:
 ```bash
@@ -144,6 +169,12 @@ Liga as três VMs do cluster
     sudo virsh start vm1-simulador
     sudo virsh start vm2-tratamento
     sudo virsh start vm3-spark
+```
+#### Opção C: Impedir que os scripts iniciem automaticamente no boot das VMs
+```bash
+    ssh debian@<IP_VM1> "sudo systemctl disable gardenia-simulador"
+    ssh debian@<IP_VM2> "sudo systemctl disable gardenia-vm2"
+    ssh debian@<IP_VM3> "sudo systemctl disable gardenia-vm3"
 ```
 #
 <b>Feitos pelos alunos do curso de Ciência da Computação da UNIFEOB.</b> 👨‍💻🎓
