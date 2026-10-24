@@ -13,9 +13,10 @@ Sistema de vendas e análise de dados para a loja de roupas **Gardênia**, com s
 
 - [Integrantes](#integrantes)
 - [Descrição](#descrição)
-- [Problema](#situação-problema)
+- [Problema](#problema)
 - [Solução](#solução)
 - [Como reproduzir o ambiente](#como-reproduzir-o-ambiente)
+- [Demonstração](#demonstração)
 
 ## Integrantes
 
@@ -148,15 +149,15 @@ Como o Apache Spark e os serviços em segundo plano consomem memória RAM de for
 #### Opção B: Desligar as VMs para liberar RAM no computador hospedeiro
 * Desligamento recomendado:
 ```bash
-    sudo virsh shutdown vm1
-    sudo virsh shutdown vm2
-    sudo virsh shutdown vm3
+    sudo virsh shutdown vm1-simulador
+    sudo virsh shutdown vm2-tratamento
+    sudo virsh shutdown vm3-spark
 ```
 * Desligamento forçado / imediato
 ```bash
-    sudo virsh destroy vm1
-    sudo virsh destroy vm2
-    sudo virsh destroy vm3
+    sudo virsh destroy vm1-simulador
+    sudo virsh destroy vm2-tratamento
+    sudo virsh destroy vm3-spark
 ```
 #### Opção C: Impedir que os scripts iniciem automaticamente no boot das VMs
 ```bash
@@ -176,6 +177,10 @@ Liga as três VMs do cluster
     sudo virsh start vm2-tratamento
     sudo virsh start vm3-spark
 ```
+## Demonstração
+Um video para demonstrar as VMs funcionando:<br>
+<br>
+[![](https://markdown-videos-api.jorgenkh.no/youtube/5UptIKxguL0)](https://youtu.be/5UptIKxguL0)
 #
 <b>Feitos pelos alunos do curso de Ciência da Computação da UNIFEOB.</b> 👨‍💻🎓
 <br><p align="center"><img src="https://s3.sa-east-1.amazonaws.com/lyceum.backups/arquivosimport/logo_branco_atual_2023.png" alt="Logo UNIFEOB" width="256"></p>
