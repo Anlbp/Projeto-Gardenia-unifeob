@@ -158,6 +158,12 @@ Como o Apache Spark e os serviços em segundo plano consomem memória RAM de for
     sudo virsh destroy vm2
     sudo virsh destroy vm3
 ```
+#### Opção C: Impedir que os scripts iniciem automaticamente no boot das VMs
+```bash
+    ssh debian@<IP_VM1> "sudo systemctl disable gardenia-simulador"
+    ssh debian@<IP_VM2> "sudo systemctl disable gardenia-vm2"
+    ssh debian@<IP_VM3> "sudo systemctl disable gardenia-vm3"
+```
 ### 7. Religar o cluster após o desligamento/boot do host:
 
 Ativa a rede virtual do libvirt:
@@ -169,12 +175,6 @@ Liga as três VMs do cluster
     sudo virsh start vm1-simulador
     sudo virsh start vm2-tratamento
     sudo virsh start vm3-spark
-```
-#### Opção C: Impedir que os scripts iniciem automaticamente no boot das VMs
-```bash
-    ssh debian@<IP_VM1> "sudo systemctl disable gardenia-simulador"
-    ssh debian@<IP_VM2> "sudo systemctl disable gardenia-vm2"
-    ssh debian@<IP_VM3> "sudo systemctl disable gardenia-vm3"
 ```
 #
 <b>Feitos pelos alunos do curso de Ciência da Computação da UNIFEOB.</b> 👨‍💻🎓
