@@ -68,11 +68,15 @@ Antes de iniciar, garanta que a máquina local possua:
 **Linux: (Debian/Ubuntu):**
 ```bash
     sudo apt update
-    sudo apt install -y git r-base r-cran-tidyverse r-cran-optparse r-cran-jsonlite openssh-client qemu-kvm libvirt-daemon-system libvirt-clients virt-manager ansible --fix-missing
+    sudo apt install -y git r-base r-cran-tidyverse r-cran-optparse r-cran-jsonlite openssh-client qemu-kvm libvirt-daemon-system libvirt-clients virt-manager ansible genisoimage --fix-missing
     curl -fsSL https://get.opentofu.org/install-opentofu.sh -o install-opentofu.sh
     chmod +x install-opentofu.sh
     ./install-opentofu.sh --install-method deb
     rm install-opentofu.sh
+    sudo mkdir -p /var/lib/libvirt/images
+    sudo virsh pool-define-as default dir --target /var/lib/libvirt/images
+    sudo virsh pool-build default 2>/dev/null || true
+    sudo virsh pool-start default
 ```
 Adicionar permissões às ferramentas:
 ```bash
@@ -170,6 +174,7 @@ Como o Apache Spark e os serviços em segundo plano consomem memória RAM de for
 Ativa a rede virtual do libvirt:
 ```bash
     sudo virsh net-start default 2>/dev/null
+    sudo virsh pool-start default
 ``` 
 Liga as três VMs do cluster
 ```bash
