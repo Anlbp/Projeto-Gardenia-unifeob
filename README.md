@@ -68,7 +68,7 @@ Antes de iniciar, garanta que a máquina local possua:
 **Linux: (Debian/Ubuntu):**
 ```bash
     sudo apt update
-    sudo apt install -y git r-base r-cran-tidyverse r-cran-optparse r-cran-jsonlite openssh-client qemu-kvm libvirt-daemon-system libvirt-clients virt-manager ansible
+    sudo apt install -y git r-base r-cran-tidyverse r-cran-optparse r-cran-jsonlite openssh-client qemu-kvm libvirt-daemon-system libvirt-clients virt-manager ansible --fix-missing
     curl -fsSL https://get.opentofu.org/install-opentofu.sh -o install-opentofu.sh
     chmod +x install-opentofu.sh
     ./install-opentofu.sh --install-method deb
