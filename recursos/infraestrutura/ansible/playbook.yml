@@ -11,7 +11,7 @@
         group: debian
         recurse: yes
 
-    - name: Instalar r
+    - name: Instalar R (Linguagem de Programação)
       apt:
         name: r-base
         state: present
