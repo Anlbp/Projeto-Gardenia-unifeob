@@ -1,0 +1,22 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Rodar Gardênia (Flask)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/site_gardenia/gardenia_final_V3.0/backend/app.py",
+      "cwd": "${workspaceFolder}/site_gardenia/gardenia_final_V3.0/backend",
+      "console": "integratedTerminal",
+      "jinja": true
+    },
+    {
+      "name": "Popular Banco de Dados (seed_db.py)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/site_gardenia/gardenia_final_V3.0/backend/seed_db.py",
+      "cwd": "${workspaceFolder}/site_gardenia/gardenia_final_V3.0/backend",
+      "console": "integratedTerminal"
+    }
+  ]
+}

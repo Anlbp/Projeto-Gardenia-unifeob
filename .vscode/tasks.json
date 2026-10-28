@@ -1,0 +1,24 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Instalar dependências (pip)",
+      "type": "shell",
+      "command": "pip install -r requirements.txt",
+      "options": {
+        "cwd": "${workspaceFolder}/site_gardenia/gardenia_final_V3.0/backend"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Rodar Servidor Flask",
+      "type": "shell",
+      "command": "python app.py",
+      "options": {
+        "cwd": "${workspaceFolder}/site_gardenia/gardenia_final_V3.0/backend"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    }
+  ]
+}

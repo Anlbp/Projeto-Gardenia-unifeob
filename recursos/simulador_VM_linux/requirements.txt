@@ -1,0 +1,3 @@
+# Se usar bibliotecas nativas como 'csv', 'random' e 'datetime', pode deixar vazio.
+# Caso use pandas:
+pandas==2.2.0

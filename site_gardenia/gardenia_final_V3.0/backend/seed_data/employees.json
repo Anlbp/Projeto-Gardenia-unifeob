@@ -1,0 +1,38 @@
+[
+  {
+    "id": "e1",
+    "name": "Camila Torres",
+    "email": "camila@gardeniamodas.com",
+    "role": "Gerente",
+    "perms": [
+      "Clientes",
+      "Estoque",
+      "Vendas",
+      "Métricas",
+      "Financeiro",
+      "Funcionários"
+    ],
+    "senha_hash": "scrypt:32768:8:1$gGfAoAuEAHuRfGVY$eed191842ed0cdee525d0d29acd9bda89cdb986f887d50b2934887dd5152576bc5cab65a8568de40b398a4a3692f26035b188369614f99529f6fafb1bf823234"
+  },
+  {
+    "id": "e2",
+    "name": "Rodrigo Alves",
+    "email": "rodrigo@gardeniamodas.com",
+    "role": "Caixa",
+    "perms": [
+      "Vendas",
+      "Clientes"
+    ],
+    "senha_hash": "scrypt:32768:8:1$gZBRCaBffoP9qsuA$0fe8ddd96fdf55f353328880b416efa4fdbe2ddef55a9d69ef2a0926ecaac4c929661704cc071d42b32f37c8d827819ab3b9fa01531e64c6bf398850c7cde5f8"
+  },
+  {
+    "id": "e3",
+    "name": "Sofia Bianchi",
+    "email": "sofia@gardeniamodas.com",
+    "role": "Estoquista",
+    "perms": [
+      "Estoque"
+    ],
+    "senha_hash": "scrypt:32768:8:1$oCkbTaOnYVtoBXj9$21524bfd52373f216a276cbe79c9973c178a3a6cec19afbca78e5739dbf4753f3f778dfe68275bc9f5145d146f0fb890d6a13ca3e9a903ca500555ebe8b9e4b4"
+  }
+]

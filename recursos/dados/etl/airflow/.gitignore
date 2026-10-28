@@ -1,0 +1,36 @@
+cat > ~/airflow-projeto/.gitignore << 'EOF'
+# Ambiente virtual
+airflow_venv/
+venv/
+.venv/
+
+# Banco de dados do Airflow
+airflow_home/airflow.db
+airflow_home/airflow.db-journal
+
+# Logs do Airflow
+airflow_home/logs/
+
+# Credenciais geradas pelo SimpleAuthManager
+airflow_home/simple_auth_manager_passwords.json.generated
+
+# Arquivos de configuração locais
+airflow_home/airflow.cfg
+airflow_home/webserver_config.py
+
+# Cache do Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Arquivos de dados (nunca commitar dados brutos)
+data/
+*.csv
+*.json
+
+# Variáveis de ambiente
+.env
+
+# Jupyter
+.ipynb_checkpoints/
+EOF

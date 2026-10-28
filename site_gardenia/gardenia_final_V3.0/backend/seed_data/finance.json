@@ -1,0 +1,6 @@
+[
+  {"id": "f1", "date": "01/09", "desc": "Venda balcão", "cat": "Vendas", "in": 2480, "out": 0},
+  {"id": "f2", "date": "02/09", "desc": "Fornecedor tecidos", "cat": "Compras", "in": 0, "out": 1200},
+  {"id": "f3", "date": "03/09", "desc": "Aluguel loja", "cat": "Fixo", "in": 0, "out": 2600},
+  {"id": "f4", "date": "05/09", "desc": "Venda balcão", "cat": "Vendas", "in": 3120, "out": 0}
+]

@@ -1,0 +1,4 @@
+Flask==3.0.3
+pymongo==4.9.2
+python-dotenv==1.0.1
+mongomock>=4.0.0

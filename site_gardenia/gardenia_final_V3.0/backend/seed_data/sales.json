@@ -1,0 +1,61 @@
+[
+  {
+    "id": "s3",
+    "date": "2026-09-16",
+    "time": "11:55",
+    "items": [
+      {
+        "sku": "789123456001",
+        "name": "Vestido Linho Areia",
+        "category": "Vestidos",
+        "price": 189.0,
+        "qty": 1
+      },
+      {
+        "sku": "789123456005",
+        "name": "Calça Alfaiataria",
+        "category": "Calças",
+        "price": 219.0,
+        "qty": 1
+      }
+    ],
+    "total": 408
+  },
+  {
+    "id": "s2",
+    "date": "2026-09-16",
+    "time": "10:40",
+    "items": [
+      {
+        "sku": "789123456003",
+        "name": "Blusa Cropped Verde",
+        "category": "Blusas",
+        "price": 119.0,
+        "qty": 1
+      }
+    ],
+    "total": 119
+  },
+  {
+    "id": "s1",
+    "date": "2026-09-16",
+    "time": "09:12",
+    "items": [
+      {
+        "sku": "789123456001",
+        "name": "Vestido Linho Areia",
+        "category": "Vestidos",
+        "price": 189.0,
+        "qty": 1
+      },
+      {
+        "sku": "789123456008",
+        "name": "Cinto Trança",
+        "category": "Acessórios",
+        "price": 79.0,
+        "qty": 1
+      }
+    ],
+    "total": 268
+  }
+]

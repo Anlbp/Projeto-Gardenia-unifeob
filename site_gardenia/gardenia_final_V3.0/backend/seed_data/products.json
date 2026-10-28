@@ -1,0 +1,999 @@
+[
+  {
+    "id": 1,
+    "name": "Vestido Aurora",
+    "gender": "Feminino",
+    "category": "Vestidos",
+    "price": 249.9,
+    "old_price": 289.9,
+    "tag": "Novo",
+    "image": "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=900&q=85",
+    "description": "Vestido midi em crepe fluido com modelagem evasê, decote em V suave e alças largas. Peça versátil e confortável para o dia a dia e ocasiões especiais.",
+    "sizes": [
+      "PP",
+      "P",
+      "M",
+      "G"
+    ],
+    "composition": "100% Viscose de Reflorestamento",
+    "rating": 4.9,
+    "reviews_count": 28
+  },
+  {
+    "id": 2,
+    "name": "Camisa Essencial Linho",
+    "gender": "Feminino",
+    "category": "Básicos",
+    "price": 139.9,
+    "old_price": 169.9,
+    "tag": "100% Linho",
+    "image": "https://images.unsplash.com/photo-1605763240000-7e93b172d754?auto=format&fit=crop&w=900&q=85",
+    "description": "Camisa feminina clássica em tecido 100% linho respirável, com gola colarinho tradicional, fechamento por botões frontais e mangas longas com punho ajustável.",
+    "sizes": [
+      "P",
+      "M",
+      "G",
+      "GG"
+    ],
+    "composition": "100% Linho Puro Certificado",
+    "rating": 5.0,
+    "reviews_count": 42
+  },
+  {
+    "id": 3,
+    "name": "Blazer Olive Tailored",
+    "gender": "Feminino",
+    "category": "Alfaiataria",
+    "price": 299.9,
+    "old_price": 349.9,
+    "tag": "Destaque",
+    "image": "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=900&q=85",
+    "description": "Blazer feminino de alfaiataria na cor verde oliva, com lapela chanfrada, fechamento por botão único e bolsos embutidos com aba. Forro interno macio.",
+    "sizes": [
+      "PP",
+      "P",
+      "M",
+      "G"
+    ],
+    "composition": "70% Lã Tropical, 30% Poliéster Reciclado",
+    "rating": 4.9,
+    "reviews_count": 35
+  },
+  {
+    "id": 4,
+    "name": "Tricot Serena Canelado",
+    "gender": "Feminino",
+    "category": "Malhas",
+    "price": 179.9,
+    "old_price": null,
+    "tag": "Mais Vendido",
+    "image": "/static/img/products/tricot_serena.jpg",
+    "description": "Blusa feminina de tricot canelado de manga longa com gola redonda. Toque macio e confortável, ideal para dias amenos e sobreposições.",
+    "sizes": [
+      "P",
+      "M",
+      "G"
+    ],
+    "composition": "60% Algodão Pima, 40% Lã Merino",
+    "rating": 4.8,
+    "reviews_count": 19
+  },
+  {
+    "id": 5,
+    "name": "Saia Luna Midi Evasê",
+    "gender": "Feminino",
+    "category": "Casual",
+    "price": 159.9,
+    "old_price": 189.9,
+    "tag": "Tendência",
+    "image": "/static/img/products/saia_midi.jpg",
+    "description": "Saia midi feminina modelo evasê em sarja leve com cintura alta, fenda frontal discreta e fechamento por botão e zíper.",
+    "sizes": [
+      "PP",
+      "P",
+      "M",
+      "G",
+      "GG"
+    ],
+    "composition": "98% Algodão, 2% Elastano",
+    "rating": 4.9,
+    "reviews_count": 23
+  },
+  {
+    "id": 6,
+    "name": "Calça Alfaiataria Íris",
+    "gender": "Feminino",
+    "category": "Alfaiataria",
+    "price": 229.9,
+    "old_price": null,
+    "tag": "Ateliê",
+    "image": "/static/img/products/calca_alfaiataria.jpg",
+    "description": "Calça feminina de alfaiataria reta com cintura alta, cós com passantes para cinto, pregas frontais e bolsos laterais faca.",
+    "sizes": [
+      "36",
+      "38",
+      "40",
+      "42",
+      "44"
+    ],
+    "composition": "92% Viscose Sarjada, 8% Poliéster",
+    "rating": 5.0,
+    "reviews_count": 31
+  },
+  {
+    "id": 7,
+    "name": "Vestido Botânica Linho",
+    "gender": "Feminino",
+    "category": "Vestidos",
+    "price": 269.9,
+    "old_price": 310.0,
+    "tag": "Exclusivo",
+    "image": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=900&q=85",
+    "description": "Vestido midi em mistura de linho e algodão com mangas curtas soltas, decote sutil e faixa para amarração e ajuste na cintura.",
+    "sizes": [
+      "PP",
+      "P",
+      "M",
+      "G"
+    ],
+    "composition": "55% Linho Puro, 45% Viscose",
+    "rating": 4.9,
+    "reviews_count": 14
+  },
+  {
+    "id": 8,
+    "name": "Regata Ribbed Areia",
+    "gender": "Feminino",
+    "category": "Básicos",
+    "price": 89.9,
+    "old_price": null,
+    "tag": "Essencial",
+    "image": "/static/img/products/regata_ribbed.jpg",
+    "description": "Regata feminina canelada em malha encorpada com decote halter. Modelagem ajustada ao corpo, ideal para usar sozinha ou sob blazers.",
+    "sizes": [
+      "PP",
+      "P",
+      "M",
+      "G"
+    ],
+    "composition": "95% Algodão Pima Peruano, 5% Elastano",
+    "rating": 4.7,
+    "reviews_count": 51
+  },
+  {
+    "id": 9,
+    "name": "Cardigan Off-White Brisa",
+    "gender": "Feminino",
+    "category": "Malhas",
+    "price": 209.9,
+    "old_price": 249.9,
+    "tag": "Conforto",
+    "image": "https://images.unsplash.com/photo-1516762689617-e1cffcef479d?auto=format&fit=crop&w=900&q=85",
+    "description": "Cardigan feminino oversized em tricot de ponto aberto com fechamento por botões frontais e mangas compridas com punho canelado.",
+    "sizes": [
+      "P",
+      "M",
+      "G"
+    ],
+    "composition": "70% Acrílico Soft Touch, 30% Algodão",
+    "rating": 4.9,
+    "reviews_count": 17
+  },
+  {
+    "id": 10,
+    "name": "Vestido Seda Solstício",
+    "gender": "Feminino",
+    "category": "Vestidos",
+    "price": 319.9,
+    "old_price": 379.9,
+    "tag": "Festa",
+    "image": "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=900&q=85",
+    "description": "Vestido longo em tecido acetinado com caimento fluido, alças finas reguláveis, decote suave e fenda lateral sutil.",
+    "sizes": [
+      "PP",
+      "P",
+      "M",
+      "G"
+    ],
+    "composition": "100% Seda Pura Tussah",
+    "rating": 5.0,
+    "reviews_count": 29
+  },
+  {
+    "id": 11,
+    "name": "Blusa Gola Alta Cashmere",
+    "gender": "Feminino",
+    "category": "Malhas",
+    "price": 189.9,
+    "old_price": 219.9,
+    "tag": "Inverno",
+    "image": "https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=900&q=85",
+    "description": "Blusa de gola alta em malha macia de toque suave, manga longa e caimento ajustado. Básico essencial para dias frios.",
+    "sizes": [
+      "P",
+      "M",
+      "G"
+    ],
+    "composition": "70% Modal, 30% Fios de Cashmere",
+    "rating": 4.8,
+    "reviews_count": 33
+  },
+  {
+    "id": 12,
+    "name": "Sobretudo Camel Wool",
+    "gender": "Feminino",
+    "category": "Casacos",
+    "price": 449.9,
+    "old_price": 529.9,
+    "tag": "Luxo",
+    "image": "/static/img/products/sobretudo_camel.jpg",
+    "description": "Sobretudo feminino em lã batida na cor caramelo com gola clássica de lapela, abotoamento duplo e faixa para amarração na cintura.",
+    "sizes": [
+      "36",
+      "38",
+      "40",
+      "42"
+    ],
+    "composition": "80% Lã Natural, 20% Poliamida Térmica",
+    "rating": 5.0,
+    "reviews_count": 48
+  },
+  {
+    "id": 13,
+    "name": "Calça Pantalona Linho Areia",
+    "gender": "Feminino",
+    "category": "Alfaiataria",
+    "price": 239.9,
+    "old_price": 279.9,
+    "tag": "Ateliê",
+    "image": "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=900&q=85",
+    "description": "Calça pantalona feminina em linho misto com cintura alta, corte reto amplo, bolsos laterais e fechamento frontal funcional.",
+    "sizes": [
+      "PP",
+      "P",
+      "M",
+      "G",
+      "GG"
+    ],
+    "composition": "100% Linho Europeu Orgânico",
+    "rating": 4.9,
+    "reviews_count": 21
+  },
+  {
+    "id": 14,
+    "name": "Macacão Alfaiataria Noite",
+    "gender": "Feminino",
+    "category": "Alfaiataria",
+    "price": 289.9,
+    "old_price": 339.9,
+    "tag": "Novo",
+    "image": "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=900&q=85",
+    "description": "Macacão longo de alfaiataria com decote transpassado, cintura marcada com cinto no mesmo tom e bolsos funcionais.",
+    "sizes": [
+      "P",
+      "M",
+      "G"
+    ],
+    "composition": "96% Crepe Alfaiataria, 4% Elastano",
+    "rating": 4.8,
+    "reviews_count": 16
+  },
+  {
+    "id": 15,
+    "name": "Colete Alfaiataria Savile",
+    "gender": "Feminino",
+    "category": "Alfaiataria",
+    "price": 169.9,
+    "old_price": null,
+    "tag": "Tendência",
+    "image": "/static/img/products/colete_alfaiataria.jpg",
+    "description": "Colete feminino de alfaiataria sem mangas em linho bege, com decote em V, abotoamento frontal com botões tartaruga e bolsos embutidos.",
+    "sizes": [
+      "PP",
+      "P",
+      "M",
+      "G"
+    ],
+    "composition": "65% Viscose, 35% Linho",
+    "rating": 4.9,
+    "reviews_count": 39
+  },
+  {
+    "id": 16,
+    "name": "Vestido Midi Floral Vintage",
+    "gender": "Feminino",
+    "category": "Vestidos",
+    "price": 259.9,
+    "old_price": 299.9,
+    "tag": "Primavera",
+    "image": "/static/img/products/vestido_floral.jpg",
+    "description": "Vestido midi em tecido leve com estampa floral clássica, mangas curtas, decote em V e saia com caimento solto e fluido.",
+    "sizes": [
+      "PP",
+      "P",
+      "M",
+      "G"
+    ],
+    "composition": "100% Algodão Cambraia Suíça",
+    "rating": 4.9,
+    "reviews_count": 27
+  },
+  {
+    "id": 17,
+    "name": "Shorts Alfaiataria Pienza",
+    "gender": "Feminino",
+    "category": "Casual",
+    "price": 149.9,
+    "old_price": 179.9,
+    "tag": "Verão",
+    "image": "/static/img/products/shorts_alfaiataria.jpg",
+    "description": "Shorts feminino de alfaiataria em linho com cintura alta, pregas frontais, bolsos laterais e barra dobrada estruturada.",
+    "sizes": [
+      "36",
+      "38",
+      "40",
+      "42"
+    ],
+    "composition": "97% Algodão, 3% Elastano",
+    "rating": 4.7,
+    "reviews_count": 18
+  },
+  {
+    "id": 18,
+    "name": "Jaqueta Pelica Mocca",
+    "gender": "Feminino",
+    "category": "Casacos",
+    "price": 389.9,
+    "old_price": 450.0,
+    "tag": "Edição Limitada",
+    "image": "https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=900&q=85",
+    "description": "Jaqueta feminina curta em material sintético estilo couro na cor mocca, com zíper frontal aparente e gola alta esportiva.",
+    "sizes": [
+      "P",
+      "M",
+      "G"
+    ],
+    "composition": "100% Couro Ecológico Premium",
+    "rating": 5.0,
+    "reviews_count": 41
+  },
+  {
+    "id": 19,
+    "name": "Suéter Gola V Mohair Areia",
+    "gender": "Feminino",
+    "category": "Malhas",
+    "price": 199.9,
+    "old_price": 239.9,
+    "tag": "Mais Vendido",
+    "image": "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&w=900&q=85",
+    "description": "Suéter feminino em tricot leve com decote em V, mangas longas e acabamento canelado nos punhos e na barra.",
+    "sizes": [
+      "P",
+      "M",
+      "G"
+    ],
+    "composition": "60% Mohair Soft, 40% Algodão Pima",
+    "rating": 4.9,
+    "reviews_count": 25
+  },
+  {
+    "id": 20,
+    "name": "Camisa Cetim Champagne",
+    "gender": "Feminino",
+    "category": "Básicos",
+    "price": 179.9,
+    "old_price": 209.9,
+    "tag": "Ateliê",
+    "image": "https://images.unsplash.com/photo-1598554747436-c9293d6a588f?auto=format&fit=crop&w=900&q=85",
+    "description": "Camisa feminina em cetim com brilho acetinado suave, gola camisa, fechamento frontal por botões e mangas longas.",
+    "sizes": [
+      "PP",
+      "P",
+      "M",
+      "G"
+    ],
+    "composition": "95% Seda Acetinada, 5% Elastano",
+    "rating": 4.8,
+    "reviews_count": 30
+  },
+  {
+    "id": 21,
+    "name": "Vestido Chemise Linho Cru",
+    "gender": "Feminino",
+    "category": "Vestidos",
+    "price": 239.9,
+    "old_price": 279.9,
+    "tag": "100% Linho",
+    "image": "https://images.unsplash.com/photo-1485968579580-b6d095142e6e?auto=format&fit=crop&w=900&q=85",
+    "description": "Vestido chemise midi em linho puro com abotoamento frontal completo, gola clássica e cinto de cordão para ajuste.",
+    "sizes": [
+      "P",
+      "M",
+      "G",
+      "GG"
+    ],
+    "composition": "100% Linho Puro Amaciado",
+    "rating": 4.9,
+    "reviews_count": 22
+  },
+  {
+    "id": 22,
+    "name": "Blusa Transpassada Linho",
+    "gender": "Feminino",
+    "category": "Básicos",
+    "price": 149.9,
+    "old_price": null,
+    "tag": "Casual",
+    "image": "https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=900&q=85",
+    "description": "Blusa feminina com decote transpassado em V, mangas 3/4 e amarração lateral ajustável em tecido de linho misto.",
+    "sizes": [
+      "PP",
+      "P",
+      "M",
+      "G"
+    ],
+    "composition": "70% Linho, 30% Viscose",
+    "rating": 4.7,
+    "reviews_count": 15
+  },
+  {
+    "id": 23,
+    "name": "Saia Plissada Metalizada",
+    "gender": "Feminino",
+    "category": "Casual",
+    "price": 189.9,
+    "old_price": 229.9,
+    "tag": "Tendência",
+    "image": "https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?auto=format&fit=crop&w=900&q=85",
+    "description": "Saia midi com efeito plissado permanente em tecido com leve brilho, cós elástico confortável e forro interno.",
+    "sizes": [
+      "P",
+      "M",
+      "G"
+    ],
+    "composition": "100% Poliéster Acetinado Microplissado",
+    "rating": 4.8,
+    "reviews_count": 26
+  },
+  {
+    "id": 24,
+    "name": "Top Cropped Estruturado",
+    "gender": "Feminino",
+    "category": "Básicos",
+    "price": 119.9,
+    "old_price": 139.9,
+    "tag": "Novo",
+    "image": "https://images.unsplash.com/photo-1583846783214-7229a91b20ed?auto=format&fit=crop&w=900&q=85",
+    "description": "Top cropped feminino com decote reto, alças médias e tecido encorpado estruturado com fechamento por zíper traseiro.",
+    "sizes": [
+      "PP",
+      "P",
+      "M",
+      "G"
+    ],
+    "composition": "100% Linho Alvejado",
+    "rating": 4.9,
+    "reviews_count": 19
+  },
+  {
+    "id": 25,
+    "name": "Trench Coat Tradicional Areia",
+    "gender": "Feminino",
+    "category": "Casacos",
+    "price": 429.9,
+    "old_price": 499.9,
+    "tag": "Clássico",
+    "image": "https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?auto=format&fit=crop&w=900&q=85",
+    "description": "Trench coat feminino tradicional na cor areia com gola ampla, abotoamento duplo, pala traseira e cinto ajustável com fivela.",
+    "sizes": [
+      "36",
+      "38",
+      "40",
+      "42"
+    ],
+    "composition": "100% Algodão Gabardine Repelente à Água",
+    "rating": 5.0,
+    "reviews_count": 47
+  },
+  {
+    "id": 26,
+    "name": "Camisa Linho Riviera",
+    "gender": "Masculino",
+    "category": "Camisas",
+    "price": 189.9,
+    "old_price": 229.9,
+    "tag": "100% Linho Puro",
+    "image": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=900&q=85",
+    "description": "Camisa masculina manga longa em 100% linho leve, com colarinho macio, fechamento frontal com botões e corte regular.",
+    "sizes": [
+      "P",
+      "M",
+      "G",
+      "GG"
+    ],
+    "composition": "100% Linho Europeu Puro",
+    "rating": 5.0,
+    "reviews_count": 38
+  },
+  {
+    "id": 27,
+    "name": "Blazer Alfaiataria Areia",
+    "gender": "Masculino",
+    "category": "Alfaiataria",
+    "price": 349.9,
+    "old_price": 399.9,
+    "tag": "Destaque",
+    "image": "https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?auto=format&fit=crop&w=900&q=85",
+    "description": "Blazer masculino de alfaiataria em tom areia com lapela clássica, dois botões frontais e forro leve acetinado.",
+    "sizes": [
+      "48",
+      "50",
+      "52",
+      "54"
+    ],
+    "composition": "65% Lã Virgem, 35% Algodão Orgânico",
+    "rating": 4.9,
+    "reviews_count": 27
+  },
+  {
+    "id": 28,
+    "name": "Calça Chino Confort",
+    "gender": "Masculino",
+    "category": "Alfaiataria",
+    "price": 229.9,
+    "old_price": null,
+    "tag": "Essencial",
+    "image": "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?auto=format&fit=crop&w=900&q=85",
+    "description": "Calça masculina modelo chino em sarja de algodão com elastano, corte reto moderno, bolsos faca e passantes para cinto.",
+    "sizes": [
+      "38",
+      "40",
+      "42",
+      "44"
+    ],
+    "composition": "97% Algodão Nobre, 3% Elastano",
+    "rating": 4.9,
+    "reviews_count": 44
+  },
+  {
+    "id": 29,
+    "name": "Tricot Canelado Terracota",
+    "gender": "Masculino",
+    "category": "Malhas",
+    "price": 199.9,
+    "old_price": 239.9,
+    "tag": "Mais Vendido",
+    "image": "https://images.unsplash.com/photo-1614975058789-41316d0e2e9c?auto=format&fit=crop&w=900&q=85",
+    "description": "Blusa masculina de tricot canelado com gola careca, mangas compridas e acabamento canelado na barra e punhos.",
+    "sizes": [
+      "P",
+      "M",
+      "G",
+      "GG"
+    ],
+    "composition": "50% Algodão Pima, 50% Lã Merino",
+    "rating": 4.8,
+    "reviews_count": 22
+  },
+  {
+    "id": 30,
+    "name": "Camiseta Pima Essential",
+    "gender": "Masculino",
+    "category": "Básicos",
+    "price": 99.9,
+    "old_price": null,
+    "tag": "Algodão Pima",
+    "image": "https://images.unsplash.com/photo-1581655353564-df123a1eb820?auto=format&fit=crop&w=900&q=85",
+    "description": "Camiseta masculina básica em algodão nobre com toque macio, gola redonda e modelagem regular confortável.",
+    "sizes": [
+      "P",
+      "M",
+      "G",
+      "GG"
+    ],
+    "composition": "100% Algodão Pima Peruano",
+    "rating": 5.0,
+    "reviews_count": 65
+  },
+  {
+    "id": 31,
+    "name": "Jaqueta Overshirt Safari",
+    "gender": "Masculino",
+    "category": "Casual",
+    "price": 289.9,
+    "old_price": 329.9,
+    "tag": "Novo",
+    "image": "https://images.unsplash.com/photo-1516257984-b1b4d707412e?auto=format&fit=crop&w=900&q=85",
+    "description": "Overshirt masculina em sarja encorpada com bolsos frontais utilitários, fechamento por botões e colarinho clássico.",
+    "sizes": [
+      "P",
+      "M",
+      "G",
+      "GG"
+    ],
+    "composition": "100% Sarja Pesada de Algodão",
+    "rating": 4.9,
+    "reviews_count": 19
+  },
+  {
+    "id": 32,
+    "name": "Camisa Polo Mercerizada",
+    "gender": "Masculino",
+    "category": "Camisas",
+    "price": 149.9,
+    "old_price": 179.9,
+    "tag": "Clássico",
+    "image": "https://images.unsplash.com/photo-1586363104862-3a5e2ab60d99?auto=format&fit=crop&w=900&q=85",
+    "description": "Camisa polo masculina em algodão com acabamento liso e macio, gola e punhos canelados e vista com 2 botões.",
+    "sizes": [
+      "P",
+      "M",
+      "G",
+      "GG"
+    ],
+    "composition": "100% Algodão Nobre Mercerizado",
+    "rating": 4.9,
+    "reviews_count": 31
+  },
+  {
+    "id": 33,
+    "name": "Costume Alfaiataria Grafite",
+    "gender": "Masculino",
+    "category": "Alfaiataria",
+    "price": 499.9,
+    "old_price": 599.9,
+    "tag": "Ateliê",
+    "image": "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=900&q=85",
+    "description": "Costume masculino completo em lã fria cinza grafite, composto por paletó com forro acetinado e calça de corte slim.",
+    "sizes": [
+      "48",
+      "50",
+      "52",
+      "54"
+    ],
+    "composition": "100% Lã Fria Super 120s",
+    "rating": 5.0,
+    "reviews_count": 40
+  },
+  {
+    "id": 34,
+    "name": "Bermuda Linho Mediterrâneo",
+    "gender": "Masculino",
+    "category": "Casual",
+    "price": 169.9,
+    "old_price": 199.9,
+    "tag": "Verão",
+    "image": "/static/img/products/bermuda_linho.jpg",
+    "description": "Bermuda masculina em tecido de linho misto com cós elástico, cordão ajustável frontal e bolsos laterais práticos.",
+    "sizes": [
+      "38",
+      "40",
+      "42",
+      "44"
+    ],
+    "composition": "55% Linho Puro, 45% Algodão",
+    "rating": 4.8,
+    "reviews_count": 28
+  },
+  {
+    "id": 35,
+    "name": "Suéter Gola Alta Milano",
+    "gender": "Masculino",
+    "category": "Malhas",
+    "price": 219.9,
+    "old_price": 259.9,
+    "tag": "Inverno",
+    "image": "https://images.unsplash.com/photo-1576871337622-98d48d1cf531?auto=format&fit=crop&w=900&q=85",
+    "description": "Suéter masculino em tricot de toque aveludado com gola alta ajustada, perfeito para usar sozinho ou sob casacos e jaquetas.",
+    "sizes": [
+      "P",
+      "M",
+      "G",
+      "GG"
+    ],
+    "composition": "100% Lã Merino Australiana",
+    "rating": 4.9,
+    "reviews_count": 34
+  },
+  {
+    "id": 36,
+    "name": "Camisa Oxford Azul Claro",
+    "gender": "Masculino",
+    "category": "Camisas",
+    "price": 169.9,
+    "old_price": 199.9,
+    "tag": "Básico Nobre",
+    "image": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=900&q=85",
+    "description": "Camisa masculina manga longa em tecido oxford de algodão, com colarinho americano abotoado e corte casual clássico.",
+    "sizes": [
+      "P",
+      "M",
+      "G",
+      "GG"
+    ],
+    "composition": "100% Algodão Penteado",
+    "rating": 4.9,
+    "reviews_count": 52
+  },
+  {
+    "id": 37,
+    "name": "Calça Alfaiataria Slim Marinho",
+    "gender": "Masculino",
+    "category": "Alfaiataria",
+    "price": 249.9,
+    "old_price": null,
+    "tag": "Destaque",
+    "image": "https://images.unsplash.com/photo-1479064555552-3ef4979f8908?auto=format&fit=crop&w=900&q=85",
+    "description": "Calça masculina de alfaiataria em corte slim azul marinho, com passantes para cinto, bolsos embutidos e fecho por zíper e gancho.",
+    "sizes": [
+      "38",
+      "40",
+      "42",
+      "44",
+      "46"
+    ],
+    "composition": "70% Viscose, 28% Lã, 2% Elastano",
+    "rating": 5.0,
+    "reviews_count": 36
+  },
+  {
+    "id": 38,
+    "name": "Cardigan Botões Lã Merino",
+    "gender": "Masculino",
+    "category": "Malhas",
+    "price": 239.9,
+    "old_price": 279.9,
+    "tag": "Conforto",
+    "image": "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?auto=format&fit=crop&w=900&q=85",
+    "description": "Cardigan masculino em tricot macio com decote em V, fechamento por botões frontais e punhos canelados.",
+    "sizes": [
+      "P",
+      "M",
+      "G",
+      "GG"
+    ],
+    "composition": "100% Lã Merino Extrafina",
+    "rating": 4.8,
+    "reviews_count": 18
+  },
+  {
+    "id": 39,
+    "name": "Jaqueta Bomber Suede Café",
+    "gender": "Masculino",
+    "category": "Casual",
+    "price": 369.9,
+    "old_price": 429.9,
+    "tag": "Exclusivo",
+    "image": "https://images.unsplash.com/photo-1495105787522-5334e3ffa0ef?auto=format&fit=crop&w=900&q=85",
+    "description": "Jaqueta masculina modelo bomber em suede macio marrom café, com zíper frontal de metal e gola e punhos canelados.",
+    "sizes": [
+      "P",
+      "M",
+      "G",
+      "GG"
+    ],
+    "composition": "100% Suede Aveludado Premium",
+    "rating": 5.0,
+    "reviews_count": 29
+  },
+  {
+    "id": 40,
+    "name": "Camisa Linho Listrada Náutica",
+    "gender": "Masculino",
+    "category": "Camisas",
+    "price": 199.9,
+    "old_price": 239.9,
+    "tag": "Verão",
+    "image": "https://images.unsplash.com/photo-1603252109303-2751441dd157?auto=format&fit=crop&w=900&q=85",
+    "description": "Camisa masculina em linho com padronagem listrada suave, mangas compridas dobráveis e colarinho clássico despojado.",
+    "sizes": [
+      "P",
+      "M",
+      "G",
+      "GG"
+    ],
+    "composition": "100% Linho Puro Lavado",
+    "rating": 4.9,
+    "reviews_count": 24
+  },
+  {
+    "id": 41,
+    "name": "Camiseta Henley Nobre",
+    "gender": "Masculino",
+    "category": "Básicos",
+    "price": 119.9,
+    "old_price": null,
+    "tag": "Essencial",
+    "image": "/static/img/products/camiseta_henley.jpg",
+    "description": "Camiseta masculina modelo henley de manga curta em malha de algodão macia, com gola redonda e peitilho de 3 botões.",
+    "sizes": [
+      "P",
+      "M",
+      "G",
+      "GG"
+    ],
+    "composition": "100% Algodão Pima Peruano",
+    "rating": 4.7,
+    "reviews_count": 37
+  },
+  {
+    "id": 42,
+    "name": "Sobretudo Lã Italiana Charcoal",
+    "gender": "Masculino",
+    "category": "Casacos",
+    "price": 479.9,
+    "old_price": 559.9,
+    "tag": "Luxo",
+    "image": "/static/img/products/sobretudo_charcoal.jpg",
+    "description": "Sobretudo masculino em lã batida cinza chumbo com comprimento 3/4, lapela chanfrada, fechamento por 3 botões e forro completo.",
+    "sizes": [
+      "48",
+      "50",
+      "52",
+      "54"
+    ],
+    "composition": "85% Lã Virgem, 15% Cashmere",
+    "rating": 5.0,
+    "reviews_count": 31
+  },
+  {
+    "id": 43,
+    "name": "Calça Jogger Alfaiataria",
+    "gender": "Masculino",
+    "category": "Casual",
+    "price": 219.9,
+    "old_price": 249.9,
+    "tag": "Tendência",
+    "image": "https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?auto=format&fit=crop&w=900&q=85",
+    "description": "Calça masculina com modelagem jogger em tecido de alfaiataria leve, cós com cordão de ajuste e punhos discretos na barra.",
+    "sizes": [
+      "38",
+      "40",
+      "42",
+      "44"
+    ],
+    "composition": "95% Algodão Sarjado, 5% Elastano",
+    "rating": 4.8,
+    "reviews_count": 21
+  },
+  {
+    "id": 44,
+    "name": "Colete Tricot Lã Merino",
+    "gender": "Masculino",
+    "category": "Malhas",
+    "price": 159.9,
+    "old_price": null,
+    "tag": "Clássico",
+    "image": "/static/img/products/colete_tricot_merino.jpg",
+    "description": "Colete masculino de tricot sem mangas em lã merino azul marinho com decote em V, ideal para sobreposição elegante com camisa.",
+    "sizes": [
+      "P",
+      "M",
+      "G",
+      "GG"
+    ],
+    "composition": "100% Lã Merino Antialérgica",
+    "rating": 4.9,
+    "reviews_count": 19
+  },
+  {
+    "id": 45,
+    "name": "Camisa Chambray Casual Lavada",
+    "gender": "Masculino",
+    "category": "Camisas",
+    "price": 179.9,
+    "old_price": 209.9,
+    "tag": "Casual",
+    "image": "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?auto=format&fit=crop&w=900&q=85",
+    "description": "Camisa masculina casual manga longa em chambray de algodão com lavagem média, botões perolados e bolsos frontais.",
+    "sizes": [
+      "P",
+      "M",
+      "G",
+      "GG"
+    ],
+    "composition": "100% Algodão Fio Tinto",
+    "rating": 4.8,
+    "reviews_count": 43
+  },
+  {
+    "id": 46,
+    "name": "Paletó Linho Rústico Tabaco",
+    "gender": "Masculino",
+    "category": "Alfaiataria",
+    "price": 369.9,
+    "old_price": 420.0,
+    "tag": "Ateliê",
+    "image": "https://images.unsplash.com/photo-1594938328870-9623159c8c99?auto=format&fit=crop&w=900&q=85",
+    "description": "Paletó masculino desestruturado em linho rústico na cor tabaco, com lapela fina e bolsos frontais tipo patch.",
+    "sizes": [
+      "48",
+      "50",
+      "52",
+      "54"
+    ],
+    "composition": "100% Linho Cru Pesado",
+    "rating": 5.0,
+    "reviews_count": 15
+  },
+  {
+    "id": 47,
+    "name": "Bermuda Chino Areia Passeio",
+    "gender": "Masculino",
+    "category": "Casual",
+    "price": 159.9,
+    "old_price": null,
+    "tag": "Básico",
+    "image": "/static/img/products/bermuda_chino_areia.jpg",
+    "description": "Bermuda masculina chino em sarja de algodão tom areia, com bolsos embutidos, passantes de cinto e fechamento com botão e zíper.",
+    "sizes": [
+      "38",
+      "40",
+      "42",
+      "44"
+    ],
+    "composition": "98% Algodão, 2% Elastano",
+    "rating": 4.7,
+    "reviews_count": 32
+  },
+  {
+    "id": 48,
+    "name": "Suéter Gola Redonda Areia",
+    "gender": "Masculino",
+    "category": "Malhas",
+    "price": 189.9,
+    "old_price": 219.9,
+    "tag": "Mais Vendido",
+    "image": "https://images.unsplash.com/photo-1520975954732-35dd22299614?auto=format&fit=crop&w=900&q=85",
+    "description": "Suéter masculino em malha leve de algodão com decote careca redondo e acabamento canelado nos punhos e barra.",
+    "sizes": [
+      "P",
+      "M",
+      "G",
+      "GG"
+    ],
+    "composition": "80% Algodão Pima, 20% Lã Merino",
+    "rating": 4.9,
+    "reviews_count": 27
+  },
+  {
+    "id": 49,
+    "name": "Camisa Social Floral Noturno",
+    "gender": "Masculino",
+    "category": "Camisas",
+    "price": 189.9,
+    "old_price": 229.9,
+    "tag": "Novo",
+    "image": "https://images.unsplash.com/photo-1602810316498-ab67cf68c8e1?auto=format&fit=crop&w=900&q=85",
+    "description": "Camisa masculina de manga longa com estampa floral sutil sobre fundo escuro, gola estruturada e modelagem slim fit.",
+    "sizes": [
+      "P",
+      "M",
+      "G",
+      "GG"
+    ],
+    "composition": "100% Algodão Cetim Fio 80",
+    "rating": 4.8,
+    "reviews_count": 14
+  },
+  {
+    "id": 50,
+    "name": "Jaqueta Trucker Sarja Oliva",
+    "gender": "Masculino",
+    "category": "Casual",
+    "price": 319.9,
+    "old_price": 369.9,
+    "tag": "Destaque",
+    "image": "/static/img/products/jaqueta_trucker_oliva.jpg",
+    "description": "Jaqueta masculina modelo trucker em sarja verde oliva resistente, com gola dobrada, bolsos com aba no peito e botões de metal.",
+    "sizes": [
+      "P",
+      "M",
+      "G",
+      "GG"
+    ],
+    "composition": "100% Algodão Sarja Heavy Weight",
+    "rating": 5.0,
+    "reviews_count": 39
+  }
+]

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal do Funcionário — Gardênia Modas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Marmelad&family=Squada+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/portal.css') }}">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/JsBarcode/3.11.5/JsBarcode.all.min.js"></script>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="20" cy="12" r="6" fill="var(--sage-400)"/>
+        <circle cx="11" cy="22" r="6" fill="var(--sage-600)"/>
+        <circle cx="29" cy="22" r="6" fill="var(--sage-600)"/>
+        <circle cx="20" cy="26" r="6" fill="var(--sage-800)"/>
+        <circle cx="20" cy="22" r="3.2" fill="#f2c14e"/>
+      </svg>
+      <div>
+        <div class="brand-name">Gardênia</div>
+        <div class="brand-sub">Portal do Funcionário</div>
+      </div>
+    </div>
+
+    <button class="nav-item active" data-view="inicio" onclick="navigate('inicio')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+      Início
+    </button>
+    <button class="nav-item" data-view="clientes" onclick="navigate('clientes')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M17 11a4 4 0 0 0 0-8"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
+      Clientes
+    </button>
+    <button class="nav-item" data-view="estoque" onclick="navigate('estoque')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3.3 7.5l8.7 5 8.7-5"/><path d="M12 22.5V12.5"/></svg>
+      Estoque
+    </button>
+    <button class="nav-item" data-view="vendas" onclick="navigate('vendas')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+      Vendas
+    </button>
+    <button class="nav-item" data-view="metricas" onclick="navigate('metricas')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg>
+      Métricas
+    </button>
+    <button class="nav-item" data-view="financeiro" onclick="navigate('financeiro')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v10"/><path d="M15 9.5c0-1.4-1.3-2.5-3-2.5s-3 1.1-3 2.5 1.3 2 3 2.5 3 1.1 3 2.5-1.3 2.5-3 2.5-3-1.1-3-2.5"/></svg>
+      Financeiro
+    </button>
+    <button class="nav-item" data-view="funcionarios" onclick="navigate('funcionarios')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.32 9c.14.36.38.67.7.88.32.21.7.32 1.09.32H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Funcionários
+    </button>
+
+    <div style="flex:1;"></div>
+    <a class="nav-item" href="/logout" style="text-decoration:none;">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Sair
+    </a>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main-col">
+    <header>
+      <div class="wrap header-row">
+        <div>
+          <div class="view-title" id="header-title">Início</div>
+          <div class="view-sub" id="header-sub">Terça-feira, 16 de setembro</div>
+        </div>
+        <div class="header-right">
+          <div class="search">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--ink-soft)" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" placeholder="Buscar no portal...">
+          </div>
+          <div style="text-align:right;line-height:1.2;">
+            <div id="user-name" style="font-size:12.5px;font-weight:600;">—</div>
+            <div id="user-role" style="font-size:11px;color:var(--ink-soft);">—</div>
+          </div>
+          <div class="avatar" id="user-avatar">—</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content wrap">
+
+      <!-- ============ INÍCIO ============ -->
+      <section class="view active" id="view-inicio">
+        <div class="hero">
+          <div class="eyebrow">Terça-feira, 16 de setembro</div>
+          <h1>Bom dia. Aqui está o resumo da loja hoje.</h1>
+          <p>Acesse os módulos abaixo para gerenciar clientes, estoque, vendas e o desempenho da Gardênia.</p>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <div class="label">Vendas hoje</div>
+            <div class="value accent" id="stat-vendas-hoje">R$ 2.480</div>
+            <div class="delta">↑ 12% vs. ontem</div>
+          </div>
+          <div class="stat">
+            <div class="label">Peças em estoque</div>
+            <div class="value" id="stat-estoque">1.247</div>
+            <div class="delta warn" id="stat-estoque-baixo">18 itens em falta</div>
+          </div>
+          <div class="stat">
+            <div class="label">Clientes cadastrados</div>
+            <div class="value" id="stat-clientes">892</div>
+            <div class="delta">+7 esta semana</div>
+          </div>
+          <div class="stat">
+            <div class="label">Ticket médio</div>
+            <div class="value" id="stat-ticket">R$ 146</div>
+            <div class="delta">↑ 4% no mês</div>
+          </div>
+        </div>
+
+        <section class="modules">
+          <div class="section-head">
+            <h2>Módulos</h2>
+            <span>6 áreas disponíveis</span>
+          </div>
+          <div class="grid">
+            <div class="card filled" onclick="navigate('clientes')">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M17 11a4 4 0 0 0 0-8"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
+              <div><div class="title">Clientes</div><div class="desc">Busca em tempo real por nome, celular ou CPF</div></div>
+            </div>
+            <div class="card" onclick="navigate('estoque')">
+              <span class="tag" id="tag-estoque">18 em falta</span>
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3.3 7.5l8.7 5 8.7-5"/><path d="M12 22.5V12.5"/></svg>
+              <div><div class="title">Estoque</div><div class="desc">Produtos, quantidades e etiquetas</div></div>
+            </div>
+            <div class="card" onclick="navigate('vendas')">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+              <div><div class="title">Vendas</div><div class="desc">Caixa com leitura de código de barras</div></div>
+            </div>
+            <div class="card tint" onclick="navigate('metricas')">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg>
+              <div><div class="title">Métricas de Vendas</div><div class="desc">Listas em tempo real e gráficos</div></div>
+            </div>
+            <div class="card" onclick="navigate('financeiro')">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v10"/><path d="M15 9.5c0-1.4-1.3-2.5-3-2.5s-3 1.1-3 2.5 1.3 2 3 2.5 3 1.1 3 2.5-1.3 2.5-3 2.5-3-1.1-3-2.5"/></svg>
+              <div><div class="title">Financeiro</div><div class="desc">Planilha de entradas e saídas</div></div>
+            </div>
+            <div class="card" onclick="navigate('funcionarios')">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.32 9c.14.36.38.67.7.88.32.21.7.32 1.09.32H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              <div><div class="title">Funcionários</div><div class="desc">Equipe, cargos e permissões</div></div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- ============ CLIENTES ============ -->
+      <section class="view" id="view-clientes">
+        <div class="view-head">
+          <div>
+            <h2>Clientes</h2>
+            <p>O cadastro é feito pelo site — aqui você só consulta o que cada cliente já comprou.</p>
+          </div>
+        </div>
+
+        <div class="search-live">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="client-search" placeholder="Digite nome, celular ou CPF...">
+        </div>
+        <div class="search-hint" id="client-count" style="margin:-10px 0 16px;"></div>
+
+        <div class="panel" style="padding:6px 20px;">
+          <div id="client-list"></div>
+        </div>
+      </section>
+
+      <!-- ============ ESTOQUE ============ -->
+      <section class="view" id="view-estoque">
+        <div class="view-head">
+          <div>
+            <h2>Estoque</h2>
+            <p>Cadastre produtos, ajuste quantidades e gere etiquetas com código de barras.</p>
+          </div>
+          <button class="btn btn-primary" onclick="openProductModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Novo produto
+          </button>
+        </div>
+
+        <div class="panel" style="padding:8px 20px;">
+          <table class="table">
+            <thead>
+              <tr><th>Produto</th><th>SKU</th><th>Categoria</th><th>Tam. / Cor</th><th>Preço</th><th>Quantidade</th><th></th></tr>
+            </thead>
+            <tbody id="product-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ VENDAS ============ -->
+      <section class="view" id="view-vendas">
+        <div class="view-head">
+          <div>
+            <h2>Vendas · Caixa</h2>
+            <p>Use a maquininha de leitura ou digite o código do produto e pressione Enter.</p>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div>
+            <div class="scan-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="2" y="6" width="2" height="12"/><rect x="6" y="6" width="1" height="12"/><rect x="9" y="6" width="3" height="12"/><rect x="14" y="6" width="1" height="12"/><rect x="17" y="6" width="2" height="12"/><rect x="21" y="6" width="1" height="12"/></svg>
+              <input type="text" id="scan-input" placeholder="Escanear ou digitar o SKU..." onkeydown="if(event.key==='Enter')scanAdd()" autofocus>
+              <button class="btn btn-sm" onclick="scanAdd()">Adicionar</button>
+            </div>
+            <div class="scan-msg" id="scan-msg"></div>
+
+            <div class="panel" style="padding:8px 20px;margin-top:16px;">
+              <table class="table">
+                <thead><tr><th>Item</th><th>Qtd.</th><th>Preço</th><th>Subtotal</th><th></th></tr></thead>
+                <tbody id="cart-tbody">
+                  <tr><td colspan="5" class="empty-state">Carrinho vazio — escaneie um produto para começar</td></tr>
+                </tbody>
+              </table>
+              <div class="cart-total">
+                <span class="lbl">Total</span>
+                <span class="amt" id="cart-total">R$ 0,00</span>
+              </div>
+              <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:16px;">
+                <button class="btn" onclick="clearCart()">Limpar</button>
+                <button class="btn btn-primary" onclick="finalizeSale()">Finalizar venda</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h3 style="font-size:13px;color:var(--ink-soft);margin-bottom:12px;">Catálogo rápido</h3>
+            <div class="grid-3" id="catalog-grid" style="grid-template-columns:1fr 1fr;"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ MÉTRICAS ============ -->
+      <section class="view" id="view-metricas">
+        <div class="view-head">
+          <div>
+            <h2>Métricas de Vendas</h2>
+            <p>Listas atualizam a cada venda fechada no caixa. Gráficos com dados de exemplo — prontos para receber os dados reais do backend em Python.</p>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-bottom:16px;">
+          <div class="chart-card">
+            <h3>Vendas dos últimos 7 dias</h3>
+            <canvas id="chart-week"></canvas>
+          </div>
+          <div class="chart-card">
+            <h3>Vendas por categoria</h3>
+            <canvas id="chart-cat"></canvas>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="panel">
+            <h3 style="font-size:13px;color:var(--ink-soft);margin-bottom:8px;">Últimas vendas</h3>
+            <div id="recent-sales"></div>
+          </div>
+          <div class="panel">
+            <h3 style="font-size:13px;color:var(--ink-soft);margin-bottom:8px;">Mais vendidos hoje</h3>
+            <div id="top-products"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ FINANCEIRO ============ -->
+      <section class="view" id="view-financeiro">
+        <div class="view-head">
+          <div>
+            <h2>Financeiro</h2>
+            <p>Planilha simples de entradas e saídas — a versão completa virá dos relatórios gerados em Python.</p>
+          </div>
+          <button class="btn btn-primary" onclick="addFinanceRow()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Nova linha
+          </button>
+        </div>
+
+        <div class="panel" style="padding:8px 20px;">
+          <table class="table" id="finance-table">
+            <thead><tr><th style="width:15%">Data</th><th>Descrição</th><th style="width:18%">Categoria</th><th style="width:14%">Entrada</th><th style="width:14%">Saída</th><th style="width:10%"></th></tr></thead>
+            <tbody id="finance-tbody"></tbody>
+            <tfoot>
+              <tr><td colspan="3" style="text-align:right;color:var(--ink-soft);">Saldo</td><td colspan="2" id="finance-balance" style="font-family:'Space Grotesk',sans-serif;font-weight:600;"></td><td></td></tr>
+            </tfoot>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============ FUNCIONÁRIOS ============ -->
+      <section class="view" id="view-funcionarios">
+        <div class="view-head">
+          <div>
+            <h2>Funcionários</h2>
+            <p>Cadastro da equipe, cargos e quais áreas do portal cada pessoa pode acessar.</p>
+          </div>
+          <button class="btn btn-primary" onclick="openEmployeeModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Novo funcionário
+          </button>
+        </div>
+
+        <div class="panel" style="padding:8px 20px;">
+          <table class="table">
+            <thead><tr><th>Nome</th><th>Cargo</th><th>Permissões</th><th></th></tr></thead>
+            <tbody id="employee-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="appfoot wrap">
+      <span>Gardênia Modas · Portal interno</span>
+      <span>v1.1 · dados de demonstração</span>
+    </footer>
+  </div>
+</div>
+
+<!-- ============ MODAL: Novo produto ============ -->
+<div class="modal-overlay" id="modal-product">
+  <div class="modal">
+    <div class="modal-head"><h3>Novo produto</h3><button class="modal-close" onclick="closeModal('modal-product')">✕</button></div>
+    <div class="field"><label>Nome do produto</label><input type="text" id="np-name" placeholder="Ex.: Vestido Linho Areia"></div>
+    <div class="field-row">
+      <div class="field"><label>SKU / código de barras</label><input type="text" id="np-sku" placeholder="Ex.: 789123456001"></div>
+      <div class="field"><label>Categoria</label>
+        <select id="np-cat"><option>Vestidos</option><option>Blusas</option><option>Calças</option><option>Saias</option><option>Acessórios</option></select>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Tamanho</label><input type="text" id="np-size" placeholder="Ex.: M"></div>
+      <div class="field"><label>Cor</label><input type="text" id="np-color" placeholder="Ex.: Areia"></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Preço (R$)</label><input type="number" id="np-price" placeholder="129.90"></div>
+      <div class="field"><label>Quantidade</label><input type="number" id="np-qty" placeholder="10"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('modal-product')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveProduct()">Salvar produto</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODAL: Etiqueta ============ -->
+<div class="modal-overlay" id="modal-label">
+  <div class="modal" style="max-width:340px;">
+    <div class="modal-head"><h3>Etiqueta</h3><button class="modal-close" onclick="closeModal('modal-label')">✕</button></div>
+    <div class="etiqueta etiqueta-print" id="etiqueta-content"></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('modal-label')">Fechar</button>
+      <button class="btn btn-primary" onclick="window.print()">Imprimir</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODAL: Novo funcionário ============ -->
+<div class="modal-overlay" id="modal-employee">
+  <div class="modal">
+    <div class="modal-head"><h3>Novo funcionário</h3><button class="modal-close" onclick="closeModal('modal-employee')">✕</button></div>
+    <div class="field"><label>Nome completo</label><input type="text" id="ne-name" placeholder="Ex.: Juliana Prado"></div>
+    <div class="field"><label>E-mail</label><input type="email" id="ne-email" placeholder="juliana@gardeniamodas.com"></div>
+    <div class="field"><label>Senha de acesso</label><input type="password" id="ne-senha" placeholder="Senha para entrar no portal"></div>
+    <div class="field"><label>Cargo</label>
+      <select id="ne-role"><option>Vendedor(a)</option><option>Caixa</option><option>Estoquista</option><option>Gerente</option></select>
+    </div>
+    <div class="field">
+      <label>Permissões de acesso</label>
+      <div id="ne-perms"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('modal-employee')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveEmployee()">Salvar funcionário</button>
+    </div>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/portal.js') }}"></script>
+</body>
+</html>

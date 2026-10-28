@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Cadastro — Gardênia Modas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Marmelad&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Squada+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <!-- Google reCAPTCHA v2 -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<body class="auth-body">
+
+    <header class="auth-header">
+        <a class="logo" href="/">GARDÊNIA<span>.</span></a>
+        <a class="auth-back" href="/">← Voltar para a loja</a>
+    </header>
+
+    <main class="auth-main">
+        <div class="card auth-card">
+            
+            <!-- Abas de Navegação -->
+            <div class="auth-tabs" id="authTabs">
+                <button type="button" class="auth-tab active" id="tabCadastro" data-tab="cadastro">✨ Criar Cadastro</button>
+                <button type="button" class="auth-tab" id="tabClienteLogin" data-tab="cliente-login">👤 Já sou Cliente</button>
+                <button type="button" class="auth-tab" id="tabFuncionario" data-tab="funcionario">💼 Sou Funcionário</button>
+            </div>
+
+            <!-- ============================================================
+                 PAINEL 1: CADASTRO COMPLETO (TELA DELE: CPF + CAPTCHA + TERMOS)
+                 ============================================================ -->
+            <section class="auth-panel" id="panelCadastro">
+
+                <!-- VIEW 1: FORMULÁRIO DE CADASTRO -->
+                <div id="formView" class="form-view">
+                    <div class="brand">
+                        <h1>Entre ou Cadastre-se</h1>
+                        <p><strong>Informe seus dados para continuar</strong></p>
+                    </div>
+
+                    <form id="cadastroForm" novalidate>
+                        <div class="field">
+                            <div class="field-label-row">
+                                <label for="cpf">| CPF:</label>
+                                <span class="tag-optional">(opcional para Cliente+)</span>
+                            </div>
+                            <input
+                                id="cpf"
+                                name="cpf"
+                                type="text"
+                                inputmode="numeric"
+                                autocomplete="off"
+                                maxlength="14"
+                                placeholder="000.000.000-00"
+                            />
+                            <div class="hint"><strong>Preencha caso você gostaria de ser Cliente+</strong><br>O CPF será verificado antes do envio.</div>
+                        </div>
+
+                        <div class="field">
+                            <label for="nome">| Nome:</label>
+                            <input
+                                id="nome"
+                                name="nome"
+                                type="text"
+                                autocomplete="name"
+                                placeholder="Digite seu lindo nome"
+                                required
+                            />
+                        </div>
+
+                        <div class="field">
+                            <label for="email">| E-mail:</label>
+                            <input
+                                id="email"
+                                name="email"
+                                type="email"
+                                autocomplete="email"
+                                placeholder="nome.usuario123@dominio.com"
+                                required
+                            />
+                            <div class="hint">O E-mail é necessário para entrar em contato quando necessário. <strong>Nunca enviaremos spam!</strong></div>
+                            <div id="emailStatus" class="email-status-text"></div>
+                        </div>
+
+                        <div class="field">
+                            <label for="senha">| Crie uma Senha:</label>
+                            <input
+                                id="senha"
+                                name="senha"
+                                type="password"
+                                placeholder="Pelo menos 4 caracteres"
+                                required
+                            />
+                        </div>
+
+                        <div id="status" class="status" role="status" aria-live="polite"></div>
+
+                        <!-- reCAPTCHA v2 do Google -->
+                        <div class="field">
+                            <div class="g-recaptcha" 
+                                data-sitekey="6LesVu0tAAAAAMPmYsJLmIMnwQAOQgfsdxHwB7_p"
+                                data-callback="onCaptchaSuccess"
+                                data-expired-callback="onCaptchaExpired">
+                            </div>
+                            <div id="recaptchaFallbackContainer"></div>
+                        </div>
+
+                        <button id="submitBtn" type="submit" disabled>
+                            Continuar
+                        </button>
+                    </form>
+
+                    <div id="result" class="result"></div>
+
+                    <div class="saved-users" id="savedUsersArea" style="display: none;">
+                        <h3>📁 Usuários cadastrados (localmente)</h3>
+                        <pre id="savedUsersList">Nenhum usuário cadastrado ainda.</pre>
+                    </div>
+
+                    <div class="footer">
+                        feito por alunos da UNIFEOB do curso de Ciência da Computação
+                    </div>
+                </div>
+
+                <!-- VIEW 2: TERMOS DE SERVIÇO -->
+                <div id="termsView" class="terms-view">
+                    <div class="terms-header">
+                        <h2>📜 Termos de Serviço</h2>
+                        <p>Leia com atenção antes de continuar</p>
+                    </div>
+
+                    <!-- Resumo dos dados informados -->
+                    <div class="user-summary" id="userSummary"></div>
+
+                    <!-- Texto dos termos com scroll -->
+                    <div class="terms-scroll" id="termsScroll">
+                        <h3>Termos de Serviço – Gardênia Roupas</h3>
+                        <p><em>Última atualização: <span id="termsDate"></span></em></p>
+
+                        <p>Bem-vindo(a) à <strong>Gardênia</strong>, sua loja de roupas online. Ao acessar e utilizar nosso site, você concorda com os Termos de Serviço descritos abaixo. Leia com atenção antes de realizar qualquer compra ou cadastro.</p>
+
+                        <hr>
+
+                        <h3>1. Aceitação dos Termos</h3>
+                        <p>Ao navegar, cadastrar-se ou efetuar compras no site da Gardênia, você declara ter lido, compreendido e aceito integralmente estes Termos de Serviço, bem como nossa Política de Privacidade. Caso não concorde com qualquer cláusula, recomendamos que não utilize nossos serviços.</p>
+
+                        <h3>2. Cadastro e Conta do Usuário</h3>
+                        <p><strong>2.1.</strong> Para aproveitar a experiência completa da Gardênia, o usuário poderá criar uma conta fornecendo informações verdadeiras, completas e atualizadas.</p>
+                        <p><strong>2.2.</strong> O usuário é responsável pela confidencialidade de seus dados de acesso (login e senha), bem como por todas as atividades realizadas em sua conta.</p>
+                        <p><strong>2.3.</strong> A Gardênia reserva-se o direito de suspender ou cancelar contas que apresentem informações falsas, uso indevido ou violação destes Termos.</p>
+
+                        <h3>3. Coleta de Dados e Algoritmo de Compras</h3>
+                        <p><strong>3.1.</strong> A Gardênia coleta dados fornecidos voluntariamente pelo usuário, como nome, e-mail, endereço, histórico de compras, preferências de estilo, tamanhos, cores e interações realizadas no site.</p>
+                        <p><strong>3.2.</strong> Esses dados são utilizados para alimentar nosso algoritmo de compras personalizado, cujo objetivo é:</p>
+                        <ul>
+                            <li>Recomendar peças e coleções de acordo com o seu estilo e histórico;</li>
+                            <li>Sugerir tamanhos e combinações mais adequadas ao seu perfil;</li>
+                            <li>Melhorar a experiência de navegação e a relevância dos produtos exibidos;</li>
+                            <li>Otimizar promoções, campanhas e comunicações direcionadas.</li>
+                        </ul>
+                        <p><strong>3.3.</strong> O algoritmo pode utilizar técnicas de análise de comportamento, aprendizado de máquina e filtragem de preferências. As recomendações são geradas de forma automatizada e têm caráter sugestivo, não constituindo obrigação de compra ou garantia de disponibilidade.</p>
+                        <p><strong>3.4.</strong> O usuário poderá, a qualquer momento, solicitar a revisão, atualização ou exclusão de seus dados pessoais, bem como optar por não receber recomendações personalizadas, entrando em contato pelos canais oficiais de atendimento.</p>
+                        <p><strong>3.5.</strong> A Gardênia compromete-se a tratar os dados conforme a Lei Geral de Proteção de Dados (LGPD – Lei nº 13.709/2018), garantindo segurança, transparência e finalidade legítima no uso das informações.</p>
+
+                        <h3>4. Compras, Preços e Pagamentos</h3>
+                        <p><strong>4.1.</strong> Os produtos exibidos no site estão sujeitos à disponibilidade de estoque.</p>
+                        <p><strong>4.2.</strong> Os preços, promoções e condições de pagamento podem ser alterados sem aviso prévio, prevalecendo sempre o valor exibido no momento da finalização da compra.</p>
+                        <p><strong>4.3.</strong> A Gardênia utiliza plataformas seguras de pagamento e não armazena dados sensíveis de cartões de crédito.</p>
+                        <p><strong>4.4.</strong> O pedido somente será considerado confirmado após a aprovação do pagamento e o envio do e-mail de confirmação.</p>
+
+                        <h3>5. Trocas, Devoluções e Cancelamentos</h3>
+                        <p><strong>5.1.</strong> O usuário poderá solicitar troca ou devolução em até 7 (sete) dias corridos após o recebimento do produto, conforme o Código de Defesa do Consumidor.</p>
+                        <p><strong>5.2.</strong> O produto deverá estar sem sinais de uso, com etiquetas e embalagem original.</p>
+                        <p><strong>5.3.</strong> Casos específicos de defeito de fabricação serão analisados individualmente pela equipe Gardênia.</p>
+
+                        <h3>6. Propriedade Intelectual</h3>
+                        <p><strong>6.1.</strong> Todo o conteúdo do site — textos, imagens, logotipos, layout, marcas e código-fonte — pertence à Gardênia ou a seus parceiros, sendo protegido por direitos autorais e de propriedade industrial.</p>
+                        <p><strong>6.2.</strong> É proibida a reprodução, distribuição ou uso indevido sem autorização prévia e por escrito.</p>
+
+                        <h3>7. Responsabilidades do Usuário</h3>
+                        <p>O usuário compromete-se a:</p>
+                        <ul>
+                            <li>Utilizar o site de forma ética e legal;</li>
+                            <li>Não inserir informações falsas ou de terceiros sem autorização;</li>
+                            <li>Não tentar burlar sistemas de segurança, algoritmos ou mecanismos de recomendação;</li>
+                            <li>Respeitar os direitos de propriedade intelectual da Gardênia.</li>
+                        </ul>
+
+                        <h3>8. Limitação de Responsabilidade</h3>
+                        <p><strong>8.1.</strong> A Gardênia não se responsabiliza por indisponibilidades temporárias do site, falhas de conexão, ou por decisões de compra tomadas exclusivamente com base nas sugestões do algoritmo.</p>
+                        <p><strong>8.2.</strong> As recomendações geradas são apenas orientativas e não substituem a análise pessoal do consumidor quanto a tamanho, estilo e adequação do produto.</p>
+
+                        <h3>9. Alterações nos Termos</h3>
+                        <p>A Gardênia poderá atualizar estes Termos de Serviço a qualquer momento, visando melhorias ou adequações legais. Recomendamos a leitura periódica. O uso contínuo do site após alterações implica concordância com os novos termos.</p>
+
+                        <h3>10. Contato</h3>
+                        <p>Em caso de dúvidas, solicitações ou reclamações, entre em contato pelos canais oficiais:</p>
+                        <ul>
+                            <li><strong>E-mail:</strong> contato@gardeniaroupas.com.br</li>
+                            <li><strong>Central de Atendimento:</strong> (19) 99999-0000</li>
+                            <li><strong>Endereço:</strong> Praça Cel. Joaquim José, 120 – Centro, São João da Boa Vista/SP</li>
+                        </ul>
+                    </div>
+
+                    <!-- Checkbox de aceite -->
+                    <label class="terms-checkbox" for="acceptTerms">
+                        <input type="checkbox" id="acceptTerms" />
+                        <span>Li e aceito os <strong>Termos de Serviço</strong> e a <strong>Política de Privacidade</strong> da Gardênia Roupas.</span>
+                    </label>
+
+                    <!-- Ações -->
+                    <div class="terms-actions">
+                        <button id="acceptBtn" type="button" disabled>
+                            ✅ Aceitar e Cadastrar
+                        </button>
+                        <button id="backBtn" type="button" class="secondary">
+                            ↩ Voltar e editar dados
+                        </button>
+                    </div>
+
+                    <div class="footer">
+                        feito por alunos da UNIFEOB do curso de Ciência da Computação
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- ============================================================
+                 PAINEL 2: LOGIN DO CLIENTE EXISTENTE
+                 ============================================================ -->
+            <section class="auth-panel" id="panelClienteLogin" hidden>
+                <div class="brand">
+                    <span class="eyebrow">BEM-VINDA(O) DE VOLTA</span>
+                    <h1>Entrar na minha conta</h1>
+                    <p class="auth-sub">Entre com seu e-mail e senha para continuar suas compras.</p>
+                </div>
+
+                <form id="clienteLoginForm" novalidate>
+                    <div class="field">
+                        <label for="clEmail">| E-mail:</label>
+                        <input type="email" id="clEmail" required placeholder="voce@email.com">
+                    </div>
+                    <div class="field">
+                        <label for="clSenha">| Senha:</label>
+                        <input type="password" id="clSenha" required placeholder="••••••••">
+                    </div>
+
+                    <div class="auth-msg" id="clienteLoginMsg"></div>
+
+                    <button type="submit" class="auth-submit-btn">
+                        <span>Entrar</span>
+                    </button>
+                </form>
+
+                <p class="auth-hint">Ainda não tem cadastro? <a href="#" id="linkGoToCadastro" class="auth-link">Criar conta Cliente+</a></p>
+
+                <div class="footer">
+                    feito por alunos da UNIFEOB do curso de Ciência da Computação
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 PAINEL 3: LOGIN DO FUNCIONÁRIO (PORTAL)
+                 ============================================================ -->
+            <section class="auth-panel" id="panelFuncionario" hidden>
+                <div class="brand">
+                    <span class="eyebrow">EQUIPE GARDÊNIA</span>
+                    <h1>Acesso do Funcionário</h1>
+                    <p class="auth-sub">Acesse o Portal de Vendas, Estoque e Métricas.</p>
+                </div>
+
+                <form id="funcionarioLoginForm" novalidate>
+                    <div class="field">
+                        <label for="fEmail">| E-mail Corporativo:</label>
+                        <input type="email" id="fEmail" required placeholder="voce@gardeniamodas.com">
+                    </div>
+                    <div class="field">
+                        <label for="fSenha">| Senha:</label>
+                        <input type="password" id="fSenha" required placeholder="••••••••">
+                    </div>
+
+                    <div class="auth-msg" id="loginMsg"></div>
+
+                    <button type="submit" class="auth-submit-btn">
+                        <span>Acessar Portal</span>
+                    </button>
+                </form>
+
+                <p class="auth-hint">Contas de colaboradores são gerenciadas pela administração do Portal.</p>
+
+                <div class="footer">
+                    feito por alunos da UNIFEOB do curso de Ciência da Computação
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+</body>
+</html>

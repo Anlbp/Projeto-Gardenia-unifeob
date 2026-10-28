@@ -1,0 +1,12 @@
+node_modules/
+tools/
+scratch/
+__pycache__/
+*.pyc
+.env
+*.tfstate
+*.tfstate.*
+.terraform/
+*.pem
+id_rsa
+*.qcow2
