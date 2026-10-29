@@ -188,4 +188,4 @@ Um video para demonstrar as VMs funcionando:<br>
 [![](https://markdown-videos-api.jorgenkh.no/youtube/5UptIKxguL0)](https://youtu.be/5UptIKxguL0)
 #
 <b>Feitos pelos alunos do curso de Ciência da Computação da UNIFEOB.</b> 👨‍💻🎓
-<br><p align="center"><img src="https://s3.sa-east-1.amazonaws.com/lyceum.backups/arquivosimport/logo_branco_atual_2023.png" alt="Logo UNIFEOB" width="256"></p>
+<br><p align="center"><img src="https://s3.sa-east-1.amazonaws.com/lyceum.backups/arquivosimport/logo_branco_atual_2023.png" alt="Logo UNIFEOB" width="256"></p> teste
