@@ -8,7 +8,7 @@ Projeto único com dois "lados":
 O backend foi organizado em módulos — pensado pra você plugar a connection string do seu MongoDB Atlas e já sair funcionando, sem quebrar.
 
 ## Estrutura de pastas
-
+ 
 ```
 gardenia-final/
 ├── backend/
