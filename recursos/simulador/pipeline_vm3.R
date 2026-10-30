@@ -14,8 +14,24 @@ option_list <- list(
 )
 opt <- parse_args(OptionParser(option_list=option_list))
 
+# Diretórios
 pasta_local <- "/home/debian/spark_work/entrada_trusted"
 pasta_resultados <- "/home/debian/spark_work/resultados_spark"
+
+# Links
+url_atlas <- "mongodb+srv://andrelpena:andre@cluster0.dziebk1.mongodb.net/"
+
+# Conexão com o banco 'gardenia' e a coleção de destino
+con_atlas <- mongo(
+  collection = "segmentacao_rfm",
+  db         = "gardenia",
+  url        = url_atlas
+)
+
+# Inserção dos dados processados pelo Spark
+con_atlas$insert(df_resultado_rfm)
+print("Dados enviados com sucesso para o MongoDB Atlas!")
+message("Resultados da análise de dados gravados no MongoDB Atlas com sucesso!")
 
 sincronizar_dados <- function() {
   dir.create(pasta_local, showWarnings = FALSE, recursive = TRUE)
