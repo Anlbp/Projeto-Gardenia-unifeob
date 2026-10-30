@@ -182,6 +182,10 @@ Liga as três VMs do cluster
     sudo virsh start vm2-tratamento
     sudo virsh start vm3-spark
 ```
+Comando para ver se a VM3 está conectando ao MongoDB
+```bash
+ssh debian@<IP_VM3> 'Rscript -e "library(mongolite); m <- mongo(\"teste_atlas\", db=\"gardenia\", url=\"mongodb+srv://andrelpena:SENHA@cluster0.dziebk1.mongodb.net/\"); m\$insert(data.frame(status=\"Conexão Ok\", data=Sys.time())); print(m\$find())"'
+```
 ## Demonstração
 Um video para demonstrar as VMs funcionando:<br>
 <br>
