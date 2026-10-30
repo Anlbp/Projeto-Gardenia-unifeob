@@ -120,6 +120,25 @@
   hosts: vm_spark
   become: yes
   tasks:
+    - name: Criar diretório para chaves de repositórios (keyrings)
+      file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: '0755'
+    
+    - name: Adicionar chave GPG oficial do MongoDB
+      ansible.builtin.shell:
+        cmd : |
+          curl -fsSL https://www.mongodb.org/static/pgp/server-8.0.asc | \
+          gpg --dearmor -o /usr/share/keyrings/mongodb-server-8.0.gpg
+        creates: /usr/share/keyrings/mongodb-server-8.0.gpg
+
+    - name: Adicionar repositório oficial do MongoDB
+      ansible.builtin.apt_repository:
+        repo: "deb [ signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] https://repo.mongodb.org/apt/debian bookworm/mongodb-org/8.0 main"
+        state: present
+        filename: mongodb-org-8.0
+
     - name: Instalar pacotes necessários
       apt:
         name: 
@@ -135,30 +154,7 @@
           - libsasl2-dev
           - curl
           - gnupg
-        state: present
-        update_cache: yes
-    
-    - name: Criar diretório para chaves de repositórios (keyrings)
-      file:
-        path: /etc/apt/keyrings
-        state: directory
-        mode: '0755'
-    
-    - name: Adicionar chave GPG oficial do MongoDB
-      get_url:
-        url: https://www.mongodb.org/static/pgp/server-7.0.asc
-        dest: /etc/apt/trusted.gpg.d/mongodb-org-7.0.asc
-        mode: '0644'
-
-    - name: Adicionar repositório oficial do MongoDB
-      copy:
-        dest: /etc/apt/sources.list.d/mongodb-org-7.0.list
-        content: "deb [signed-by=/etc/apt/keyrings/mongodb-org-7.0.asc] https://repo.mongodb.org/apt/debian bookworm/mongodb-org/7.0 main\n"
-        mode: '0644'
-
-    - name: Instalar MongoDB Community Server (mongodb-org)
-      apt:
-        name: mongodb-org
+          - mongodb-org
         state: present
         update_cache: yes
     
