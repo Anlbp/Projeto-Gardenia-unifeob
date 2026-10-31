@@ -18,10 +18,14 @@ opt <- parse_args(OptionParser(option_list=option_list))
 pasta_local <- "/home/debian/spark_work/entrada_trusted"
 pasta_resultados <- "/home/debian/spark_work/resultados_spark"
 
-# Links
-url_atlas <- "mongodb+srv://andrelpena:andre@cluster0.dziebk1.mongodb.net/"
+# Conexão com o banco 'gardenia'
+url_atlas <- Sys.getenv("MONGO_URL")
 
-# Conexão com o banco 'gardenia' e a coleção de destino
+if (url_atlas == ""){
+  stop("ERRO: A variável de ambiente MONGO_URL não foi configurada!")
+}
+
+# Conexão no Atlas
 con_atlas <- mongo(
   collection = "segmentacao_rfm",
   db         = "gardenia",

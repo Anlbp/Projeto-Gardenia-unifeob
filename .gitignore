@@ -23,6 +23,7 @@ crash.log
 id_rsa
 id_rsa.pub
 *.key
+.vault_pass
 
 # Logs e Arquivos Temporários de Execução
 *.log

@@ -99,9 +99,10 @@ A partir da raiz do projeto, execute:
 #
 ### 3. Configuração, instalações e tarefas das virtualizações:
 
+Comando para criar e configurar as VMs automaticamente:
 ```bash
     cd ./ansible/
-    ansible-playbook -i inventory.ini playbook.yml
+    ansible-playbook -i inventory.ini playbook.yml --ask-vault-pass
 ```
 ### 4. Execução das VMs:
 

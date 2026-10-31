@@ -119,6 +119,8 @@
 - name: Configurar VM 3 - Spark Big Data e Mongo DB
   hosts: vm_spark
   become: yes
+  vars_files:
+    - vars/vault.yml
   tasks:
     - name: Criar diretório para chaves de repositórios (keyrings)
       file:
@@ -200,25 +202,28 @@
         owner: debian
         mode: '0755'
 
-    - name: Criar serviço Systemd para Spark + MongoDB
+    - name: Criar serviço Systemd para VM3 (Spark + MongoDB + Atlas)
       vars:
         ip_vm2: "{{ hostvars[groups['vm_tratamento'][0]].ansible_host }}"
       copy:
         dest: /etc/systemd/system/gardenia-vm3.service
         content: |
           [Unit]
-          Description=Servico Spark e MongoDB em R (VM3)
+          Description=Servico VM3 - Spark, MongoDB e Atlas em R
           After=network.target mongod.service
 
           [Service]
           Type=simple
           User=debian
           WorkingDirectory=/home/debian/spark_work
+          Environment="MONGO_URL={{ mongo_atlas_url }}"
           ExecStart=/usr/bin/Rscript /home/debian/spark_work/pipeline_vm3.R -o debian@{{ ip_vm2 }}:/home/debian/gardenia/saida -i 30
           Restart=always
 
           [Install]
           WantedBy=multi-user.target
+        mode: '0644'
+      notify: Reload systemd
 
     - name: Ativar e iniciar o servico da VM3
       systemd:
