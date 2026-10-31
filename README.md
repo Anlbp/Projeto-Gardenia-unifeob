@@ -104,6 +104,10 @@ Comando para criar e configurar as VMs automaticamente:
     cd ./ansible/
     ansible-playbook -i inventory.ini playbook.yml --ask-vault-pass
 ```
+**Se você for um desenvolvedor**, execute isso ao invés do comando anterior:
+```bash
+    ansible-playbook -i inventory.ini playbook.yml --vault-password-file .vault_pass
+```
 ### 4. Execução das VMs:
 
 > ⚙️ **Automação Ativa:**<br>Os serviços do pipeline R e do MongoDB já iniciam e se sincronizam automaticamente no boot das VMs via systemd.<br>Não é necessário rodar os scripts R manualmente.
