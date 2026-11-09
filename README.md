@@ -1,200 +1,353 @@
-# Projeto Gardênia - UNIFEOB (Equipe 1)
-[![GitHub](https://badgen.net/badge/icon/github?icon=github&label)](https://github.com)
-![](/github/last-commit/vladkens/macmon)
+<div align="center">
+
+# 🌸 Projeto Gardênia
+
+**Sistema de vendas e análise de dados para a loja de roupas Gardênia**
+
 [![Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)]()
-[![GitHub latest commit](https://badgen.net/github/last-commit/Anlbp/Projeto-Gardenia-unifeob)](https://badgen.net/github/last-commit/Anlbp/Projeto-Gardenia-unifeob)
-[![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
-[![R](https://img.shields.io/badge/-script-276DC3.svg?style=flat&logo=R)](https://cran.r-project.org)
-[![MongoDB](https://img.shields.io/badge/MongoDB-6.0%2B-green)]()
+[![Python](https://img.shields.io/badge/Python-3.x-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![R](https://img.shields.io/badge/R-276DC3?logo=r&logoColor=white)](https://cran.r-project.org/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-6.0%2B-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![OpenTofu](https://img.shields.io/badge/OpenTofu-IaC-FFDA18?logo=opentofu&logoColor=black)](https://opentofu.org/)
+[![Ansible](https://img.shields.io/badge/Ansible-automa%C3%A7%C3%A3o-EE0000?logo=ansible&logoColor=white)](https://www.ansible.com/)
+[![GitHub](https://img.shields.io/badge/GitHub-Reposit%C3%B3rio-181717?logo=github&logoColor=white)](https://github.com/Anlbp/Projeto-Gardenia-unifeob)
 
-Sistema de vendas e análise de dados para a loja de roupas **Gardênia**, com site de compras (retirada na loja), portal de funcionários e pipeline de Big Data para geração de insights.
+</div>
 
-## Sumário
+---
 
-- [Integrantes](#integrantes)
-- [Descrição](#descrição)
-- [Problema](#problema)
-- [Solução](#solução)
-- [Como reproduzir o ambiente](#como-reproduzir-o-ambiente)
-- [Demonstração](#demonstração)
+## 📑 Sumário
 
-## Integrantes
+- [Integrantes](#-integrantes)
+- [Descrição](#-descrição)
+- [Problema](#-problema)
+- [Solução](#-solução)
+  - [Arquitetura do pipeline](#arquitetura-do-pipeline)
+- [Estrutura do projeto](#-estrutura-do-projeto)
+- [Como reproduzir o ambiente](#-como-reproduzir-o-ambiente)
+  - [Visão geral](#visão-geral)
+  - [1. Pré-requisitos](#1-pré-requisitos)
+  - [2. Instalação das ferramentas](#2-instalação-das-ferramentas)
+  - [3. Provisionamento com OpenTofu](#3-provisionamento-com-opentofu)
+  - [4. Configuração com Ansible](#4-configuração-com-ansible)
+  - [5. Verificação e logs](#5-verificação-e-logs)
+  - [6. Operação e ciclo de vida](#6-operação-e-ciclo-de-vida)
+- [Troubleshooting](#-troubleshooting)
+- [Demonstração](#-demonstração)
+- [Licença](#-licença)
+
+---
+
+## 👥 Integrantes
 
 | RA | Nome |
-| - | - |
-| 24000057 | Andre Luis Bertelli Pena |
+|:---|:---|
+| 24000057 | André Luis Bertelli Pena |
 | 24000043 | André Luis Carneiro Filho |
-| 24001365 | Caio Fernando Pereira Silva | 
-| 24001366 | Cleudio de Faria | 
+| 24001365 | Caio Fernando Pereira Silva |
+| 24001366 | Cléudio de Faria |
 | 24000603 | Renan Augusto Cristi Avelar |
 
-## Descrição
+---
 
-O **Projeto Gardênia** é uma solução desenvolvida para a loja de roupas Gardênia, com o objetivo de melhorar o processo de vendas, o controle de estoque e o armazenamento das informações da empresa. O projeto consiste na criação de um site de compras para retirada na loja, desenvolvido com **HTML, CSS e Python**, utilizando o **MongoDB** para armazenamento dos dados.
+## 📖 Descrição
 
-O sistema permitirá que os clientes consultem os produtos disponíveis, visualizem as roupas pela frente e pelo verso e tenham acesso a informações como marca e material. Também haverá um sistema de clientes, no qual o comprador poderá informar seu **CPF** para ter acesso a descontos e benefícios exclusivos do site e da loja.
+O **Projeto Gardênia** é uma solução desenvolvida para a loja de roupas Gardênia com o objetivo de melhorar o processo de vendas, o controle de estoque e o armazenamento das informações da empresa.
 
-## Problema
+O projeto consiste na criação de:
 
-Atualmente, a loja utiliza **arquivamento em papel** para registrar algumas de suas informações e não possui um sistema centralizado para armazenar os dados de cada compra. Isso dificulta a consulta e organização das informações, além de prejudicar o controle de estoque, o acompanhamento das vendas e o conhecimento sobre os clientes.
+- 🛒 **Site de compras** (retirada na loja), feito em **HTML, CSS e Python**;
+- 👔 **Portal de funcionários** com caixa virtual, controle de estoque e pesquisa de clientes;
+- 🗄️ **Pipeline de Big Data** para ETL e geração de insights de vendas, com dados persistidos no **MongoDB**;
+- 💳 **Sistema de clientes** com identificação por CPF, descontos e benefícios exclusivos.
 
-A falta de armazenamento adequado dos dados também representa um **gasto de oportunidade**, pois informações importantes sobre as compras e os clientes deixam de ser aproveitadas para gerar análises e auxiliar nas decisões da loja.
+---
 
-## Solução
+## ❗ Problema
 
-Como solução, será desenvolvido um **site de compras para retirada na loja**, permitindo que os clientes consultem os produtos e realizem seus pedidos de forma digital. O sistema contará também com um **portal para funcionários**, oferecendo recursos como análise de vendas, caixa virtual, pesquisa de clientes e controle de estoque.
+Atualmente, a loja utiliza **arquivamento em papel** para registrar parte das informações e **não possui um sistema centralizado** de armazenamento. Isso gera:
 
-Os dados de **produtos, clientes e compras** serão armazenados no MongoDB, permitindo que as informações sejam organizadas, consultadas e utilizadas posteriormente. O sistema de clientes também permitirá identificar compradores por meio do CPF e oferecer descontos exclusivos.
+- Dificuldade de consulta e organização das informações;
+- Falta de controle de estoque em tempo real;
+- Ausência de acompanhamento histórico das vendas;
+- **Gasto de oportunidade**: dados valiosos (clientes, preferências, produtos mais vendidos) que nunca são reaproveitados para decisão.
 
-A arquitetura proposta será integrada ao funcionamento do sistema da Gardênia de forma que os dados gerados durante as operações da loja possam ser aproveitados tanto para o funcionamento do site quanto para análises futuras. Quando um cliente realizar uma compra pelo site, os dados relacionados ao pedido serão registrados no sistema operacional. Essas informações poderão incluir o produto escolhido, quantidade, preço, desconto, cliente, data e situação do pedido.
+---
 
-Após o registro da compra, os dados poderão ser enviados para o Data Lake, onde permanecerão armazenados em seu formato original. Esse processo permitirá manter um histórico das operações realizadas no sistema, mesmo que os dados sejam posteriormente modificados ou tratados para utilização analítica. Dessa forma, o Data Lake funcionará como uma camada de armazenamento histórico e flexível.
+## ✅ Solução
 
-Os dados armazenados passarão posteriormente pelo processo de ETL. Durante essa etapa, serão realizadas verificações para garantir a qualidade das informações. Por exemplo, poderão ser identificadas compras duplicadas, valores inválidos, produtos inexistentes ou dados cadastrais inconsistentes. Os dados também poderão ser padronizados para que informações semelhantes possuam o mesmo formato antes de serem inseridas no Data Warehouse.
+A solução proposta é um ecossistema com três camadas:
 
-Após o tratamento, os dados serão organizados de acordo com o modelo dimensional definido para o projeto. A tabela Fato_Vendas será responsável por armazenar os registros das vendas, enquanto as dimensões Dim_Cliente, Dim_Produto, Dim_Data e Dim_Funcionario fornecerão os contextos necessários para a análise. Essa separação permitirá realizar consultas específicas sem a necessidade de analisar diretamente os dados brutos armazenados no Data Lake.
+1. **Operação** — site de compras + portal de funcionários (dados gerados aqui).
+2. **Data Lake** — armazenamento do dado bruto, no formato original, como histórico imutável.
+3. **Data Warehouse** — dado tratado via **ETL**, modelado dimensionalmente (Fato_Vendas + Dim_Cliente, Dim_Produto, Dim_Data, Dim_Funcionario) para consultas analíticas.
 
-Com a implementação da solução, a loja poderá reduzir a dependência de registros em papel, melhorar a organização das informações, facilitar o processo de compra e utilizar os dados armazenados para obter uma visão mais clara das vendas, clientes e estoque.
+### Arquitetura do pipeline
 
-## Como reproduzir o ambiente:
-
-### 1. Pré-requisitos (Máquina Hospedeira):
-
-Antes de iniciar, garanta que a máquina local possua:
-* CPU com suporte a virtualização (VT-x / AMD-V habilitado na BIOS)
-* No mínimo 8GB de RAM, 4 vCPUs, 40GB de disco livre
-* Sistema Linux - obrigatório para Ansible, Libvirt/QEMU e OpenTofu
-
-**Linux: (Debian/Ubuntu):**
-```bash
-    sudo apt update
-    sudo apt install -y git r-base r-cran-tidyverse r-cran-optparse r-cran-jsonlite openssh-client qemu-kvm libvirt-daemon-system libvirt-clients virt-manager ansible genisoimage --fix-missing
-    curl -fsSL https://get.opentofu.org/install-opentofu.sh -o install-opentofu.sh
-    chmod +x install-opentofu.sh
-    ./install-opentofu.sh --install-method deb
-    rm install-opentofu.sh
-    sudo mkdir -p /var/lib/libvirt/images
-    sudo virsh pool-define-as default dir --target /var/lib/libvirt/images
-    sudo virsh pool-build default 2>/dev/null || true
-    sudo virsh pool-start default
-```
-Adicionar permissões às ferramentas:
-```bash
-        sudo usermod -aG libvirt $USER
-        sudo usermod -aG kvm $USER
-```
-Em seguida reinicie o computador **OU** execute:
-```bash
-        newgrp libvirt
-```
-### 2. Provisionamento da Infraestrutura (OpenTofu):
-
-A partir da raiz do projeto, execute:
-```bash
-    cd ./recursos/infraestrutura/
-    tofu init
-    tofu apply -auto-approve
-```
-> ⚠️ **Atenção:**<br>O OpenTofu criará as 3 VMs no Libvirt e gerará automaticamente o arquivo ansible/inventory.ini com os IPs atribuídos pelo DHCP.
-#
-### 3. Configuração, instalações e tarefas das virtualizações:
-
-Comando para criar e configurar as VMs automaticamente:
-```bash
-    cd ./ansible/
-    ansible-playbook -i inventory.ini playbook.yml --ask-vault-pass
-```
-**Se você for um desenvolvedor**, execute isso ao invés do comando anterior:
-```bash
-    ansible-playbook -i inventory.ini playbook.yml --vault-password-file .vault_pass
-```
-### 4. Execução das VMs:
-
-> ⚙️ **Automação Ativa:**<br>Os serviços do pipeline R e do MongoDB já iniciam e se sincronizam automaticamente no boot das VMs via systemd.<br>Não é necessário rodar os scripts R manualmente.
-
-Para verificar o status ou acompanhar os logs em tempo real, conecte-se à VM desejada (utilize o IP presente no ```inventory.ini```)
-
-**VM1 (Simulador):**
-```bash
-    ssh debian@<IP_VM1> "sudo systemctl status gardenia-simulador"
-```
-e para acompanhar os logs em tempo real:
-```bash
-    ssh debian@<IP_VM1> "journalctl -u gardenia-simulador -f"
+```mermaid
+flowchart LR
+    A["🖥️ VM1<br/>Simulador de vendas"] -->|grava bruto| B[("🗃️ Data Lake")]
+    B --> C["🧹 VM2<br/>ETL (limpeza + padronização)"]
+    C -->|modelo dimensional| D[("📦 Data Warehouse<br/>MongoDB")]
+    D --> E["📊 VM3<br/>Análise (Spark / R)"]
 ```
 
-**VM2 (Tratamento e Limpeza):**
-```bash
-    ssh debian@<IP_VM2> "sudo systemctl status gardenia-vm2"
-```
-e para acompanhar os logs em tempo real:
-```bash
-    ssh debian@<IP_VM2> "journalctl -u gardenia-vm2 -f"
+**Fluxo resumido:**
+
+| Etapa | O que acontece | Exemplo de problema tratado |
+|:---:|:---|:---|
+| **1. Registro** | Compra do site grava pedido (produto, valor, cliente, data, situação) | — |
+| **2. Data Lake** | Dado bruto preservado no formato original | Rastreabilidade histórica |
+| **3. ETL (VM2)** | Validação, deduplicação, padronização | CPFs inválidos, valores negativos, produtos inexistentes |
+| **4. DW (VM3)** | Dado modelado em Fato + Dimensões | Consultas analíticas rápidas |
+| **5. Análise (VM3)** | Spark / R script (RFM, etc.) | Segmentação de clientes |
+
+---
+
+## 📂 Estrutura do projeto
+
+```text
+Projeto-Gardenia-unifeob/
+├── README.md
+├── recursos/
+│   └── infraestrutura/          # arquivos OpenTofu (.tf)
+│       └── ansible/inventory.ini   # gerado automaticamente
+└── ansible/
+    ├── playbook.yml
+    ├── .vault_pass                  # ⚠️ NÃO commitar
+    └── ...
 ```
 
-**VM3 (Big Data / Spark):**
-```bash
-    ssh debian@<IP_VM3> "sudo systemctl status gardenia-vm3"
-```
-e para acompanhar os logs em tempo real:
-```bash
-    ssh debian@<IP_VM3> "journalctl -u gardenia-vm3 -f"
-```
-### 5. Validação dos dados salvos no MongoDB (VM3)
-```bash
-    ssh debian@<IP_VM3>
-    Rscript -e "m <- mongolite::mongo('segmentacao_rfm', 'gardenia'); print(m$find())"
-    exit
-```
-### 6. Pausar, interromper ou desligar as VMs:
-Como o Apache Spark e os serviços em segundo plano consomem memória RAM de forma contínua, você pode pausar ou desligar as VMs conforme necessário:
-#### Opção A: Parar apenas os scripts (sem desligar as VMs)
-```bash
-    ssh debian@<IP_VM1> "sudo systemctl stop gardenia-simulador"
-    ssh debian@<IP_VM2> "sudo systemctl stop gardenia-vm2"
-    ssh debian@<IP_VM3> "sudo systemctl stop gardenia-vm3"
-```
-> **Dica:**<br>Para reativar o pipeline a qualquer momento, troque stop por start nos comandos acima.
-#### Opção B: Desligar as VMs para liberar RAM no computador hospedeiro
-* Desligamento recomendado:
-```bash
-    sudo virsh shutdown vm1-simulador
-    sudo virsh shutdown vm2-tratamento
-    sudo virsh shutdown vm3-spark
-```
-* Desligamento forçado / imediato
-```bash
-    sudo virsh destroy vm1-simulador
-    sudo virsh destroy vm2-tratamento
-    sudo virsh destroy vm3-spark
-```
-#### Opção C: Impedir que os scripts iniciem automaticamente no boot das VMs
-```bash
-    ssh debian@<IP_VM1> "sudo systemctl disable gardenia-simulador"
-    ssh debian@<IP_VM2> "sudo systemctl disable gardenia-vm2"
-    ssh debian@<IP_VM3> "sudo systemctl disable gardenia-vm3"
-```
-### 7. Religar o cluster após o desligamento/boot do host:
+---
 
-Ativa a rede virtual do libvirt:
+## 🚀 Como reproduzir o ambiente
+
+### Visão geral
+
+O pipeline roda em **3 VMs** criadas com **Libvirt/QEMU** e provisionadas com **OpenTofu + Ansible**:
+
+| VM | Nome do serviço systemd | Função |
+|:---:|:---|:---|
+| **VM1** | `gardenia-simulador` | Simula vendas e gera dados brutos |
+| **VM2** | `gardenia-vm2` | Executa ETL e carrega o Data Warehouse |
+| **VM3** | `gardenia-vm3` | Roda Spark + scripts R de análise; hospeda o MongoDB |
+
+> [!NOTE]
+> Os serviços iniciam automaticamente no boot das VMs via `systemd`. **Não é necessário** rodar scripts R manualmente.
+
+### 1. Pré-requisitos
+
+**Máquina hospedeira (obrigatoriamente Linux):**
+
+- CPU com suporte a virtualização (**VT-x** ou **AMD-V** habilitado na BIOS)
+- Mínimo: **8 GB de RAM**, **4 vCPUs**, **40 GB de disco livre**
+- Kernel Linux com KVM disponível
+
+> [!IMPORTANT]
+> O projeto **não funciona** em Windows/macOS nativo. Use **WSL2 com systemd habilitado** (com limitações) ou uma máquina Linux de verdade.
+
+### 2. Instalação das ferramentas
+**Debian / Ubuntu:**
 ```bash
-    sudo virsh net-start default 2>/dev/null
-    sudo virsh pool-start default
-``` 
-Liga as três VMs do cluster
-```bash
-    sudo virsh start vm1-simulador
-    sudo virsh start vm2-tratamento
-    sudo virsh start vm3-spark
+sudo apt update
+sudo apt install -y \
+  git \
+  r-base r-cran-tidyverse r-cran-optparse r-cran-jsonlite r-cran-mongolite \
+  openssh-client \
+  qemu-kvm libvirt-daemon-system libvirt-clients virt-manager \
+  ansible genisoimage \
+  --fix-missing
 ```
-Comando para ver se a VM3 está conectando ao MongoDB
+**OpenTofu:**
 ```bash
-ssh debian@<IP_VM3> 'Rscript -e "library(mongolite); m <- mongo(\"teste_atlas\", db=\"gardenia\", url=\"mongodb+srv://andrelpena:SENHA@cluster0.dziebk1.mongodb.net/\"); m\$insert(data.frame(status=\"Conexão Ok\", data=Sys.time())); print(m\$find())"'
+curl -fsSL https://get.opentofu.org/install-opentofu.sh -o install-opentofu.sh
+chmod +x install-opentofu.sh
+./install-opentofu.sh --install-method deb
+rm install-opentofu.sh
 ```
-## Demonstração
-Um video para demonstrar as VMs funcionando:<br>
-<br>
+**Pool de imagens do Libvirt:**
+```bash
+sudo mkdir -p /var/lib/libvirt/images
+sudo virsh pool-define-as default dir --target /var/lib/libvirt/images
+sudo virsh pool-build default 2>/dev/null || true
+sudo virsh pool-start default
+```
+
+**Adicionar o usuário aos grupos `libvirt` e `kvm`:**
+
+```bash
+sudo usermod -aG libvirt "$USER"
+sudo usermod -aG kvm "$USER"
+```
+
+> [!TIP]
+> A forma mais confiável de aplicar os novos grupos é **reiniciar a máquina**. Se quiser evitar o reboot, `newgrp libvirt` **sozinho não basta** — ele troca um grupo por vez. Use `newgrp libvirt` e depois `newgrp kvm` em **terminais separados**, ou apenas faça logout/login.
+
+### 3. Provisionamento com OpenTofu
+
+```bash
+cd recursos/infraestrutura/
+tofu init
+tofu apply -auto-approve
+```
+
+> [!WARNING]
+> O OpenTofu cria as **3 VMs** no Libvirt e gera automaticamente `ansible/inventory.ini` com os IPs atribuídos pelo DHCP. Confira o arquivo após a execução.
+
+### 4. Configuração com Ansible
+
+**Para uso geral (pede senha do vault interativamente):**
+
+```bash
+cd ansible/
+ansible-playbook -i inventory.ini playbook.yml --ask-vault-pass
+```
+
+**Para desenvolvimento (usa arquivo de senha local):**
+
+```bash
+cd ansible/
+ansible-playbook -i inventory.ini playbook.yml --vault-password-file .vault_pass
+```
+
+> [!CAUTION]
+> Nunca versione o arquivo `.vault_pass`. Adicione ao `.gitignore`:
+> ```gitignore
+> ansible/.vault_pass
+> *.env
+> ```
+
+### 5. Verificação e logs
+
+<details>
+<summary><b>VM1 — Simulador</b></summary>
+
+```bash
+ssh debian@<IP_VM1> "sudo systemctl status gardenia-simulador"
+# Logs em tempo real:
+ssh debian@<IP_VM1> "journalctl -u gardenia-simulador -f"
+```
+</details>
+
+<details>
+<summary><b>VM2 — ETL / Tratamento</b></summary>
+
+```bash
+ssh debian@<IP_VM2> "sudo systemctl status gardenia-vm2"
+ssh debian@<IP_VM2> "journalctl -u gardenia-vm2 -f"
+```
+</details>
+
+<details>
+<summary><b>VM3 — Big Data / Spark</b></summary>
+
+```bash
+ssh debian@<IP_VM3> "sudo systemctl status gardenia-vm3"
+ssh debian@<IP_VM3> "journalctl -u gardenia-vm3 -f"
+```
+</details>
+
+**Validar dados persistidos no MongoDB (VM3):**
+
+```bash
+ssh debian@<IP_VM3>
+Rscript -e "m <- mongolite::mongo('segmentacao_rfm', 'gardenia'); print(m\$find())"
+exit
+```
+
+### 6. Operação e ciclo de vida
+
+#### Pausar apenas os scripts (VMs continuam ligadas)
+
+```bash
+ssh debian@<IP_VM1> "sudo systemctl stop gardenia-simulador"
+ssh debian@<IP_VM2> "sudo systemctl stop gardenia-vm2"
+ssh debian@<IP_VM3> "sudo systemctl stop gardenia-vm3"
+```
+
+> Para retomar: troque `stop` por `start`.
+
+#### Desligar as VMs (libera RAM)
+
+```bash
+# Desligamento gracioso
+sudo virsh shutdown vm1-simulador
+sudo virsh shutdown vm2-tratamento
+sudo virsh shutdown vm3-spark
+
+# Forçado (último recurso)
+sudo virsh destroy vm1-simulador
+sudo virsh destroy vm2-tratamento
+sudo virsh destroy vm3-spark
+```
+
+#### Impedir inicialização automática dos scripts no boot
+
+```bash
+ssh debian@<IP_VM1> "sudo systemctl disable gardenia-simulador"
+ssh debian@<IP_VM2> "sudo systemctl disable gardenia-vm2"
+ssh debian@<IP_VM3> "sudo systemctl disable gardenia-vm3"
+```
+
+#### Religar o cluster após desligar o host
+
+```bash
+# Reativar rede e pool do Libvirt
+sudo virsh net-start default 2>/dev/null
+sudo virsh pool-start default
+
+# Ligar as VMs
+sudo virsh start vm1-simulador
+sudo virsh start vm2-tratamento
+sudo virsh start vm3-spark
+```
+
+**Testar conexão da VM3 com o MongoDB:**
+
+```bash
+# ⚠️ Substitua SENHA e o host antes de rodar. NÃO commite credenciais reais.
+ssh debian@<IP_VM3> 'Rscript -e "library(mongolite); m <- mongo(\"teste_atlas\", db=\"gardenia\", url=\"mongodb+srv://USUARIO:SENHA@SEU_CLUSTER.mongodb.net/\"); m\$insert(data.frame(status=\"Conexão Ok\", data=Sys.time())); print(m\$find())"'
+```
+
+---
+
+## 🩺 Troubleshooting
+
+<details>
+<summary><b>A rede <code>default</code> do Libvirt não existe / VMs não têm rede</b></summary>
+
+Execute uma única vez:
+```bash
+sudo virsh net-define /usr/share/libvirt/networks/default.xml
+sudo virsh net-start default
+sudo virsh net-autostart default
+```
+</details>
+
+<details>
+<summary><b><code>tofu apply</code> falha com "permission denied" no <code>/var/lib/libvirt</code></b></summary>
+
+Confirme que o usuário está no grupo `libvirt` (via `groups`) e faça logout/login antes de tentar novamente.
+</details>
+
+<details>
+<summary><b>Ansible pede senha do vault mesmo com <code>--vault-password-file</code></b></summary>
+
+Verifique se `.vault_pass` existe **dentro da pasta `ansible/`** e se tem permissão de leitura (`chmod 600 .vault_pass`).
+</details>
+
+---
+
+## 🎥 Demonstração
+
 [![](https://markdown-videos-api.jorgenkh.no/youtube/5UptIKxguL0)](https://youtu.be/5UptIKxguL0)
-#
-<b>Feitos pelos alunos do curso de Ciência da Computação da UNIFEOB.</b> 👨‍💻🎓
-<br><p align="center"><img src="https://s3.sa-east-1.amazonaws.com/lyceum.backups/arquivosimport/logo_branco_atual_2023.png" alt="Logo UNIFEOB" width="256"></p> teste
+
+---
+
+<div align="center">
+
+Feito com 💜 pelos alunos do curso de **Ciência da Computação** da UNIFEOB 👨‍💻🎓
+
+<img src="https://s3.sa-east-1.amazonaws.com/lyceum.backups/arquivosimport/logo_branco_atual_2023.png" alt="Logo UNIFEOB" width="200">
+
+</div>
