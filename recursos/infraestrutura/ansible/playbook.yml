@@ -90,7 +90,7 @@
 
     - name: Criar serviço Systemd para o Tratamento
       vars:
-        ip_vm1: "{{ hostvars[groups['vm_simulador'][0]].ansible_host}}"
+        ip_vm1: "{{ hostvars[groups['vm_simulador'][0]].ansible_host }}"
       copy:
         dest: /etc/systemd/system/gardenia-vm2.service
         content: |
@@ -128,16 +128,22 @@
         state: directory
         mode: '0755'
     
+    # Elimina conflito do Signed-By
+    - name: Remover lista antiga do repositório MongoDB
+      file:
+        path: /etc/apt/sources.list.d/mongodb-org-8.0.list
+        state: absent
+    
     - name: Adicionar chave GPG oficial do MongoDB
       ansible.builtin.shell:
-        cmd : |
+        cmd: |
           curl -fsSL https://www.mongodb.org/static/pgp/server-8.0.asc | \
-          gpg --dearmor -o /usr/share/keyrings/mongodb-server-8.0.gpg
-        creates: /usr/share/keyrings/mongodb-server-8.0.gpg
+          gpg --dearmor -o /etc/apt/keyrings/mongodb-server-8.0.gpg
+        creates: /etc/apt/keyrings/mongodb-server-8.0.gpg
 
     - name: Adicionar repositório oficial do MongoDB
       ansible.builtin.apt_repository:
-        repo: "deb [ signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] https://repo.mongodb.org/apt/debian bookworm/mongodb-org/8.0 main"
+        repo: "deb [ signed-by=/etc/apt/keyrings/mongodb-server-8.0.gpg ] https://repo.mongodb.org/apt/debian bookworm/mongodb-org/8.0 main"
         state: present
         filename: mongodb-org-8.0
 
@@ -188,6 +194,7 @@
           v3 <- tail(avail$spark[startsWith(avail$spark, '3.')], 1);
           if (nrow(sparklyr::spark_installed_versions()) == 0) sparklyr::spark_install(version = v3)
         "
+
     - name: Criar diretórios de trabalho
       file:
         path: /home/debian/spark_work
@@ -223,7 +230,6 @@
           [Install]
           WantedBy=multi-user.target
         mode: '0644'
-      notify: Reload systemd
 
     - name: Ativar e iniciar o servico da VM3
       systemd:
