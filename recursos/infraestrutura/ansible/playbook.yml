@@ -11,11 +11,45 @@
         group: debian
         recurse: yes
 
+    - name: Registrar os IPs atuais do cluster no /etc/hosts
+      ansible.builtin.lineinfile:
+        path: /etc/hosts
+        regexp: '^.*\s{{ item }}(\s|$)'
+        line: "{{ hostvars[item]['ansible_host'] }} {{ item }}"
+        state: present
+      loop: "{{ groups['all'] }}"
+      become: yes
+
+    - name: Garantir diretório .ssh nas VMs que fazem ssh/scp
+      ansible.builtin.file:
+        path: /home/debian/.ssh
+        state: directory
+        owner: debian
+        group: debian
+        mode: '0700'
+      when: inventory_hostname in groups['all']
+
+    - name: Distribuir chave privada RSA do cluster (para scp entre VMs)
+      ansible.builtin.copy:
+        src: ~/.ssh/id_rsa          # caminho no HOST que roda o ansible
+        dest: /home/debian/.ssh/id_rsa
+        owner: debian
+        group: debian
+        mode: '0600'
+      when: inventory_hostname in groups['all']
+
+    - name: Garantir chave pública em authorized_keys de TODAS as VMs
+      ansible.posix.authorized_key:
+        user: debian
+        state: present
+        key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
     - name: Instalar R (Linguagem de Programação)
       apt:
         name: r-base
         state: present
         update_cache: yes
+        lock_timeout: 320
         
     - name: Criar diretórios
       file:
@@ -60,6 +94,12 @@
 - name: Configurar VM 2 - Pipeline de Limpeza
   hosts: vm_tratamento
   become: yes
+  handlers:
+    - name: Reiniciar gardenia-vm2
+      ansible.builtin.systemd:
+        name: gardenia-vm2
+        state: restarted
+        daemon_reload: yes
   tasks:
     - name: Garantir permissões do usuário debian em sua pasta home
       file:
@@ -70,9 +110,10 @@
 
     - name: Instalar dependências de sistema e R
       apt:
-        name: [r-base, r-cran-tidyverse, r-cran-optparse, r-cran-jsonlite]
+        name: [r-base, rsync, r-cran-tidyverse, r-cran-optparse, r-cran-jsonlite]
         state: present
         update_cache: yes
+        lock_timeout: 320
 
     - name: Criar diretórios de trabalho
       file:
@@ -91,25 +132,46 @@
     - name: Criar serviço Systemd para o Tratamento
       vars:
         ip_vm1: "{{ hostvars[groups['vm_simulador'][0]].ansible_host }}"
-      copy:
+        pasta_trabalho: "/home/debian/gardenia"
+        pasta_entrada:  "{{ pasta_trabalho }}/dados_brutos"
+        pasta_saida:    "{{ pasta_trabalho }}/saida"
+      ansible.builtin.copy:
         dest: /etc/systemd/system/gardenia-vm2.service
+        owner: root
+        group: root
+        mode: "0644"
         content: |
           [Unit]
-          Description=Servico Tratamento em R (VM2)
-          After=network.target
+          Description=Servico Tratamento em R (VM2) - Gardenia
+          After=network-online.target
+          Wants=network-online.target
+          StartLimitIntervalSec=120
+          StartLimitBurst=5
 
           [Service]
           Type=simple
           User=debian
-          WorkingDirectory=/home/debian/gardenia
-          ExecStart=/usr/bin/Rscript /home/debian/gardenia/pipeline_vm2.R -o debian@{{ ip_vm1 }}:/home/debian/simulador/saida -i 15
+          Group=debian
+          WorkingDirectory={{ pasta_trabalho }}
+          ExecStart=/usr/bin/Rscript {{ pasta_trabalho }}/pipeline_vm2.R \
+            --origem debian@{{ ip_vm1 }}:/home/debian/simulador/saida \
+            --destino {{ pasta_entrada }} \
+            --saida   {{ pasta_saida }} \
+            --intervalo 15
           Restart=always
+          RestartSec=10
+          StandardOutput=journal
+          StandardError=journal
+
+          NoNewPrivileges=true
+          PrivateTmp=true
 
           [Install]
           WantedBy=multi-user.target
+      notify: Reiniciar gardenia-vm2
 
-    - name: Ativar e iniciar o servico da VM2
-      systemd:
+    - name: Garantir serviço habilitado e rodando
+      ansible.builtin.systemd:
         name: gardenia-vm2
         state: started
         enabled: yes
@@ -151,6 +213,7 @@
       apt:
         name: 
           - default-jre-headless
+          - rsync
           - r-base
           - r-base-dev
           - r-cran-tidyverse
@@ -165,6 +228,7 @@
           - mongodb-org
         state: present
         update_cache: yes
+        lock_timeout: 888
     
     - name: Garantir que o serviço do MongoDB está ativo
       systemd:

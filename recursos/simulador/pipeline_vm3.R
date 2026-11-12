@@ -22,7 +22,7 @@ suppressPackageStartupMessages({
 # ---- Argumentos --------------------------------------------------------------
 option_list <- list(
   make_option(c("-o", "--origem"), type = "character",
-              default = "debian@192.168.122.125:/home/debian/gardenia/saida",
+              default = "debian@vm2:/home/debian/gardenia/saida",
               help = "Origem SSH dos CSVs tratados"),
   make_option(c("-i", "--intervalo"), type = "integer", default = 30,
               help = "Intervalo de vigia em segundos"),

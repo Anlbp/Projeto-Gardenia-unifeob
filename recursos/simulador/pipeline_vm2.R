@@ -23,19 +23,37 @@ args <- parse_args(parser)
 # ==========================================
 coletar <- function(origem, destino) {
   dir.create(destino, showWarnings = FALSE, recursive = TRUE)
-  cmd <- sprintf("scp -p -o StrictHostKeyChecking=accept-new %s/ciclo_*.pronto %s/ 2>/dev/null", origem, destino)
-  system(cmd)
-  
+
+  # 1. Copia os marcadores .pronto
+  cmd <- sprintf(
+    "scp -p -o StrictHostKeyChecking=accept-new %s/ciclo_*.pronto %s/ 2>&1",
+    origem, destino
+  )
+  saida <- system(cmd, intern = TRUE)
+  if (length(saida) > 0 && any(nzchar(saida))) {
+    cat(sprintf("[coleta] scp: %s\n", paste(saida, collapse = " | ")))
+  }
+
+  # 2. Descobre quais ciclos chegaram
   prontos <- list.files(destino, pattern = "ciclo_.*\\.pronto$")
-  if (length(prontos) == 0) return(c())
-  
+  if (length(prontos) == 0) {
+    cat("[coleta] nenhum ciclo novo disponível.\n")
+    return(c())
+  }
+
   ciclos <- as.numeric(str_extract(prontos, "\\d+"))
-  for (c in ciclos) {
-    if (!file.exists(file.path(destino, sprintf("trusted_%d.pronto", c)))) {
-      system(sprintf("scp -p -o StrictHostKeyChecking=accept-new %s/*_%d.csv %s/ 2>/dev/null", origem, c, destino))
-      cat(sprintf("[coleta] Ciclo %d copiado.\n", c))
+
+  # 3. Para cada ciclo, copia os CSVs correspondentes
+  for (ciclo in ciclos) {
+    if (!file.exists(file.path(destino, sprintf("trusted_%d.pronto", ciclo)))) {
+      system(sprintf(
+        "scp -p -o StrictHostKeyChecking=accept-new %s/*_%d.csv %s/ 2>&1",
+        origem, ciclo, destino
+      ))
+      cat(sprintf("[coleta] Ciclo %d copiado.\n", ciclo))
     }
   }
+
   return(ciclos)
 }
 
