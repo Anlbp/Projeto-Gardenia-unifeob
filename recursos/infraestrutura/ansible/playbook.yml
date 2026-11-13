@@ -1,11 +1,10 @@
 ---
-# Configuração da VM 1 (Simulador)
-- name: Configurar VM 1 - Simulador de Dados
-  hosts: vm_simulador
+- name: Configuração comum do cluster (SSH, hosts, permissões)
+  hosts: all
   become: yes
   tasks:
     - name: Garantir permissões do usuário debian em sua pasta home
-      file:
+      ansible.builtin.file:
         path: /home/debian
         owner: debian
         group: debian
@@ -18,55 +17,79 @@
         line: "{{ hostvars[item]['ansible_host'] }} {{ item }}"
         state: present
       loop: "{{ groups['all'] }}"
-      become: yes
 
-    - name: Garantir diretório .ssh nas VMs que fazem ssh/scp
+    - name: Garantir diretório .ssh
       ansible.builtin.file:
         path: /home/debian/.ssh
         state: directory
         owner: debian
         group: debian
         mode: '0700'
-      when: inventory_hostname in groups['all']
 
-    - name: Distribuir chave privada RSA do cluster (para scp entre VMs)
+    - name: Distribuir chave privada RSA do cluster (PEM)
       ansible.builtin.copy:
-        src: ~/.ssh/id_rsa          # caminho no HOST que roda o ansible
+        src: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"   # sem espaço no lookup
         dest: /home/debian/.ssh/id_rsa
         owner: debian
         group: debian
         mode: '0600'
-      when: inventory_hostname in groups['all']
+        force: yes
+        validate: "ssh-keygen -y -f %s"
+      register: chave_copiada
 
-    - name: Garantir chave pública em authorized_keys de TODAS as VMs
+    - name: Validar chave PEM em cada host
+      ansible.builtin.shell:
+        cmd: |
+          set -e
+          head -1 /home/debian/.ssh/id_rsa | grep -q "BEGIN RSA PRIVATE KEY" || {
+            echo "ERRO: chave não é PEM em {{ inventory_hostname }}"; exit 1;
+          }
+          ssh-keygen -y -f /home/debian/.ssh/id_rsa > /dev/null 2>&1 || {
+            echo "ERRO: chave inválida (libcrypto) em {{ inventory_hostname }}"; exit 1;
+          }
+          echo "OK: {{ inventory_hostname }} — chave PEM válida"
+      register: validacao
+      changed_when: false
+      failed_when: validacao.rc != 0
+
+    - name: Mostrar validação por host
+      ansible.builtin.debug:
+        msg: "{{ validacao.stdout }}"
+
+    - name: Autorizar chave pública em authorized_keys
       ansible.posix.authorized_key:
         user: debian
         state: present
-        key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+        key: "{{ lookup('file', lookup('env', 'HOME') + '/.ssh/id_rsa.pub') }}"
 
+# Configuração da VM 1 (Simulador)
+- name: Configurar VM 1 - Simulador de Dados
+  hosts: vm_simulador
+  become: yes
+  tasks:
     - name: Instalar R (Linguagem de Programação)
-      apt:
+      ansible.builtin.apt:
         name: r-base
         state: present
         update_cache: yes
         lock_timeout: 320
         
     - name: Criar diretórios
-      file:
+      ansible.builtin.file:
         path: /home/debian/simulador/saida
         state: directory
         owner: debian
         group: debian
 
     - name: Copiar código do Simulador
-      copy:
+      ansible.builtin.copy:
         src: ../../simulador/simulador.R
         dest: /home/debian/simulador/simulador.R
         owner: debian
         mode: '0755'
 
     - name: Criar serviço Systemd para o Simulador
-      copy:
+      ansible.builtin.copy:
         dest: /etc/systemd/system/gardenia-simulador.service
         content: |
           [Unit]
@@ -84,7 +107,7 @@
           WantedBy=multi-user.target
 
     - name: Ativar e iniciar o servico do Simulador
-      systemd:
+      ansible.builtin.systemd:
         name: gardenia-simulador
         state: started
         enabled: yes
@@ -101,29 +124,27 @@
         state: restarted
         daemon_reload: yes
   tasks:
-    - name: Garantir permissões do usuário debian em sua pasta home
-      file:
-        path: /home/debian
-        owner: debian
-        group: debian
-        recurse: yes
-
     - name: Instalar dependências de sistema e R
-      apt:
-        name: [r-base, rsync, r-cran-tidyverse, r-cran-optparse, r-cran-jsonlite]
+      ansible.builtin.apt:
+        name: 
+          - r-base
+          - rsync
+          - r-cran-tidyverse
+          - r-cran-optparse
+          - r-cran-jsonlite
         state: present
         update_cache: yes
         lock_timeout: 320
 
     - name: Criar diretórios de trabalho
-      file:
+      ansible.builtin.file:
         path: /home/debian/gardenia
         state: directory
         owner: debian
         group: debian
 
     - name: Copiar pipeline_vm2.R
-      copy:
+      ansible.builtin.copy:
         src: ../../simulador/pipeline_vm2.R
         dest: /home/debian/gardenia/pipeline_vm2.R
         owner: debian
@@ -185,14 +206,14 @@
     - vars/vault.yml
   tasks:
     - name: Criar diretório para chaves de repositórios (keyrings)
-      file:
+      ansible.builtin.file:
         path: /etc/apt/keyrings
         state: directory
         mode: '0755'
     
     # Elimina conflito do Signed-By
     - name: Remover lista antiga do repositório MongoDB
-      file:
+      ansible.builtin.file:
         path: /etc/apt/sources.list.d/mongodb-org-8.0.list
         state: absent
     
@@ -210,7 +231,7 @@
         filename: mongodb-org-8.0
 
     - name: Instalar pacotes necessários
-      apt:
+      ansible.builtin.apt:
         name: 
           - default-jre-headless
           - rsync
@@ -231,17 +252,10 @@
         lock_timeout: 888
     
     - name: Garantir que o serviço do MongoDB está ativo
-      systemd:
+      ansible.builtin.systemd:
         name: mongod
         state: started
         enabled: yes
-
-    - name: Garantir permissões do usuário debian em sua pasta home
-      file:
-        path: /home/debian
-        owner: debian
-        group: debian
-        recurse: yes
 
     - name: Instalar sparklyr e mongolite via CRAN
       command: >
@@ -260,14 +274,14 @@
         "
 
     - name: Criar diretórios de trabalho
-      file:
+      ansible.builtin.file:
         path: /home/debian/spark_work
         state: directory
         owner: debian
         group: debian
 
     - name: Copiar pipeline_vm3.R
-      copy:
+      ansible.builtin.copy:
         src: ../../simulador/pipeline_vm3.R
         dest: /home/debian/spark_work/pipeline_vm3.R
         owner: debian
@@ -276,7 +290,7 @@
     - name: Criar serviço Systemd para VM3 (Spark + MongoDB + Atlas)
       vars:
         ip_vm2: "{{ hostvars[groups['vm_tratamento'][0]].ansible_host }}"
-      copy:
+      ansible.builtin.copy:
         dest: /etc/systemd/system/gardenia-vm3.service
         content: |
           [Unit]
@@ -296,7 +310,7 @@
         mode: '0644'
 
     - name: Ativar e iniciar o servico da VM3
-      systemd:
+      ansible.builtin.systemd:
         name: gardenia-vm3
         state: started
         enabled: yes

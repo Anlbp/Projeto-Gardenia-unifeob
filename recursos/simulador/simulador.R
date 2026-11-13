@@ -97,8 +97,7 @@ gerar_ciclo <- function(ciclo) {
     telefone = gerar_telefone(n),
     cpf = gerar_cpf(n),
     data_nascimento = data_nascimento,
-    data_cadastro = as.character(hoje - sample(365:1095, n, replace = TRUE)),
-    inconsistente = ifelse(tipo == "ok", "False", "True")
+    data_cadastro = as.character(hoje - sample(365:1095, n, replace = TRUE))
   )
 
   # 2. Tabela Produtos
@@ -126,8 +125,7 @@ gerar_ciclo <- function(ciclo) {
     estoque = estoque,
     peso = round(runif(n, 0.1, 5), 2),
     satisfacao_media = round(runif(n, 1, 5), 1),
-    data_cadastro = as.character(hoje - sample(365:1095, n, replace = TRUE)),
-    inconsistente = ifelse(tipo == "ok", "False", "True")
+    data_cadastro = as.character(hoje - sample(365:1095, n, replace = TRUE))
   )
 
   # 3. Tabela Compras
@@ -155,8 +153,7 @@ gerar_ciclo <- function(ciclo) {
     desconto = desconto,
     data_compra = as.character(hoje - sample(0:364, n, replace = TRUE)),
     status = status,
-    satisfacao = sample(1:5, n, replace = TRUE),
-    inconsistente = ifelse(tipo == "ok", "False", "True")
+    satisfacao = sample(1:5, n, replace = TRUE)
   )
 
   # Gravando os CSVs brutos do ciclo
